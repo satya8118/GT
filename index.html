@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAT442 · Graph Theory — Topic Index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cover:#182836;
+    --cover-2:#0E1822;
+    --brass:#C79A4B;
+    --brass-dim:#8C6A34;
+    --paper:#F1E9D6;
+    --paper-2:#E7DCC1;
+    --ink:#211D14;
+    --ink-soft:#4A4437;
+    --rust:#9A3324;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    background:
+      radial-gradient(120% 140% at 50% -10%, var(--cover) 0%, var(--cover-2) 65%, #080F16 100%);
+    font-family:'Source Serif 4', serif;
+    color:var(--ink);
+  }
+
+  body{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:6vh 5vw 8vh;
+  }
+
+  /* faint graph network watermark stitched into the cover */
+  .cover-mark{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:0.06;
+    z-index:0;
+  }
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:760px;
+  }
+
+  .spine-label{
+    text-align:center;
+    font-family:'JetBrains Mono', monospace;
+    letter-spacing:0.42em;
+    font-size:0.72rem;
+    color:var(--brass);
+    text-transform:uppercase;
+    margin-bottom:1.6rem;
+  }
+
+  .spine-label::before,
+  .spine-label::after{
+    content:"—";
+    margin:0 0.75em;
+    opacity:0.6;
+  }
+
+  .page{
+    background:
+      linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+    border-radius:2px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.4) inset,
+      0 30px 60px -20px rgba(0,0,0,0.55),
+      0 2px 0 var(--brass-dim);
+    padding:clamp(2.2rem, 5vw, 4rem) clamp(1.8rem, 6vw, 4.5rem) clamp(2.6rem, 5vw, 4rem);
+    position:relative;
+    overflow:hidden;
+  }
+
+  .page::before{
+    content:"";
+    position:absolute;
+    left:0; top:0; bottom:0;
+    width:10px;
+    background:linear-gradient(180deg, var(--brass) 0%, var(--brass-dim) 100%);
+    box-shadow:2px 0 6px rgba(0,0,0,0.15);
+  }
+
+  header{
+    text-align:center;
+    margin-bottom:clamp(2rem, 4vw, 3rem);
+  }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:var(--rust);
+    margin:0 0 0.9rem;
+  }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(2.1rem, 5vw, 3rem);
+    line-height:1.08;
+    margin:0 0 0.7rem;
+    color:var(--ink);
+  }
+
+  .subtitle{
+    font-style:italic;
+    font-size:1.05rem;
+    color:var(--ink-soft);
+    margin:0;
+  }
+
+  .rule{
+    border:none;
+    height:1px;
+    margin:clamp(1.6rem,3vw,2.4rem) auto;
+    width:64%;
+    background:linear-gradient(90deg, transparent, var(--brass-dim), transparent);
+  }
+
+  .toc-heading{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0 0 1.1rem;
+  }
+
+  ol.toc{
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+
+  ol.toc li{
+    border-bottom:1px solid rgba(76,68,55,0.18);
+  }
+
+  ol.toc li:last-child{
+    border-bottom:none;
+  }
+
+  ol.toc a{
+    display:flex;
+    align-items:baseline;
+    gap:1rem;
+    text-decoration:none;
+    color:var(--ink);
+    padding:0.95rem 0.15rem;
+    transition:color 0.2s ease, padding-left 0.2s ease;
+  }
+
+  ol.toc a:hover,
+  ol.toc a:focus-visible{
+    color:var(--rust);
+    padding-left:0.35rem;
+  }
+
+  ol.toc a:focus-visible{
+    outline:2px solid var(--rust);
+    outline-offset:4px;
+  }
+
+  .num{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.85rem;
+    color:var(--brass-dim);
+    min-width:2.4rem;
+    flex-shrink:0;
+  }
+
+  .title{
+    font-family:'Fraunces', serif;
+    font-size:1.18rem;
+    font-weight:500;
+    flex:1;
+  }
+
+  .arrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.95rem;
+    opacity:0;
+    transform:translateX(-4px);
+    transition:opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  ol.toc a:hover .arrow,
+  ol.toc a:focus-visible .arrow{
+    opacity:1;
+    transform:translateX(0);
+  }
+
+  footer{
+    margin-top:clamp(2.2rem,4vw,3rem);
+    text-align:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.68rem;
+    letter-spacing:0.14em;
+    color:var(--ink-soft);
+    opacity:0.75;
+  }
+
+  @media (max-width:520px){
+    body{ padding:6vh 4vw 6vh; }
+    .num{ min-width:1.9rem; }
+    .title{ font-size:1.05rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    ol.toc a, .arrow{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<svg class="cover-mark" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <pattern id="graph-grid" width="120" height="120" patternUnits="userSpaceOnUse">
+      <rect width="120" height="120" fill="none" stroke="#C79A4B" stroke-width="0.3"/>
+      <!-- Complete Graph K4 motif pattern -->
+      <line x1="30" y1="30" x2="90" y2="30" stroke="#C79A4B" stroke-width="0.6"/>
+      <line x1="90" y1="30" x2="90" y2="90" stroke="#C79A4B" stroke-width="0.6"/>
+      <line x1="90" y1="90" x2="30" y2="90" stroke="#C79A4B" stroke-width="0.6"/>
+      <line x1="30" y1="90" x2="30" y2="30" stroke="#C79A4B" stroke-width="0.6"/>
+      <line x1="30" y1="30" x2="90" y2="90" stroke="#C79A4B" stroke-width="0.6"/>
+      <line x1="90" y1="30" x2="30" y2="90" stroke="#C79A4B" stroke-width="0.6"/>
+      
+      <circle cx="30" cy="30" r="3" fill="#C79A4B"/>
+      <circle cx="90" cy="30" r="3" fill="#C79A4B"/>
+      <circle cx="90" cy="90" r="3" fill="#C79A4B"/>
+      <circle cx="30" cy="90" r="3" fill="#C79A4B"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#graph-grid)"/>
+</svg>
+
+<div class="wrap">
+  <div class="spine-label">Department of Mathematics</div>
+
+  <div class="page">
+    <header>
+      <p class="eyebrow">MAT442 </p>
+      <h1>Graph Theory</h1>
+      <p class="subtitle">Topic Index</p>
+    </header>
+
+    <hr class="rule">
+
+    <p class="toc-heading">Contents</p>
+
+    <!--
+      Each entry below is a placeholder (Topic 1, Topic 2, …) linking to
+      topic-1.html, topic-2.html, and so on. Rename the link text and,
+      if you like, the filename as each topic page is written. To add
+      a new topic, copy one <li>…</li> block and update the number,
+      title, and href.
+    -->
+    <ol class="toc">
+      <li><a href="Topics/CG.html"><span class="num">01</span><span class="title">Connected Graphs</span><span class="arrow">→</span></a></li>
+      <li><a href="Topics/Tree.html"><span class="num">02</span><span class="title">Tree</span><span class="arrow">→</span></a></li>
+      <li><a href="topic-3.html"><span class="num">03</span><span class="title">Topic 3</span><span class="arrow">→</span></a></li>
+      <li><a href="topic-4.html"><span class="num">04</span><span class="title">Topic 4</span><span class="arrow">→</span></a></li>
+      <li><a href="topic-5.html"><span class="num">05</span><span class="title">Topic 5</span><span class="arrow">→</span></a></li>      
+    </ol>
+<h2>Graph Theory Nuggests</h2>
+      <p class="subtitle">Topic Index</p>
+      <ol class="toc">
+      <li><a href="Nuggets/few.html"><span class="num">01</span><span class="title">Few Problems</span><span class="arrow">→</span></a></li>
+      <li><a href="Nuggets/Cayley.html"><span class="num">02</span><span class="title">Cayley Graph</span><span class="arrow">→</span></a></li>
+      <li><a href="topic-3.html"><span class="num">03</span><span class="title">Topic 3</span><span class="arrow">→</span></a></li>
+      <li><a href="topic-4.html"><span class="num">04</span><span class="title">Topic 4</span><span class="arrow">→</span></a></li>
+      
+    </ol>
+    <footer>MAT442 — Graph Theory</footer>
+  </div>
+</div>
+
+</body>
+</html>
