@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expository on Connected Graphs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #090d16;
+      color: #ffffff;
+    }
+    .math {
+      font-family: 'Fira Code', monospace;
+      font-weight: 600;
+    }
+    .text-yellow { color: #facc15; }
+    .text-orange { color: #fb923c; }
+    .text-lime { color: #a3e635; }
+    .text-cyan { color: #22d3ee; }
+    .text-white { color: #ffffff; }
+    
+    .border-cyan-glow { border-color: rgba(34, 211, 238, 0.4); }
+    .border-orange-glow { border-color: rgba(251, 146, 60, 0.4); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col space-y-12 pb-16">
+
+  <!-- Header -->
+  <header class="border-b border-cyan-900/50 bg-slate-950/90 backdrop-blur sticky top-0 z-50 py-4 px-6">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-bold text-cyan tracking-wide">
+          An Expository on Connected Graphs
+        </h1>
+        <p class="text-xs text-orange font-medium">Interactive Graph Theory Guide & Rigorous Results</p>
+      </div>
+      <nav class="flex flex-wrap gap-3 text-sm font-semibold">
+        <a href="#definition" class="text-yellow hover:text-white transition">Definitions</a>
+        <a href="#four-vertices" class="text-lime hover:text-white transition">4-Vertex Graphs</a>
+        <a href="#self-complement" class="text-cyan hover:text-white transition">Co-Connectivity</a>
+        <a href="#extremal-edges" class="text-orange hover:text-white transition">Minimum Edges</a>
+        <a href="#diameter-bounds" class="text-yellow hover:text-white transition">Diameter Bounds</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 space-y-16 flex-1 w-full">
+
+    <!-- Hero Title -->
+    <section class="text-center max-w-4xl mx-auto space-y-4 pt-6">
+      <h2 class="text-4xl sm:text-5xl font-extrabold text-white">
+        Graph Connectivity & Extremal Properties
+      </h2>
+      <p class="text-cyan text-base sm:text-lg leading-relaxed">
+        A comprehensive guide covering structural classifications, complement properties, extremal bounds for connectivity, and diameter restrictions.
+      </p>
+    </section>
+
+    <!-- SECTION 1: Definition & Examples -->
+    <section id="definition" class="bg-slate-950/80 rounded-2xl border border-cyan-900/60 p-6 sm:p-8 space-y-6">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-xs font-bold text-orange tracking-widest uppercase">SECTION 1</span>
+        <h3 class="text-2xl font-bold text-cyan mt-1">Definition & Basic Examples</h3>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-8 items-start">
+        <div class="space-y-4">
+          <div class="bg-slate-900 border border-cyan-glow p-5 rounded-xl space-y-3">
+            <h4 class="text-lg font-bold text-yellow">Formal Definition</h4>
+            <p class="text-white text-sm leading-relaxed">
+              An undirected simple graph <span class="math text-cyan">G = (V, E)</span> is <strong>connected</strong> if for every pair of distinct vertices <span class="math text-yellow">u, v ∈ V</span>, there exists a path starting at <span class="math text-yellow">u</span> and ending at <span class="math text-yellow">v</span>.
+            </p>
+            <p class="text-orange text-xs">
+              If a graph is not connected, it is disconnected, and its maximal connected subgraphs are called its <strong>connected components</strong>.
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <h5 class="text-lime font-bold text-base">Examples of Connected Graphs:</h5>
+            <ul class="list-disc pl-5 space-y-1 text-sm text-white">
+              <li><strong class="text-cyan">Complete Graph (K<sub>n</sub>):</strong> Direct edge between every pair of vertices.</li>
+              <li><strong class="text-cyan">Cycle Graph (C<sub>n</sub>, n ≥ 3):</strong> A single continuous ring.</li>
+              <li><strong class="text-cyan">Tree (T<sub>n</sub>):</strong> Connected acyclic graph with exactly <span class="math text-yellow">n - 1</span> edges.</li>
+            </ul>
+
+            <h5 class="text-orange font-bold text-base pt-2">Non-Examples (Disconnected):</h5>
+            <ul class="list-disc pl-5 space-y-1 text-sm text-white">
+              <li><strong class="text-yellow">Empty Graph (K̄<sub>n</sub>, n ≥ 2):</strong> Vertices with zero edges.</li>
+              <li><strong class="text-yellow">Disjoint Union (K<sub>3</sub> ∪ K<sub>2</sub>):</strong> Two isolated cliques with no path between them.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Interactive Playground -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col items-center">
+          <div class="w-full flex justify-between items-center mb-4">
+            <span class="text-xs font-bold text-lime uppercase tracking-wider">Interactive Visualizer</span>
+            <div class="flex gap-2">
+              <button onclick="loadSection1Preset('connected')" class="px-3 py-1 text-xs font-bold rounded bg-cyan/20 text-cyan border border-cyan/40 hover:bg-cyan/40 transition">Connected</button>
+              <button onclick="loadSection1Preset('disconnected')" class="px-3 py-1 text-xs font-bold rounded bg-orange/20 text-orange border border-orange/40 hover:bg-orange/40 transition">Disconnected</button>
+            </div>
+          </div>
+
+          <canvas id="canvas-sec1" width="380" height="220" class="w-full max-w-[380px] h-[220px] bg-slate-950 rounded-lg border border-slate-800"></canvas>
+          <div id="sec1-status" class="mt-4 px-4 py-1.5 rounded-full font-bold text-xs"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: All 4-Vertex Connected Graphs -->
+    <section id="four-vertices" class="bg-slate-950/80 rounded-2xl border border-cyan-900/60 p-6 sm:p-8 space-y-6">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-xs font-bold text-orange tracking-widest uppercase">SECTION 2</span>
+        <h3 class="text-2xl font-bold text-lime mt-1">Classification of All Connected Graphs on 4 Vertices</h3>
+        <p class="text-cyan text-xs sm:text-sm mt-1">
+          There are 2<sup>(4 × 3 / 2)</sup> = 64 labeled graphs on 4 vertices. Up to <strong>isomorphism</strong>, there are 11 distinct graphs, of which exactly <strong>6 are connected</strong>.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col items-center">
+          <h4 class="font-bold text-yellow text-base mb-1">1. Star Graph (K<sub>1,3</sub>)</h4>
+          <span class="text-xs text-lime mb-2 font-mono">Edges: 3 | Tree / Claw</span>
+          <canvas id="c-4v-1" width="200" height="140" class="bg-slate-950 rounded border border-slate-800"></canvas>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col items-center">
+          <h4 class="font-bold text-yellow text-base mb-1">2. Path Graph (P<sub>4</sub>)</h4>
+          <span class="text-xs text-lime mb-2 font-mono">Edges: 3 | Line Tree</span>
+          <canvas id="c-4v-2" width="200" height="140" class="bg-slate-950 rounded border border-slate-800"></canvas>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col items-center">
+          <h4 class="font-bold text-yellow text-base mb-1">3. Cycle Graph (C<sub>4</sub>)</h4>
+          <span class="text-xs text-lime mb-2 font-mono">Edges: 4 | Square</span>
+          <canvas id="c-4v-3" width="200" height="140" class="bg-slate-950 rounded border border-slate-800"></canvas>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col items-center">
+          <h4 class="font-bold text-yellow text-base mb-1">4. Paw Graph</h4>
+          <span class="text-xs text-lime mb-2 font-mono">Edges: 4 | C<sub>3</sub> + pendent edge</span>
+          <canvas id="c-4v-4" width="200" height="140" class="bg-slate-950 rounded border border-slate-800"></canvas>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col items-center">
+          <h4 class="font-bold text-yellow text-base mb-1">5. Diamond Graph (K<sub>4</sub> - e)</h4>
+          <span class="text-xs text-lime mb-2 font-mono">Edges: 5 | K<sub>4</sub> minus 1 edge</span>
+          <canvas id="c-4v-5" width="200" height="140" class="bg-slate-950 rounded border border-slate-800"></canvas>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col items-center">
+          <h4 class="font-bold text-yellow text-base mb-1">6. Complete Graph (K<sub>4</sub>)</h4>
+          <span class="text-xs text-lime mb-2 font-mono">Edges: 6 | Fully Connected</span>
+          <canvas id="c-4v-6" width="200" height="140" class="bg-slate-950 rounded border border-slate-800"></canvas>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 3: Co-Connected Graphs & Diameters -->
+    <section id="self-complement" class="bg-slate-950/80 rounded-2xl border border-cyan-900/60 p-6 sm:p-8 space-y-6">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-xs font-bold text-orange tracking-widest uppercase">SECTION 3</span>
+        <h3 class="text-2xl font-bold text-cyan mt-1">Co-Connected Graphs: When Both X and X<sup>c</sup> are Connected</h3>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-8 items-start">
+        <div class="space-y-4 text-white text-sm leading-relaxed">
+          <p>
+            The <strong>complement graph</strong> <span class="math text-cyan">X<sup>c</sup></span> has the same vertex set as <span class="math text-cyan">X</span>, but two vertices are adjacent in <span class="math text-cyan">X<sup>c</sup></span> if and only if they are <em>not</em> adjacent in <span class="math text-cyan">X</span>.
+          </p>
+
+          <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-2">
+            <h4 class="font-bold text-yellow text-base">Key Theorem: Complement Connectivity</h4>
+            <p class="text-white text-xs sm:text-sm">
+              For any simple graph <span class="math text-cyan">X</span>, at least one of <span class="math text-cyan">X</span> or <span class="math text-cyan">X<sup>c</sup></span> is connected.
+            </p>
+            <p class="text-orange text-xs">
+              <em>Proof:</em> If <span class="math text-cyan">X</span> is disconnected, vertices in different components of <span class="math text-cyan">X</span> have direct edges between them in <span class="math text-cyan">X<sup>c</sup></span>. Vertices within the same component of <span class="math text-cyan">X</span> connect in <span class="math text-cyan">X<sup>c</sup></span> via any vertex from another component!
+            </p>
+          </div>
+
+          <div class="bg-slate-900 p-5 rounded-xl border border-orange-glow space-y-3">
+            <h4 class="font-bold text-orange text-base">Diameter Bounds when both X and X<sup>c</sup> are Connected</h4>
+            <p class="text-xs text-white">
+              Suppose both <span class="math text-cyan">X</span> and <span class="math text-cyan">X<sup>c</sup></span> are connected (requires <span class="math text-yellow">n ≥ 4</span>):
+            </p>
+            <ul class="list-disc pl-5 space-y-2 text-xs">
+              <li>
+                <strong class="text-lime">Minimum Diameter:</strong> <span class="math text-yellow">min diam = 2</span>.<br/>
+                <span class="text-cyan">If diam(X) = 1, then X ≅ K<sub>n</sub>, which forces X<sup>c</sup> to be completely disconnected (diam = ∞).</span>
+              </li>
+              <li>
+                <strong class="text-lime">Maximum Diameter:</strong> <span class="math text-yellow">max diam = 3</span>.<br/>
+                <span class="text-cyan">If diam(X) ≥ 4, then diam(X<sup>c</sup>) ≤ 2. Thus, the maximum diameter for both X and X<sup>c</sup> to remain connected simultaneously is <strong>3</strong> (e.g., P<sub>4</sub>).</span>
+              </li>
+            </ul>
+            <div class="bg-slate-950 p-3 rounded-lg border border-lime/30 text-center font-mono text-xs text-lime">
+              Result: If both X and X<sup>c</sup> are connected ⇒ 2 ≤ diam(X) ≤ 3 and 2 ≤ diam(X<sup>c</sup>) ≤ 3
+            </div>
+          </div>
+        </div>
+
+        <!-- Inspector Widget -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+          <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+            <span class="font-bold text-yellow text-sm">Dual Graph Inspector</span>
+            <select id="dual-preset-select" onchange="changeDualPreset(this.value)" class="bg-slate-950 text-cyan border border-slate-700 text-xs rounded px-2 py-1 outline-none font-semibold">
+              <option value="p4">Path P4 (Both Conn, Diam = 3)</option>
+              <option value="c5">Cycle C5 (Self-Comp, Diam = 2)</option>
+              <option value="house">House Graph (Both Conn)</option>
+              <option value="k4">K4 Graph (Complement Disconn)</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col items-center">
+              <span class="text-xs font-bold text-cyan mb-1">Graph X</span>
+              <canvas id="canvas-X" width="200" height="150" class="bg-slate-950 rounded border border-slate-800 w-full"></canvas>
+              <div id="info-X" class="text-xs mt-2 text-white font-mono text-center"></div>
+            </div>
+
+            <div class="flex flex-col items-center">
+              <span class="text-xs font-bold text-orange mb-1">Complement X<sup>c</sup></span>
+              <canvas id="canvas-Xc" width="200" height="150" class="bg-slate-950 rounded border border-slate-800 w-full"></canvas>
+              <div id="info-Xc" class="text-xs mt-2 text-white font-mono text-center"></div>
+            </div>
+          </div>
+
+          <div id="dual-analysis-banner" class="p-3 rounded-lg text-xs font-bold text-center"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Minimum Edges for Guaranteed Connectivity -->
+    <section id="extremal-edges" class="bg-slate-950/80 rounded-2xl border border-cyan-900/60 p-6 sm:p-8 space-y-6">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-xs font-bold text-orange tracking-widest uppercase">SECTION 4</span>
+        <h3 class="text-2xl font-bold text-yellow mt-1">Minimum Edges Required to Guarantee Connectivity</h3>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-8 items-center">
+        <div class="space-y-4 text-white text-sm leading-relaxed">
+          <p class="text-base font-bold text-cyan">
+            Question: What is the minimum number of edges required so that ANY graph on n vertices is ALWAYS connected?
+          </p>
+
+          <div class="bg-slate-900 border border-cyan-glow p-5 rounded-xl space-y-4">
+            <div class="flex items-center gap-3">
+              <span class="text-lg font-bold text-white">Answer:</span>
+              <span class="bg-slate-950 border border-lime text-lime font-mono text-lg font-extrabold px-3 py-1 rounded">
+                m = (n - 1)(n - 2) / 2 + 1
+              </span>
+            </div>
+
+            <h5 class="font-bold text-orange text-sm">Rigorous Derivation:</h5>
+            <ol class="list-decimal pl-5 space-y-2 text-xs text-white">
+              <li>
+                To find the threshold, we construct the <strong>maximum possible edges in a disconnected graph</strong>.
+              </li>
+              <li>
+                A disconnected graph with components of size <span class="math text-yellow">k</span> and <span class="math text-yellow">n - k</span> has maximum edges when <span class="math text-yellow">k = n - 1</span> and <span class="math text-yellow">n - k = 1</span>.
+              </li>
+              <li>
+                This worst-case structure consists of a complete clique <span class="math text-cyan">K<sub>n-1</sub></span> and 1 isolated vertex. The total edges in this graph is:
+                <div class="text-yellow font-mono text-sm py-1">m<sub>max-disconn</sub> = C(n-1, 2) = (n-1)(n-2)/2</div>
+              </li>
+              <li>
+                Adding just <strong>1 extra edge</strong> (+1) forces an edge to connect the isolated vertex, guaranteeing connectivity regardless of edge layout!
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Calculator -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+          <h4 class="font-bold text-white text-base">Extremal Graph Visualizer</h4>
+
+          <div class="flex items-center gap-4">
+            <label class="text-xs font-bold text-cyan">Vertices (n):</label>
+            <input type="range" id="n-slider" min="3" max="8" value="5" oninput="updateExtremalSection(this.value)" class="w-full accent-cyan cursor-pointer">
+            <span id="n-val-display" class="font-mono font-bold text-yellow text-lg w-6">5</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 text-center">
+            <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+              <span class="text-xs text-orange font-bold block">Max Disconnected Edges</span>
+              <span id="max-dis-edges" class="text-xl font-mono font-bold text-orange">6</span>
+              <span class="text-[10px] text-cyan block font-mono">C(n-1, 2)</span>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+              <span class="text-xs text-lime font-bold block">Guaranteed Connected</span>
+              <span id="min-conn-edges" class="text-xl font-mono font-bold text-lime">7</span>
+              <span class="text-[10px] text-cyan block font-mono">C(n-1, 2) + 1</span>
+            </div>
+          </div>
+
+          <div class="flex justify-center pt-2">
+            <canvas id="canvas-extremal" width="300" height="180" class="bg-slate-950 rounded-lg border border-slate-800"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: Minimum Edges for Bounded Diameter -->
+    <section id="diameter-bounds" class="bg-slate-950/80 rounded-2xl border border-cyan-900/60 p-6 sm:p-8 space-y-6">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-xs font-bold text-orange tracking-widest uppercase">SECTION 5</span>
+        <h3 class="text-2xl font-bold text-orange mt-1">Minimum Edges Required to Guarantee Diameter ≤ d</h3>
+      </div>
+
+      <div class="space-y-6">
+        <div class="text-white text-sm leading-relaxed space-y-4">
+          <p>
+            What is the minimum number of edges <span class="math text-yellow">m</span> required so that ANY graph on <span class="math text-yellow">n</span> vertices is guaranteed to have <strong>diameter ≤ d</strong>, regardless of structural arrangement?
+          </p>
+
+          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-4">
+            <h4 class="text-base font-bold text-lime">Ore's Theorem & General Edge Formula</h4>
+            
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-1">
+                <span class="text-xs font-bold text-cyan uppercase">Case d = 1</span>
+                <p class="text-xs text-white">
+                  Diameter ≤ 1 requires a fully complete graph K<sub>n</sub>.
+                </p>
+                <div class="font-mono text-sm text-yellow font-bold pt-1">
+                  m = C(n, 2) = n(n-1)/2
+                </div>
+              </div>
+
+              <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-1">
+                <span class="text-xs font-bold text-cyan uppercase">Case d = 2</span>
+                <p class="text-xs text-white">
+                  To guarantee diameter ≤ 2, edge count must exceed max edges of a graph with diameter 3.
+                </p>
+                <div class="font-mono text-sm text-yellow font-bold pt-1">
+                  m = C(n-2, 2) + 2
+                </div>
+              </div>
+            </div>
+
+            <!-- General Formula Box -->
+            <div class="bg-slate-950 border border-orange-glow p-4 rounded-lg space-y-2">
+              <span class="text-xs font-bold text-orange uppercase tracking-wider">General Formula for Diameter ≤ d (d ≥ 2)</span>
+              <div class="text-xl font-mono font-extrabold text-lime text-center py-2">
+                m = C(n - d, 2) + d = (n - d)(n - d - 1) / 2 + d
+              </div>
+              <p class="text-xs text-cyan leading-relaxed">
+                <em>Structural Logic:</em> The extremal graph of diameter d + 1 is formed by a path of length d (d + 1 vertices) connected to a clique of the remaining n - (d + 1) vertices attached at one end. Adding 1 more edge breaks this longest path and forces diam(G) ≤ d.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Table -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+          <div class="flex items-center gap-3">
+            <label class="text-xs font-bold text-yellow">Select Number of Vertices (n):</label>
+            <select id="matrix-n" onchange="renderDiameterTable()" class="bg-slate-950 text-cyan border border-slate-700 text-xs rounded px-3 py-1.5 outline-none font-mono font-bold">
+              <option value="5">n = 5</option>
+              <option value="6" selected>n = 6</option>
+              <option value="7">n = 7</option>
+              <option value="8">n = 8</option>
+              <option value="10">n = 10</option>
+            </select>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-white border-collapse">
+              <thead>
+                <tr class="border-b border-slate-800 text-cyan font-bold">
+                  <th class="py-2.5 px-3">Target Max Diameter (d)</th>
+                  <th class="py-2.5 px-3">Algebraic Formula</th>
+                  <th class="py-2.5 px-3 text-lime">Required Edges (m)</th>
+                  <th class="py-2.5 px-3">Total Possible Edges</th>
+                  <th class="py-2.5 px-3 text-orange">% of Complete Graph</th>
+                </tr>
+              </thead>
+              <tbody id="diameter-table-body">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-slate-800 bg-slate-950 py-6 text-center text-xs text-cyan">
+    Graph Theory Expository Interactive Webpage • Fully Rendered in Native HTML5/Canvas
+  </footer>
+
+  <!-- Scripting Section -->
+  <script>
+    // SECTION 1 CANVAS LOGIC
+    const s1Canvas = document.getElementById('canvas-sec1');
+    const s1Ctx = s1Canvas.getContext('2d');
+    let s1Vertices = [];
+    let s1Edges = [];
+
+    function loadSection1Preset(type) {
+      if (type === 'connected') {
+        s1Vertices = [
+          { x: 80, y: 60, label: 'A' },
+          { x: 200, y: 40, label: 'B' },
+          { x: 300, y: 110, label: 'C' },
+          { x: 190, y: 170, label: 'D' },
+          { x: 90, y: 150, label: 'E' }
+        ];
+        s1Edges = [[0,1], [1,2], [2,3], [3,4], [4,0], [1,3]];
+      } else {
+        s1Vertices = [
+          { x: 80, y: 60, label: 'A' },
+          { x: 170, y: 50, label: 'B' },
+          { x: 110, y: 150, label: 'C' },
+          { x: 290, y: 70, label: 'D' },
+          { x: 310, y: 160, label: 'E' }
+        ];
+        s1Edges = [[0,1], [1,2], [2,0], [3,4]];
+      }
+      drawSection1();
+    }
+
+    function checkConnected(numV, edges) {
+      if (numV === 0) return true;
+      let adj = Array.from({ length: numV }, () => []);
+      edges.forEach(([u, v]) => {
+        adj[u].push(v);
+        adj[v].push(u);
+      });
+      let visited = new Array(numV).fill(false);
+      function dfs(node) {
+        visited[node] = true;
+        adj[node].forEach(nbr => {
+          if (!visited[nbr]) dfs(nbr);
+        });
+      }
+      dfs(0);
+      return visited.every(Boolean);
+    }
+
+    function drawSection1() {
+      s1Ctx.clearRect(0, 0, s1Canvas.width, s1Canvas.height);
+
+      s1Ctx.lineWidth = 2;
+      s1Ctx.strokeStyle = '#22d3ee';
+      s1Edges.forEach(([u, v]) => {
+        s1Ctx.beginPath();
+        s1Ctx.moveTo(s1Vertices[u].x, s1Vertices[u].y);
+        s1Ctx.lineTo(s1Vertices[v].x, s1Vertices[v].y);
+        s1Ctx.stroke();
+      });
+
+      s1Vertices.forEach((v) => {
+        s1Ctx.beginPath();
+        s1Ctx.arc(v.x, v.y, 16, 0, Math.PI * 2);
+        s1Ctx.fillStyle = '#090d16';
+        s1Ctx.strokeStyle = '#facc15';
+        s1Ctx.lineWidth = 2;
+        s1Ctx.fill();
+        s1Ctx.stroke();
+
+        s1Ctx.fillStyle = '#ffffff';
+        s1Ctx.font = 'bold 12px Inter';
+        s1Ctx.textAlign = 'center';
+        s1Ctx.textBaseline = 'middle';
+        s1Ctx.fillText(v.label, v.x, v.y);
+      });
+
+      const isConn = checkConnected(s1Vertices.length, s1Edges);
+      const statusEl = document.getElementById('sec1-status');
+      if (isConn) {
+        statusEl.textContent = 'Graph Status: CONNECTED';
+        statusEl.className = 'mt-4 px-4 py-1.5 rounded-full font-bold text-xs bg-lime/20 text-lime border border-lime/40';
+      } else {
+        statusEl.textContent = 'Graph Status: DISCONNECTED';
+        statusEl.className = 'mt-4 px-4 py-1.5 rounded-full font-bold text-xs bg-orange/20 text-orange border border-orange/40';
+      }
+    }
+
+    loadSection1Preset('connected');
+
+    // SECTION 2: 4-VERTEX CONNECTED GRAPHS
+    const fourVertexConfigs = [
+      { id: 'c-4v-1', edges: [[0,1], [0,2], [0,3]] },
+      { id: 'c-4v-2', edges: [[0,1], [1,2], [2,3]] },
+      { id: 'c-4v-3', edges: [[0,1], [1,2], [2,3], [3,0]] },
+      { id: 'c-4v-4', edges: [[0,1], [1,2], [2,0], [2,3]] },
+      { id: 'c-4v-5', edges: [[0,1], [1,2], [2,3], [3,0], [0,2]] },
+      { id: 'c-4v-6', edges: [[0,1], [1,2], [2,3], [3,0], [0,2], [1,3]] }
+    ];
+
+    const pos4 = [
+      { x: 50, y: 35 },
+      { x: 150, y: 35 },
+      { x: 150, y: 105 },
+      { x: 50, y: 105 }
+    ];
+
+    fourVertexConfigs.forEach(cfg => {
+      const cvs = document.getElementById(cfg.id);
+      if (!cvs) return;
+      const ctx = cvs.getContext('2d');
+      ctx.clearRect(0, 0, cvs.width, cvs.height);
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#22d3ee';
+      cfg.edges.forEach(([u, v]) => {
+        ctx.beginPath();
+        ctx.moveTo(pos4[u].x, pos4[u].y);
+        ctx.lineTo(pos4[v].x, pos4[v].y);
+        ctx.stroke();
+      });
+
+      pos4.forEach((p, idx) => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 10, 0, Math.PI * 2);
+        ctx.fillStyle = '#090d16';
+        ctx.strokeStyle = '#a3e635';
+        ctx.lineWidth = 2;
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 10px Inter';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(idx + 1, p.x, p.y);
+      });
+    });
+
+    // SECTION 3: DUAL GRAPH INSPECTOR
+    const dualPresets = {
+      p4: {
+        n: 4,
+        edges: [[0,1], [1,2], [2,3]],
+        coords: [{x:40, y:75}, {x:80, y:30}, {x:120, y:120}, {x:160, y:75}]
+      },
+      c5: {
+        n: 5,
+        edges: [[0,1], [1,2], [2,3], [3,4], [4,0]],
+        coords: [{x:100, y:20}, {x:160, y:60}, {x:140, y:125}, {x:60, y:125}, {x:40, y:60}]
+      },
+      house: {
+        n: 5,
+        edges: [[0,1], [1,2], [2,3], [3,0], [0,4], [1,4]],
+        coords: [{x:50, y:115}, {x:150, y:115}, {x:150, y:60}, {x:50, y:60}, {x:100, y:20}]
+      },
+      k4: {
+        n: 4,
+        edges: [[0,1], [1,2], [2,3], [3,0], [0,2], [1,3]],
+        coords: [{x:50, y:30}, {x:150, y:30}, {x:150, y:110}, {x:50, y:110}]
+      }
+    };
+
+    function calculateDiameter(n, edges) {
+      if (!checkConnected(n, edges)) return Infinity;
+      let adj = Array.from({ length: n }, () => []);
+      edges.forEach(([u, v]) => {
+        adj[u].push(v);
+        adj[v].push(u);
+      });
+
+      let maxDist = 0;
+      for (let start = 0; start < n; start++) {
+        let dist = new Array(n).fill(-1);
+        let q = [start];
+        dist[start] = 0;
+        while (q.length > 0) {
+          let curr = q.shift();
+          adj[curr].forEach(nbr => {
+            if (dist[nbr] === -1) {
+              dist[nbr] = dist[curr] + 1;
+              q.push(nbr);
+            }
+          });
+        }
+        maxDist = Math.max(maxDist, ...dist);
+      }
+      return maxDist;
+    }
+
+    function changeDualPreset(key) {
+      const p = dualPresets[key];
+      const n = p.n;
+      const edgesX = p.edges;
+      
+      const edgeSetX = new Set(edgesX.map(([u,v]) => Math.min(u,v) + '-' + Math.max(u,v)));
+      const edgesXc = [];
+      for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+          if (!edgeSetX.has(i + '-' + j)) {
+            edgesXc.push([i, j]);
+          }
+        }
+      }
+
+      drawGraphOnCanvas('canvas-X', p.coords, edgesX, '#22d3ee');
+      const diamX = calculateDiameter(n, edgesX);
+      const connX = checkConnected(n, edgesX);
+      document.getElementById('info-X').innerHTML = `Connected: ${connX ? 'YES' : 'NO'}<br/>Diameter: ${diamX === Infinity ? '∞' : diamX}`;
+
+      drawGraphOnCanvas('canvas-Xc', p.coords, edgesXc, '#fb923c');
+      const diamXc = calculateDiameter(n, edgesXc);
+      const connXc = checkConnected(n, edgesXc);
+      document.getElementById('info-Xc').innerHTML = `Connected: ${connXc ? 'YES' : 'NO'}<br/>Diameter: ${diamXc === Infinity ? '∞' : diamXc}`;
+
+      const banner = document.getElementById('dual-analysis-banner');
+      if (connX && connXc) {
+        banner.className = 'p-3 rounded-lg text-xs font-bold text-center bg-lime/20 text-lime border border-lime/40';
+        banner.innerHTML = `✓ Both X and X<sup>c</sup> are Connected!<br/> Diameters satisfy 2 ≤ diam ≤ 3: diam(X) = ${diamX}, diam(X<sup>c</sup>) = ${diamXc}.`;
+      } else {
+        banner.className = 'p-3 rounded-lg text-xs font-bold text-center bg-orange/20 text-orange border border-orange/40';
+        banner.innerHTML = `⚠️ One graph is Disconnected (X: ${connX ? 'Connected' : 'Disconnected'}, X<sup>c</sup>: ${connXc ? 'Connected' : 'Disconnected'})`;
+      }
+    }
+
+    function drawGraphOnCanvas(id, coords, edges, color) {
+      const cvs = document.getElementById(id);
+      const ctx = cvs.getContext('2d');
+      ctx.clearRect(0, 0, cvs.width, cvs.height);
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = color;
+      edges.forEach(([u, v]) => {
+        ctx.beginPath();
+        ctx.moveTo(coords[u].x, coords[u].y);
+        ctx.lineTo(coords[v].x, coords[v].y);
+        ctx.stroke();
+      });
+
+      coords.forEach((p, idx) => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 10, 0, Math.PI * 2);
+        ctx.fillStyle = '#090d16';
+        ctx.strokeStyle = '#facc15';
+        ctx.lineWidth = 2;
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 10px Inter';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(idx + 1, p.x, p.y);
+      });
+    }
+
+    changeDualPreset('p4');
+
+    // SECTION 4: EXTREMAL GRAPH BUILDER
+    function updateExtremalSection(val) {
+      const n = parseInt(val);
+      document.getElementById('n-val-display').textContent = n;
+
+      const maxDis = ((n - 1) * (n - 2)) / 2;
+      const minConn = maxDis + 1;
+
+      document.getElementById('max-dis-edges').textContent = maxDis;
+      document.getElementById('min-conn-edges').textContent = minConn;
+
+      const cvs = document.getElementById('canvas-extremal');
+      const ctx = cvs.getContext('2d');
+      ctx.clearRect(0, 0, cvs.width, cvs.height);
+
+      const center = { x: 110, y: 90 };
+      const radius = 55;
+      let coords = [];
+
+      for (let i = 0; i < n - 1; i++) {
+        const angle = (2 * Math.PI * i) / (n - 1);
+        coords.push({
+          x: center.x + radius * Math.cos(angle),
+          y: center.y + radius * Math.sin(angle)
+        });
+      }
+      coords.push({ x: 240, y: 90 });
+
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = '#fb923c';
+      for (let i = 0; i < n - 1; i++) {
+        for (let j = i + 1; j < n - 1; j++) {
+          ctx.beginPath();
+          ctx.moveTo(coords[i].x, coords[i].y);
+          ctx.lineTo(coords[j].x, coords[j].y);
+          ctx.stroke();
+        }
+      }
+
+      coords.forEach((p, idx) => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 10, 0, Math.PI * 2);
+        ctx.fillStyle = idx === n - 1 ? '#fb923c' : '#090d16';
+        ctx.strokeStyle = idx === n - 1 ? '#ffffff' : '#22d3ee';
+        ctx.lineWidth = 2;
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 10px Inter';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(idx === n - 1 ? 'Iso' : idx + 1, p.x, p.y);
+      });
+    }
+
+    updateExtremalSection(5);
+
+    // SECTION 5: DIAMETER MATRIX CALCULATOR
+    function renderDiameterTable() {
+      const n = parseInt(document.getElementById('matrix-n').value);
+      const totalEdges = (n * (n - 1)) / 2;
+      const tbody = document.getElementById('diameter-table-body');
+      tbody.innerHTML = '';
+
+      for (let d = 1; d <= n - 1; d++) {
+        let reqEdges = 0;
+        let formulaStr = '';
+
+        if (d === 1) {
+          reqEdges = totalEdges;
+          formulaStr = `C(${n}, 2)`;
+        } else {
+          reqEdges = ((n - d) * (n - d - 1)) / 2 + d;
+          formulaStr = `C(${n}-${d}, 2) + ${d}`;
+        }
+
+        const pct = ((reqEdges / totalEdges) * 100).toFixed(1);
+
+        const row = document.createElement('tr');
+        row.className = 'border-b border-slate-800/80 hover:bg-slate-900/50';
+        row.innerHTML = `
+          <td class="py-2.5 px-3 font-bold text-yellow">d = ${d}</td>
+          <td class="py-2.5 px-3 font-mono text-xs text-cyan">${formulaStr}</td>
+          <td class="py-2.5 px-3 font-mono font-bold text-lime text-sm">${reqEdges}</td>
+          <td class="py-2.5 px-3 font-mono text-white">${totalEdges}</td>
+          <td class="py-2.5 px-3 font-mono text-orange font-bold">${pct}%</td>
+        `;
+        tbody.appendChild(row);
+      }
+    }
+
+    renderDiameterTable();
+  </script>
+</body>
+</html>

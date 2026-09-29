@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cayley Graphs — Definition, Classification & Gallery</title>
+
+  <!-- MathJax for LaTeX Rendering -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #ffffff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+
+      --blue-bg: #eff6ff;
+      --blue-frame: #1d4ed8;
+      
+      --orange-bg: #fff7ed;
+      --orange-frame: #c2410c;
+
+      --green-bg: #f0fdf4;
+      --green-frame: #15803d;
+
+      --yellow-bg: #fefce8;
+      --yellow-frame: #a16207;
+
+      --red-bg: #fef2f2;
+      --red-frame: #b91c1c;
+
+      --purple-bg: #faf5ff;
+      --purple-frame: #6b21a8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .main-container {
+      width: 100%;
+      max-width: 1080px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      padding: 2.5rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 1rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #1e3a8a;
+    }
+    header p {
+      margin: 0.4rem 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    /* TColorBox Replications */
+    .tcolorbox {
+      border-radius: 8px;
+      border: 1px solid;
+      border-left-width: 6px;
+      margin: 1.2rem 0;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .tcolorbox .title {
+      padding: 0.5rem 1rem;
+      font-weight: 700;
+      font-size: 1rem;
+      color: white;
+    }
+    .tcolorbox .content {
+      padding: 1rem 1.2rem;
+    }
+
+    .tcolorbox.blue { border-color: var(--blue-frame); background: var(--blue-bg); }
+    .tcolorbox.blue .title { background: var(--blue-frame); }
+
+    .tcolorbox.orange { border-color: var(--orange-frame); background: var(--orange-bg); }
+    .tcolorbox.orange .title { background: var(--orange-frame); }
+
+    .tcolorbox.green { border-color: var(--green-frame); background: var(--green-bg); }
+    .tcolorbox.green .title { background: var(--green-frame); }
+
+    .tcolorbox.yellow { border-color: var(--yellow-frame); background: var(--yellow-bg); }
+    .tcolorbox.yellow .title { background: var(--yellow-frame); }
+
+    .tcolorbox.red { border-color: var(--red-frame); background: var(--red-bg); }
+    .tcolorbox.red .title { background: var(--red-frame); }
+
+    .tcolorbox.purple { border-color: var(--purple-frame); background: var(--purple-bg); }
+    .tcolorbox.purple .title { background: var(--purple-frame); }
+
+    h2.section-header {
+      font-size: 1.5rem;
+      color: #0f172a;
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 0.3rem;
+      margin-top: 2.5rem;
+    }
+
+    /* Table Styling */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.8rem 0;
+      font-size: 0.95rem;
+    }
+    table.data-table th, table.data-table td {
+      border: 1px solid var(--line);
+      padding: 0.6rem 0.8rem;
+      text-align: center;
+    }
+    table.data-table th {
+      background: rgba(0,0,0,0.03);
+      font-weight: 700;
+    }
+
+    /* SVG Grid Gallery */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .gallery-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }
+    .gallery-card svg {
+      display: block;
+      margin: 0 auto 0.5rem;
+      max-width: 100%;
+      height: auto;
+    }
+    .gallery-card .caption {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .gallery-card .sub-caption {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<div class="main-container">
+
+  <header>
+    <h1>Cayley Graphs</h1>
+    <p>Theory, Classifications for Orders 4, 6, 8, and 10, and Gallery</p>
+  </header>
+
+  <!-- DEFINITION -->
+  <div class="tcolorbox blue">
+    <div class="title">Definition: Cayley Graph</div>
+    <div class="content">
+      Let $G$ be a finite group and $S \subseteq G \setminus \{e\}$ a <em>connection set</em> satisfying $S = S^{-1}$ (symmetric). The <strong>Cayley graph</strong> $\mathrm{Cay}(G, S)$ is a simple undirected graph defined as:
+      <ul>
+        <li><strong>Vertex Set:</strong> $V = G$</li>
+        <li><strong>Edge Set:</strong> $E = \{\{g, h\} \mid gh^{-1} \in S\} = \{\{g, sg\} \mid g \in G, s \in S\}$</li>
+      </ul>
+      <strong>Key Properties:</strong>
+      <ul>
+        <li>$\mathrm{Cay}(G, S)$ is $|S|$-regular.</li>
+        <li>$\mathrm{Cay}(G, S)$ is connected if and only if $S$ generates the group $G$ ($\langle S \rangle = G$).</li>
+        <li>$\mathrm{Cay}(G, S)$ is always <strong>vertex-transitive</strong> (the group $G$ acts transitively on itself via left multiplication).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EXAMPLES AND NON EXAMPLES -->
+  <div class="tcolorbox red">
+    <div class="title">Examples and Non-Examples of Cayley Graphs</div>
+    <div class="content">
+      <p><strong>Examples:</strong></p>
+      <ul>
+        <li><strong>Cycle Graphs $C_n$:</strong> $\mathrm{Cay}(\mathbb{Z}_n, \{1, n-1\})$ is the $n$-cycle.</li>
+        <li><strong>Hypercubes $Q_d$:</strong> $\mathrm{Cay}(\mathbb{Z}_2^d, S)$ where $S$ is the standard basis is the $d$-dimensional hypercube.</li>
+        <li><strong>Complete Graphs $K_n$:</strong> $\mathrm{Cay}(G, G \setminus \{e\})$ for any group $G$ of order $n$.</li>
+        <li><strong>Prism Graphs:</strong> $\mathrm{Cay}(D_n, \{r, r^{-1}, s\})$ yields the $n$-gonal prism.</li>
+      </ul>
+      <p><strong>Non-Examples:</strong></p>
+      <ul>
+        <li><strong>Paths $P_n$ ($n \ge 3$) and Stars $K_{1, n}$:</strong> Not vertex-transitive (vertices have different degrees or non-symmetric structural positions), so they can <em>never</em> be Cayley graphs.</li>
+        <li><strong>The Petersen Graph (10 vertices):</strong> It is $3$-regular and vertex-transitive, but it is <strong>NOT a Cayley graph</strong>. No group of order 10 ($\mathbb{Z}_{10}$ or $D_5$) has a connection set that yields the Petersen graph (it lacks the required automorphism symmetries).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION: ORDER 4 -->
+  <h2 class="section-header">1. Cayley Graphs on 4 Vertices</h2>
+  <div class="tcolorbox orange">
+    <div class="title">Groups of Order 4</div>
+    <div class="content">
+      Up to isomorphism, there are exactly two groups of order 4:
+      $$\mathbb{Z}_4 = \langle a \mid a^4 = 1 \rangle \qquad \text{and} \qquad V_4 \cong \mathbb{Z}_2 \times \mathbb{Z}_2 = \{e, a, b, c\} \quad (a^2=b^2=c^2=e)$$
+    </div>
+  </div>
+
+  <div class="gallery-grid">
+    <div class="gallery-card">
+      <svg viewBox="0 0 160 160" width="160" height="160" id="cay-z4-c4"></svg>
+      <div class="caption">$\mathrm{Cay}(\mathbb{Z}_4, \{1, 3\}) \cong C_4$</div>
+      <div class="sub-caption">2-regular connected cycle</div>
+    </div>
+    <div class="gallery-card">
+      <svg viewBox="0 0 160 160" width="160" height="160" id="cay-v4-k4"></svg>
+      <div class="caption">$\mathrm{Cay}(V_4, \{a, b, c\}) \cong K_4$</div>
+      <div class="sub-caption">3-regular complete graph</div>
+    </div>
+    <div class="gallery-card">
+      <svg viewBox="0 0 160 160" width="160" height="160" id="cay-v4-2k2"></svg>
+      <div class="caption">$\mathrm{Cay}(V_4, \{a\}) \cong 2K_2$</div>
+      <div class="sub-caption">1-regular disconnected matching</div>
+    </div>
+  </div>
+
+  <!-- SECTION: ORDER 6 -->
+  <h2 class="section-header">2. Cayley Graphs on 6 Vertices</h2>
+  <div class="tcolorbox orange">
+    <div class="title">Groups of Order 6</div>
+    <div class="content">
+      Up to isomorphism, there are two groups of order 6:
+      $$\mathbb{Z}_6 \qquad \text{and} \qquad D_3 \cong S_3 = \langle r, s \mid r^3 = s^2 = 1, srs = r^{-1} \rangle$$
+    </div>
+  </div>
+
+  <div class="tcolorbox green">
+    <div class="title">Main Cayley Graphs of Order 6</div>
+    <div class="content">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Group $G$</th>
+            <th>Connection Set $S$</th>
+            <th>Degree</th>
+            <th>Isomorphism Class / Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>$\mathbb{Z}_6$</td><td>$\{3\}$</td><td>1</td><td>$3K_2$ (Perfect Matching)</td></tr>
+          <tr><td>$\mathbb{Z}_6$</td><td>$\{1, 5\}$</td><td>2</td><td>$C_6$ (6-cycle)</td></tr>
+          <tr><td>$\mathbb{Z}_6$</td><td>$\{2, 4\}$</td><td>2</td><td>$2C_3$ (Two disjoint triangles)</td></tr>
+          <tr><td>$D_3$</td><td>$\{r, r^2, s\}$</td><td>3</td><td>$K_{3,3}$ (Complete Bipartite)</td></tr>
+          <tr><td>$D_3$</td><td>$\{s, sr, sr^2\}$</td><td>3</td><td>$K_{3,3}$</td></tr>
+          <tr><td>$D_3$</td><td>$\{r, r^2, s, sr\}$</td><td>4</td><td>$K_6 \setminus 3K_2$</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="gallery-grid">
+    <div class="gallery-card">
+      <svg viewBox="0 0 180 180" width="180" height="180" id="cay-z6-c6"></svg>
+      <div class="caption">$\mathrm{Cay}(\mathbb{Z}_6, \{1, 5\}) \cong C_6$</div>
+      <div class="sub-caption">2-regular 6-cycle</div>
+    </div>
+    <div class="gallery-card">
+      <svg viewBox="0 0 180 180" width="180" height="180" id="cay-z6-2c3"></svg>
+      <div class="caption">$\mathrm{Cay}(\mathbb{Z}_6, \{2, 4\}) \cong 2C_3$</div>
+      <div class="sub-caption">2-regular disconnected triangles</div>
+    </div>
+    <div class="gallery-card">
+      <svg viewBox="0 0 180 180" width="180" height="180" id="cay-d3-k33"></svg>
+      <div class="caption">$\mathrm{Cay}(D_3, \{r, r^2, s\}) \cong K_{3,3}$</div>
+      <div class="sub-caption">3-regular complete bipartite graph</div>
+    </div>
+  </div>
+
+  <!-- SECTION: ORDER 8 -->
+  <h2 class="section-header">3. Cayley Graphs on 8 Vertices</h2>
+  <div class="tcolorbox orange">
+    <div class="title">Groups of Order 8</div>
+    <div class="content">
+      There are <strong>5 isomorphism classes</strong> of groups of order 8:
+      <ul>
+        <li><strong>Abelian:</strong> $\mathbb{Z}_8$, $\mathbb{Z}_4 \times \mathbb{Z}_2$, $\mathbb{Z}_2^3$</li>
+        <li><strong>Non-Abelian:</strong> Dihedral group $D_4$, Quaternion group $Q_8 = \{\pm 1, \pm i, \pm j, \pm k\}$</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="gallery-grid">
+    <div class="gallery-card">
+      <svg viewBox="0 0 200 200" width="200" height="200" id="cay-z23-cube"></svg>
+      <div class="caption">$\mathrm{Cay}(\mathbb{Z}_2^3, \text{basis}) \cong Q_3$</div>
+      <div class="sub-caption">3D Cube Graph (3-regular)</div>
+    </div>
+    <div class="gallery-card">
+      <svg viewBox="0 0 200 200" width="200" height="200" id="cay-d4-prism"></svg>
+      <div class="caption">$\mathrm{Cay}(D_4, \{r, r^3, s\})$</div>
+      <div class="sub-caption">4-gonal (Square) Prism</div>
+    </div>
+    <div class="gallery-card">
+      <svg viewBox="0 0 200 200" width="200" height="200" id="cay-q8-circ"></svg>
+      <div class="caption">$\mathrm{Cay}(Q_8, \{\pm i, \pm j\})$</div>
+      <div class="sub-caption">4-regular connected graph</div>
+    </div>
+  </div>
+
+  <!-- SECTION: ORDER 10 -->
+  <h2 class="section-header">4. Cayley Graphs on 10 Vertices</h2>
+  <div class="tcolorbox orange">
+    <div class="title">Groups of Order 10</div>
+    <div class="content">
+      Up to isomorphism, there are exactly <strong>two</strong> groups of order 10:
+      $$\mathbb{Z}_{10} \qquad \text{and} \qquad D_5 = \langle r, s \mid r^5 = s^2 = 1, srs = r^{-1} \rangle$$
+    </div>
+  </div>
+
+  <div class="tcolorbox green">
+    <div class="title">Main Cayley Graphs of $\mathbb{Z}_{10}$</div>
+    <div class="content">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Connection Set $S$</th>
+            <th>Degree</th>
+            <th>Graph Structure / Isomorphism Class</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>$\{5\}$</td><td>1</td><td>$5K_2$ (Perfect matching)</td></tr>
+          <tr><td>$\{1, 9\}$</td><td>2</td><td>$C_{10}$ (10-cycle)</td></tr>
+          <tr><td>$\{2, 8\}$</td><td>2</td><td>$2C_5$ (Two disjoint 5-cycles)</td></tr>
+          <tr><td>$\{1, 9, 5\}$</td><td>3</td><td>3-regular connected graph</td></tr>
+          <tr><td>$\{2, 8, 5\}$</td><td>3</td><td>3-regular disconnected graph ($2C_5$ + matching)</td></tr>
+          <tr><td>$\{1, 3, 7, 9\}$</td><td>4</td><td>$K_{5,5}$ minus a perfect matching</td></tr>
+          <tr><td>$\{1, 3, 5, 7, 9\}$</td><td>5</td><td>$K_{5,5}$ (Complete Bipartite)</td></tr>
+          <tr><td>$\mathbb{Z}_{10} \setminus \{0\}$</td><td>9</td><td>$K_{10}$ (Complete Graph)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tcolorbox green">
+    <div class="title">Main Cayley Graphs of $D_5$</div>
+    <div class="content">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Connection Set $S$</th>
+            <th>Degree</th>
+            <th>Graph Structure / Isomorphism Class</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>$\{s\}$</td><td>1</td><td>$5K_2$</td></tr>
+          <tr><td>$\{r, r^4\}$</td><td>2</td><td>$2C_5$</td></tr>
+          <tr><td>$\{r, r^4, s\}$</td><td>3</td><td>Pentagonal Prism</td></tr>
+          <tr><td>$\{s, sr, sr^2, sr^3, sr^4\}$</td><td>5</td><td>$K_{5,5}$</td></tr>
+          <tr><td>$D_5 \setminus \{1\}$</td><td>9</td><td>$K_{10}$</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="gallery-grid">
+    <div class="gallery-card">
+      <svg viewBox="0 0 200 200" width="200" height="200" id="cay-z10-c10"></svg>
+      <div class="caption">$\mathrm{Cay}(\mathbb{Z}_{10}, \{1,9\}) = C_{10}$</div>
+    </div>
+    <div class="gallery-card">
+      <svg viewBox="0 0 200 200" width="200" height="200" id="cay-z10-2c5"></svg>
+      <div class="caption">$\mathrm{Cay}(\mathbb{Z}_{10}, \{2,8\}) = 2C_5$</div>
+    </div>
+    <div class="gallery-card">
+      <svg viewBox="0 0 200 200" width="200" height="200" id="cay-d5-prism"></svg>
+      <div class="caption">$\mathrm{Cay}(D_5, \{r, r^4, s\})$</div>
+      <div class="sub-caption">Pentagonal Prism</div>
+    </div>
+  </div>
+
+  <div class="tcolorbox yellow">
+    <div class="title">Worked Example: Verifying the Pentagonal Prism</div>
+    <div class="content">
+      Consider $S = \{r, r^4, s\} \subseteq D_5$. Every vertex $g \in D_5$ has neighbors $gr, gr^4, gs$:
+      <ul>
+        <li>If $g = r^k$ (rotation), $gr$ and $gr^4$ are rotations, forming an outer 5-cycle. $gs = r^k s$ is a reflection, connecting $g$ to the inner layer.</li>
+        <li>If $g = sr^k$ (reflection), $gr$ and $gr^4$ are reflections, forming an inner 5-cycle. $gs = sr^k s = r^{-k}$ is a rotation, connecting back to the outer layer.</li>
+      </ul>
+      Thus, the resulting Cayley graph consists of two 5-cycles linked by a perfect matching: the <strong>Pentagonal Prism</strong>.
+    </div>
+  </div>
+
+  <div class="tcolorbox purple">
+    <div class="title">Important Summary Observations</div>
+    <div class="content">
+      <ul>
+        <li><strong>Vertex Transitivity:</strong> Every Cayley graph is vertex-transitive. Thus, graphs with asymmetric degree distributions or central vertices (like stars $K_{1, n}$) are never Cayley graphs.</li>
+        <li><strong>Automorphism Orbits:</strong> Two connection sets $S_1, S_2 \subseteq G$ produce isomorphic Cayley graphs if there is an automorphism $\phi \in \mathrm{Aut}(G)$ such that $\phi(S_1) = S_2$.</li>
+        <li><strong>Connectedness Condition:</strong> A Cayley graph $\mathrm{Cay}(G, S)$ is connected if and only if $S$ generates $G$.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- SVG DRAWING ENGINE -->
+<script>
+(function() {
+  const NS = 'http://www.w3.org/2000/svg';
+
+  function createEl(tag, attrs) {
+    const el = document.createElementNS(NS, tag);
+    for (let k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  function drawGraph(svgId, nodes, edges) {
+    const svg = document.getElementById(svgId);
+    if (!svg) return;
+    svg.innerHTML = '';
+
+    // Draw Edges
+    edges.forEach(e => {
+      const n1 = nodes[e[0]], n2 = nodes[e[1]];
+      const line = createEl('line', {
+        x1: n1.x, y1: n1.y,
+        x2: n2.x, y2: n2.y,
+        stroke: e[2] || '#64748b',
+        'stroke-width': e[3] || 2,
+        'stroke-dasharray': e[4] || 'none'
+      });
+      svg.appendChild(line);
+    });
+
+    // Draw Nodes
+    nodes.forEach(n => {
+      const circle = createEl('circle', {
+        cx: n.x, cy: n.y, r: n.r || 6,
+        fill: n.fill || '#2563eb',
+        stroke: '#1e3a8a',
+        'stroke-width': 1.5
+      });
+      svg.appendChild(circle);
+    });
+  }
+
+  // 1. Z4 -> C4
+  drawGraph('cay-z4-c4', 
+    [{x:40,y:40}, {x:120,y:40}, {x:120,y:120}, {x:40,y:120}],
+    [[0,1], [1,2], [2,3], [3,0]]
+  );
+
+  // 2. V4 -> K4
+  drawGraph('cay-v4-k4',
+    [{x:40,y:40}, {x:120,y:40}, {x:120,y:120}, {x:40,y:120}],
+    [[0,1], [1,2], [2,3], [3,0], [0,2], [1,3]]
+  );
+
+  // 3. V4 -> 2K2
+  drawGraph('cay-v4-2k2',
+    [{x:40,y:50}, {x:40,y:110}, {x:120,y:50}, {x:120,y:110}],
+    [[0,1], [2,3]]
+  );
+
+  // 4. Z6 -> C6
+  (function() {
+    const nodes = [];
+    for(let i=0; i<6; i++) {
+      const a = (i * 60 - 90) * Math.PI / 180;
+      nodes.push({x: 90 + 60*Math.cos(a), y: 90 + 60*Math.sin(a)});
+    }
+    const edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,0]];
+    drawGraph('cay-z6-c6', nodes, edges);
+  })();
+
+  // 5. Z6 -> 2C3
+  (function() {
+    const nodes = [];
+    for(let i=0; i<6; i++) {
+      const a = (i * 60 - 90) * Math.PI / 180;
+      nodes.push({x: 90 + 60*Math.cos(a), y: 90 + 60*Math.sin(a), fill: i%2===0?'#2563eb':'#dc2626'});
+    }
+    const edges = [[0,2],[2,4],[4,0],[1,3],[3,5],[5,1]];
+    drawGraph('cay-z6-2c3', nodes, edges);
+  })();
+
+  // 6. D3 -> K3,3
+  (function() {
+    const nodes = [
+      {x:40,y:40}, {x:40,y:90}, {x:40,y:140},
+      {x:140,y:40}, {x:140,y:90}, {x:140,y:140, fill:'#dc2626'}
+    ];
+    nodes[3].fill = nodes[4].fill = '#dc2626';
+    const edges = [];
+    for(let i=0;i<3;i++) for(let j=3;j<6;j++) edges.push([i,j]);
+    drawGraph('cay-d3-k33', nodes, edges);
+  })();
+
+  // 7. Cube Graph Q3
+  drawGraph('cay-z23-cube',
+    [
+      {x:50,y:50}, {x:110,y:50}, {x:110,y:110}, {x:50,y:110},
+      {x:80,y:80}, {x:140,y:80}, {x:140,y:140}, {x:80,y:140}
+    ],
+    [
+      [0,1],[1,2],[2,3],[3,0],
+      [4,5],[5,6],[6,7],[7,4],
+      [0,4],[1,5],[2,6],[3,7]
+    ]
+  );
+
+  // 8. D4 Prism (Square Prism)
+  drawGraph('cay-d4-prism',
+    [
+      {x:100+60*Math.cos(0), y:100+60*Math.sin(0)},
+      {x:100+60*Math.cos(Math.PI/2), y:100+60*Math.sin(Math.PI/2)},
+      {x:100+60*Math.cos(Math.PI), y:100+60*Math.sin(Math.PI)},
+      {x:100+60*Math.cos(3*Math.PI/2), y:100+60*Math.sin(3*Math.PI/2)},
+      {x:100+30*Math.cos(0), y:100+30*Math.sin(0), fill:'#dc2626'},
+      {x:100+30*Math.cos(Math.PI/2), y:100+30*Math.sin(Math.PI/2), fill:'#dc2626'},
+      {x:100+30*Math.cos(Math.PI), y:100+30*Math.sin(Math.PI), fill:'#dc2626'},
+      {x:100+30*Math.cos(3*Math.PI/2), y:100+30*Math.sin(3*Math.PI/2), fill:'#dc2626'}
+    ],
+    [
+      [0,1],[1,2],[2,3],[3,0],
+      [4,5],[5,6],[6,7],[7,4],
+      [0,4],[1,5],[2,6],[3,7]
+    ]
+  );
+
+  // 9. Q8 Cayley Graph
+  drawGraph('cay-q8-circ',
+    [
+      {x:60,y:60}, {x:140,y:60}, {x:140,y:140}, {x:60,y:140},
+      {x:100,y:40}, {x:160,y:100}, {x:100,y:160}, {x:40,y:100}
+    ],
+    [
+      [0,1],[1,2],[2,3],[3,0],
+      [4,5],[5,6],[6,7],[7,4],
+      [0,4],[1,5],[2,6],[3,7],[0,7],[1,4],[2,5],[3,6]
+    ]
+  );
+
+  // 10. Z10 C10
+  (function() {
+    const nodes = [];
+    for(let i=0; i<10; i++) {
+      const a = (i * 36 - 90) * Math.PI / 180;
+      nodes.push({x: 100 + 70*Math.cos(a), y: 100 + 70*Math.sin(a)});
+    }
+    const edges = [];
+    for(let i=0;i<10;i++) edges.push([i, (i+1)%10]);
+    drawGraph('cay-z10-c10', nodes, edges);
+  })();
+
+  // 11. Z10 2C5
+  (function() {
+    const nodes = [];
+    for(let i=0; i<5; i++) {
+      const a = (i * 72 - 90) * Math.PI / 180;
+      nodes.push({x: 60 + 35*Math.cos(a), y: 100 + 35*Math.sin(a)});
+    }
+    for(let i=0; i<5; i++) {
+      const a = (i * 72 - 90) * Math.PI / 180;
+      nodes.push({x: 140 + 35*Math.cos(a), y: 100 + 35*Math.sin(a), fill:'#dc2626'});
+    }
+    const edges = [
+      [0,1],[1,2],[2,3],[3,4],[4,0],
+      [5,6],[6,7],[7,8],[8,9],[9,5]
+    ];
+    drawGraph('cay-z10-2c5', nodes, edges);
+  })();
+
+  // 12. D5 Pentagonal Prism
+  (function() {
+    const nodes = [];
+    for(let i=0; i<5; i++) {
+      const a = (i * 72 - 90) * Math.PI / 180;
+      nodes.push({x: 100 + 70*Math.cos(a), y: 100 + 70*Math.sin(a)});
+    }
+    for(let i=0; i<5; i++) {
+      const a = (i * 72 - 90) * Math.PI / 180;
+      nodes.push({x: 100 + 35*Math.cos(a), y: 100 + 35*Math.sin(a), fill:'#dc2626'});
+    }
+    const edges = [];
+    for(let i=0;i<5;i++) {
+      edges.push([i, (i+1)%5]);
+      edges.push([i+5, ((i+1)%5)+5]);
+      edges.push([i, i+5]);
+    }
+    drawGraph('cay-d5-prism', nodes, edges);
+  })();
+
+})();
+</script>
+
+</body>
+</html>

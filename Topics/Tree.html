@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trees: Definitions, Basic Lemmas, and Equivalent Characterizations</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+<style>
+  :root{
+    --ink:#1f2430; --paper:#faf7f1; --panel:#ffffff; --line:#e2ddd0;
+    --accent:#5b6ee1; --accent-dark:#3a48a8; --amber:#c98a2c; --green:#3f8f5f;
+    --red:#c14e4e; --purple:#8256b0; --teal:#2f8f8a; --muted:#6b6f7a;
+    --c1:#5b6ee1; --c2:#3f8f5f; --c3:#8256b0; --c4:#c98a2c; --c5:#c14e4e; --c6:#2f8f8a;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:'Georgia','Cambria','Source Serif Pro',serif; line-height:1.65; padding-bottom:60px;}
+  header{padding:48px 20px 26px; text-align:center; background:linear-gradient(180deg,#2b2f45,#3a3f5c); color:#f4f2ea;}
+  header h1{font-family:'Trebuchet MS','Segoe UI',sans-serif; font-weight:600; font-size:1.85em; margin:0 0 8px; letter-spacing:0.3px;}
+  header p{margin:0; color:#cdd0e6; font-size:1.02em; font-style:italic;}
+  .toc{display:flex; justify-content:center; gap:22px; margin-top:18px; flex-wrap:wrap;}
+  .toc a{color:#dfe2f7; text-decoration:none; font-family:'Trebuchet MS',sans-serif; font-size:0.92em; border-bottom:1px dotted #7d84ad; padding-bottom:2px;}
+  .toc a:hover{color:#fff;}
+  .wrap{max-width:900px; margin:0 auto; padding:0 20px;}
+  section{margin-top:46px;}
+  .section-kicker{font-family:'Trebuchet MS',sans-serif; font-size:0.78em; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent-dark); font-weight:700; margin-bottom:4px;}
+  h2{font-family:'Trebuchet MS','Segoe UI',sans-serif; font-size:1.4em; color:var(--accent-dark); border-bottom:2px solid var(--line); padding-bottom:8px; margin:0 0 18px;}
+  h3{font-family:'Trebuchet MS','Segoe UI',sans-serif; font-size:1.08em; margin:22px 0 8px; color:var(--ink);}
+  .statement-box{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:22px 26px; box-shadow:0 2px 10px rgba(0,0,0,0.04);}
+  .statement-box ol{margin:0; padding-left:1.4em;}
+  .statement-box li{margin-bottom:12px;}
+  .statement-box li b{color:var(--accent-dark);}
+  .tag{display:inline-block; font-family:'Trebuchet MS',sans-serif; font-size:0.78em; font-weight:700; color:#fff; padding:2px 9px; border-radius:12px; margin-right:8px; vertical-align:middle;}
+  .cyclemap{display:flex; justify-content:center; margin:22px 0 6px;}
+  .note{background:#f1f4ff; border-left:4px solid var(--accent); border-radius:6px; padding:14px 18px; font-size:0.96em; color:#333a55; margin:16px 0;}
+  .card{background:var(--panel); border:1px solid var(--line); border-left-width:6px; border-radius:8px; padding:18px 22px; margin:20px 0; box-shadow:0 1px 6px rgba(0,0,0,0.03);}
+  .card h3{margin-top:0; display:flex; align-items:center; gap:10px;}
+  .card .lemma-label{font-family:'Trebuchet MS',sans-serif; font-size:0.75em; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); font-weight:700;}
+  .toggle-btn{font-family:'Trebuchet MS',sans-serif; font-size:0.82em; background:var(--ink); color:#fff; border:none; border-radius:5px; padding:5px 12px; cursor:pointer; margin-top:8px;}
+  .toggle-btn:hover{opacity:0.85;}
+  .proof-body{margin-top:10px; display:none;}
+  .proof-body.open{display:block;}
+  .proof-body p{margin:0 0 10px;}
+  .qed{text-align:right; font-weight:bold;}
+  .diagram-panel{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:20px; text-align:center;}
+  .btnrow{margin-bottom:14px; display:flex; flex-wrap:wrap; justify-content:center; gap:8px;}
+  .modebtn{font-family:'Trebuchet MS',sans-serif; font-size:0.85em; border:1.5px solid var(--line); background:#fff; color:var(--ink); padding:7px 14px; border-radius:20px; cursor:pointer; transition:all .15s;}
+  .modebtn.active{color:#fff; border-color:transparent;}
+  .modebtn[data-mode="leaf"].active{background:var(--amber);}
+  .modebtn[data-mode="bridge"].active{background:var(--red);}
+  .modebtn[data-mode="cycle"].active{background:var(--purple);}
+  .modebtn[data-mode="path"].active{background:var(--accent);}
+  .modebtn[data-mode="none"].active{background:var(--muted);}
+  .caption{font-size:0.9em; color:var(--muted); margin-top:6px; min-height:20px;}
+  footer{text-align:center; color:var(--muted); font-size:0.85em; margin-top:60px;}
+  .defbox{background:#fff8ea; border:1px solid #eadfc0; border-left:5px solid var(--amber); border-radius:8px; padding:18px 22px; margin:16px 0;}
+  .examplerow{display:flex; gap:24px; flex-wrap:wrap; justify-content:center; margin:18px 0;}
+  .examplecard{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px; text-align:center; width:250px;}
+  .examplecard .verdict{font-family:'Trebuchet MS',sans-serif; font-weight:700; font-size:0.88em; margin-top:6px;}
+  .verdict.yes{color:var(--green);}
+  .verdict.no{color:var(--red);}
+  .gallery-block{margin-bottom:34px;}
+  .gallery-grid{display:flex; flex-wrap:wrap; gap:16px; justify-content:center;}
+  .gitem{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:8px 10px 10px; width:150px; text-align:center;}
+  .gitem svg{display:block; margin:0 auto;}
+  .gitem .glabel{font-family:'Trebuchet MS',sans-serif; font-size:0.78em; color:var(--muted); margin-top:4px; line-height:1.3;}
+  .count-strip{font-family:'Trebuchet MS',sans-serif; font-size:0.85em; color:var(--muted); text-align:center; margin-top:6px;}
+  .toolbox{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:20px;}
+  .toolbox label{font-family:'Trebuchet MS',sans-serif; font-size:0.88em; color:var(--muted);}
+  .toolbox input[type=text]{font-family:'Trebuchet MS',sans-serif; font-size:0.95em; padding:8px 10px; border:1.5px solid var(--line); border-radius:6px; width:260px; max-width:100%; margin-top:6px;}
+  .toolbox select{font-family:'Trebuchet MS',sans-serif; font-size:0.9em; padding:7px 10px; border:1.5px solid var(--line); border-radius:6px; margin-top:6px;}
+  .toolbox button.run{font-family:'Trebuchet MS',sans-serif; background:var(--accent-dark); color:#fff; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; margin-left:8px;}
+  .toolbox button.run:hover{opacity:0.88;}
+  .result-box{margin-top:14px; padding:12px 16px; border-radius:8px; font-family:'Trebuchet MS',sans-serif; font-size:0.92em;}
+  .result-box.ok{background:#eaf6ee; color:#245c37; border:1px solid #bfe3c9;}
+  .result-box.bad{background:#fdecec; color:#7a2626; border:1px solid #f2c1c1;}
+  .step-table{width:100%; border-collapse:collapse; margin-top:10px; font-family:'Trebuchet MS',sans-serif; font-size:0.85em;}
+  .step-table th,.step-table td{border:1px solid var(--line); padding:5px 9px; text-align:center;}
+  .step-table th{background:#f2efe6;}
+  .tabs{display:flex; gap:6px; margin-bottom:0;}
+  .tabbtn{font-family:'Trebuchet MS',sans-serif; font-size:0.88em; padding:8px 18px; border-radius:8px 8px 0 0; border:1.5px solid var(--line); border-bottom:none; background:#f2efe6; cursor:pointer; color:var(--muted);}
+  .tabbtn.active{background:var(--panel); font-weight:700; color:var(--accent-dark);}
+  .tabpanel{display:none; border:1px solid var(--line); border-radius:0 8px 8px 8px; padding:18px; background:var(--panel);}
+  .tabpanel.active{display:block;}
+  .problem-card{background:#fff; border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin:14px 0;}
+  .demo-flex{display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start;}
+  .demo-flex > div{flex:1; min-width:240px;}
+  table.cayley-table{border-collapse:collapse; margin:14px auto; font-family:'Trebuchet MS',sans-serif; font-size:0.9em;}
+  table.cayley-table th, table.cayley-table td{border:1px solid var(--line); padding:6px 14px; text-align:center;}
+  table.cayley-table th{background:#f2efe6;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Trees: Definitions, Basic Lemmas, and Equivalent Characterizations</h1>
+  <p>Lecture notes with proofs and interactive diagrams</p>
+  <div class="toc">
+    <a href="#sec1">1. Introduction</a>
+    <a href="#sec2">2. Immediate Observations</a>
+    <a href="#sec3">3. Equivalent Conditions</a>
+    <a href="#sec4">4. Degree Sequences</a>
+    <a href="#sec5">5. Counting Labelled Trees</a>
+    <a href="#sec6">6. Prüfer Sequences</a>
+    <a href="#sec7">7. Spanning Trees</a>
+    <a href="#sec8">8. Trees by Diameter</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ============================================================ -->
+<section id="sec1">
+  <div class="section-kicker">Section 1</div>
+  <h2>Introduction</h2>
+
+  <div class="defbox">
+    <h3 style="margin-top:0;">Definition</h3>
+    <p style="margin-bottom:0;">A <b>tree</b> is a graph $T=(V,E)$ that is <b>connected</b> and contains <b>no cycles</b> (i.e. is <i>acyclic</i>). Throughout, $n=|V|$ denotes the number of vertices.</p>
+  </div>
+
+  <h3>Example versus non-example</h3>
+  <p>Both conditions in the definition — connected <i>and</i> acyclic — are needed. Here is a graph satisfying both (a tree), and a graph satisfying only one of them (not a tree).</p>
+  <div class="examplerow">
+    <div class="examplecard">
+      <svg viewBox="0 0 200 150" width="100%" height="130">
+        <line x1="100" y1="20" x2="60" y2="70" stroke="#8a93b8" stroke-width="2.5"/>
+        <line x1="60" y1="70" x2="140" y2="70" stroke="#8a93b8" stroke-width="2.5"/>
+        <line x1="140" y1="70" x2="100" y2="120" stroke="#8a93b8" stroke-width="2.5"/>
+        <line x1="140" y1="70" x2="175" y2="120" stroke="#8a93b8" stroke-width="2.5"/>
+        <g font-family="Trebuchet MS,sans-serif" font-size="13" font-weight="700" fill="#fff" text-anchor="middle" dominant-baseline="middle">
+          <circle cx="100" cy="20" r="13" fill="#5b6ee1"/><text x="100" y="20">a</text>
+          <circle cx="60" cy="70" r="13" fill="#5b6ee1"/><text x="60" y="70">b</text>
+          <circle cx="140" cy="70" r="13" fill="#5b6ee1"/><text x="140" y="70">c</text>
+          <circle cx="100" cy="120" r="13" fill="#5b6ee1"/><text x="100" y="120">d</text>
+          <circle cx="175" cy="120" r="13" fill="#5b6ee1"/><text x="175" y="120">e</text>
+        </g>
+      </svg>
+      <div class="verdict yes">Connected + acyclic &rarr; a tree</div>
+    </div>
+    <div class="examplecard">
+      <svg viewBox="0 0 200 150" width="100%" height="130">
+        <line x1="60" y1="40" x2="140" y2="40" stroke="#8a93b8" stroke-width="2.5"/>
+        <line x1="140" y1="40" x2="140" y2="110" stroke="#8a93b8" stroke-width="2.5"/>
+        <line x1="140" y1="110" x2="60" y2="110" stroke="#8a93b8" stroke-width="2.5"/>
+        <line x1="60" y1="110" x2="60" y2="40" stroke="#c14e4e" stroke-width="3"/>
+        <line x1="60" y1="40" x2="20" y2="20" stroke="#8a93b8" stroke-width="2.5"/>
+        <g font-family="Trebuchet MS,sans-serif" font-size="13" font-weight="700" fill="#fff" text-anchor="middle" dominant-baseline="middle">
+          <circle cx="60" cy="40" r="13" fill="#5b6ee1"/><text x="60" y="40">a</text>
+          <circle cx="140" cy="40" r="13" fill="#5b6ee1"/><text x="140" y="40">b</text>
+          <circle cx="140" cy="110" r="13" fill="#5b6ee1"/><text x="140" y="110">c</text>
+          <circle cx="60" cy="110" r="13" fill="#5b6ee1"/><text x="60" y="110">d</text>
+          <circle cx="20" cy="20" r="13" fill="#5b6ee1"/><text x="20" y="20">e</text>
+        </g>
+      </svg>
+      <div class="verdict no">Connected, but a&ndash;b&ndash;c&ndash;d&ndash;a is a cycle &rarr; not a tree</div>
+    </div>
+  </div>
+
+  <h3>All non-isomorphic trees on $n=4,5,6,7$ vertices</h3>
+  <p>Up to relabelling of vertices (isomorphism), there is exactly one tree for $n=1,2,3$; the count then grows as shown below.</p>
+
+  <div class="gallery-block">
+    <div class="count-strip"><b>$n=4$:</b> 2 trees</div>
+    <div class="gallery-grid" id="gallery-4"></div>
+  </div>
+  <div class="gallery-block">
+    <div class="count-strip"><b>$n=5$:</b> 3 trees</div>
+    <div class="gallery-grid" id="gallery-5"></div>
+  </div>
+  <div class="gallery-block">
+    <div class="count-strip"><b>$n=6$:</b> 6 trees</div>
+    <div class="gallery-grid" id="gallery-6"></div>
+  </div>
+  <div class="gallery-block">
+    <div class="count-strip"><b>$n=7$:</b> 11 trees</div>
+    <div class="gallery-grid" id="gallery-7"></div>
+  </div>
+  <div class="note">
+    The sequence of counts $1,1,1,2,3,6,11,23,\dots$ (for $n=1,2,3,4,5,6,7,8,\dots$) is <a href="https://oeis.org/A000055" target="_blank" rel="noopener">OEIS A000055</a>. Notice the tree labelled <i>"not a caterpillar"</i> for $n=7$: it is the first case where deleting all the leaves does <b>not</b> leave behind a path.
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="sec2">
+  <div class="section-kicker">Section 2</div>
+  <h2>A Few Immediate Observations</h2>
+  <p>These facts follow directly from the definition (connected + acyclic) and are used repeatedly later.</p>
+
+  <div class="card" style="border-left-color:var(--c1);">
+    <h3><span class="lemma-label">Lemma 0</span></h3>
+    <p>Every tree $T$ with $n \ge 2$ vertices has at least one vertex of degree $1$ (a <i>leaf</i>, or <i>pendant vertex</i>).</p>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show proof</button>
+    <div class="proof-body">
+      <p><b>Proof.</b> Since $T$ is finite, it has a path of maximum length; write it as $v_0v_1\cdots v_k$. We claim $\deg(v_0)=1$.</p>
+      <p>Suppose not: then $v_0$ has some neighbour $u \ne v_1$. There are two possibilities.</p>
+      <p>&bull; If $u$ does not lie on the path, then $u, v_0, v_1, \dots, v_k$ is a longer path — contradicting maximality.</p>
+      <p>&bull; If $u = v_i$ for some $i \ge 2$, then $v_0v_1\cdots v_i v_0$ is a cycle — contradicting that $T$ is acyclic.</p>
+      <p>Both cases are impossible, so $\deg(v_0)=1$: the endpoint of a longest path is always a leaf.</p>
+      <p class="qed">&#8718;</p>
+    </div>
+  </div>
+
+  <div class="card" style="border-left-color:var(--c2);">
+    <h3><span class="lemma-label">Lemma 1</span></h3>
+    <p>A tree $T$ with $n \ge 3$ vertices contains a vertex of degree at least $2$.</p>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show proof</button>
+    <div class="proof-body">
+      <p><b>Proof.</b> Since $T$ is connected and $n\ge 2$, no vertex can be isolated, so every vertex has degree $\ge 1$.</p>
+      <p>Suppose, for contradiction, that <i>every</i> vertex has degree exactly $1$. Pick any vertex $v_0$; it has a unique neighbour $v_1$, and since $\deg(v_1)=1$ as well, $v_1$'s only edge is the one back to $v_0$.</p>
+      <p>Now take any third vertex $w$ (it exists, since $n\ge 3$). By connectivity there is a path from $v_0$ to $w$. Its first step must go to $v_0$'s only neighbour, $v_1$. But $v_1$ has no other edge to continue on, so the path cannot proceed any further unless $w=v_1$. Since $w$ was an arbitrary third vertex distinct from $v_0,v_1$, this is a contradiction: $w$ cannot be reached.</p>
+      <p>So not every vertex can have degree exactly $1$; since every degree is $\ge 1$, some vertex must have degree $\ge 2$.</p>
+      <p class="qed">&#8718;</p>
+    </div>
+  </div>
+
+  <div class="card" style="border-left-color:var(--c3);">
+    <h3><span class="lemma-label">Lemma 2</span></h3>
+    <p>If a tree $T$ has a vertex $v$ of degree $k \ge 2$, then $T$ has at least $k$ pendant vertices (leaves).</p>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show proof</button>
+    <div class="proof-body">
+      <p><b>Step 1: removing $v$ leaves exactly $k$ components.</b> Let $u_1,\dots,u_k$ be the neighbours of $v$. Since $T$ is connected, deleting $v$ leaves each remaining vertex still reachable from some $u_i$, so every component of $T-v$ contains at least one $u_i$. If some component contained two of the $u_i$'s, say $u_i$ and $u_j$, then joining a $u_i$&ndash;$u_j$ path inside that component with the two edges $vu_i$ and $vu_j$ would produce a cycle through $v$ — contradicting acyclicity. So each of the $k$ components of $T-v$ contains exactly one $u_i$; there are exactly $k$ components, call them $T_1,\dots,T_k$ (with $u_i \in T_i$).</p>
+      <p><b>Step 2: each $T_i$ contributes a leaf of $T$.</b> Fix $i$. If $T_i$ consists of the single vertex $u_i$, then in $T$, $u_i$'s only neighbour is $v$ itself, so $\deg_T(u_i)=1$ — i.e. $u_i$ is a leaf of $T$. Otherwise $T_i$ has $\ge 2$ vertices; being connected and acyclic (a subgraph of the acyclic graph $T$), $T_i$ is itself a tree, so by Lemma 0 it has some leaf $\ell_i \ne u_i$ possible, or possibly $\ell_i = u_i$. In either case $\ell_i$'s only neighbour inside $T_i$ is one other vertex of $T_i$, and $\ell_i$ is not adjacent to $v$ (only $u_i$ is, among vertices of $T_i$, and if $\ell_i \ne u_i$ it has no edge to $v$). So $\deg_T(\ell_i) = 1$: $\ell_i$ is a leaf of $T$.</p>
+      <p><b>Step 3: these leaves are distinct.</b> The leaf found in branch $T_i$ lies in $T_i$, and the sets $T_1,\dots,T_k$ are pairwise disjoint (different components of $T-v$). So the $k$ leaves $\ell_1,\dots,\ell_k$ are $k$ distinct leaves of $T$. Hence $T$ has at least $k$ leaves.</p>
+      <p class="qed">&#8718;</p>
+    </div>
+  </div>
+
+  <div class="card" style="border-left-color:var(--c4);">
+    <h3><span class="lemma-label">Lemma 3</span></h3>
+    <p>Every tree $T$ is <b>bipartite</b>: its vertex set can be split into two classes $A,B$ so that every edge of $T$ joins a vertex of $A$ to a vertex of $B$ (equivalently, no edge has both endpoints in $A$, and none has both endpoints in $B$).</p>
+
+    <h3 style="margin-top:16px; font-size:1em;">Proof 1 &mdash; via the even-cycle criterion</h3>
+    <p>A standard characterization of bipartite graphs is:</p>
+    <div class="note" style="margin:10px 0;">A graph is bipartite if and only if it contains no cycle of odd length.</div>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show why "no odd cycle &#8658; bipartite"</button>
+    <div class="proof-body">
+      <p>Assume $G$ is connected with no odd cycle (the disconnected case follows by treating each component separately). Fix a root $r$ and let $A,B$ be the sets of vertices at even, respectively odd, distance from $r$ (distance = length of a shortest $r$&ndash;$v$ path).</p>
+      <p>Suppose some edge $uw$ had both endpoints in the same class, i.e. $d(r,u)$ and $d(r,w)$ have the same parity. Take shortest paths $P_u$ from $r$ to $u$ and $P_w$ from $r$ to $w$, and let $z$ be the last vertex they have in common. The two sub-paths from $z$ to $u$ and from $z$ to $w$ have lengths of the same parity (since $d(z,u)-d(z,w) = d(r,u)-d(r,w)$ is even), so combining them with the edge $uw$ produces a closed walk of odd total length, which contains an odd cycle — contradicting our assumption. So every edge joins $A$ to $B$: $G$ is bipartite.</p>
+      <p class="qed">&#8718;</p>
+    </div>
+    <p>Now apply this to a tree $T$: by definition (statement (1) of Section 3), $T$ has <b>no cycles at all</b> — so in particular it has no cycle of odd length, vacuously. By the criterion above, $T$ is bipartite.</p>
+    <p class="qed">&#8718;</p>
+
+    <h3 style="margin-top:22px; font-size:1em;">Proof 2 &mdash; directly, by distance parity from a root</h3>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show proof</button>
+    <div class="proof-body">
+      <p>Fix any vertex $r$ of $T$ as a root. Since $T$ is a tree, every vertex $v$ has a <i>unique</i> path from $r$ (statement (6) of Section 3), so its distance $d(r,v)$ &mdash; the length of that path &mdash; is well defined. Let</p>
+      <p style="text-align:center;">$A=\{v : d(r,v) \text{ is even}\}, \qquad B=\{v : d(r,v) \text{ is odd}\}.$</p>
+      <p>Let $uw$ be any edge of $T$. Removing the edge $uw$ from $T$ splits it into two components (Lemma 2's argument, with $k=2$ here restricted to this single edge); say $w$ lies on the far side from $r$. Then the unique $r$&ndash;$w$ path must pass through $u$ and use the edge $uw$ as its last step (any $r$&ndash;$w$ path not using edge $uw$ together with the edge $uw$ would create a second $r$-to-$w$ route, contradicting uniqueness). Hence $d(r,w) = d(r,u)+1$.</p>
+      <p>So the two endpoints of every edge have distances from $r$ that differ by exactly $1$ &mdash; one even, one odd. Thus every edge joins a vertex of $A$ to a vertex of $B$, and $\{A,B\}$ is a bipartition of $T$.</p>
+      <p class="qed">&#8718;</p>
+    </div>
+
+    <h3 style="margin-top:20px; font-size:1em;">Interactive: the two-coloring by distance</h3>
+    <div class="toolbox">
+      <label>Root the tree at vertex:</label><br>
+      <select id="bipartite-root" onchange="showBipartition()">
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+        <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+      </select>
+      <div id="bipartite-view" style="text-align:center; margin-top:12px;"></div>
+      <div class="caption" id="bipartite-caption"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="sec3">
+  <div class="section-kicker">Section 3</div>
+  <h2>Equivalent Conditions for a Tree</h2>
+  <p>Let $T=(V,E)$ be a finite graph with $n=|V|\ge 1$ vertices. The following six statements about $T$ are logically equivalent.</p>
+  <div class="statement-box">
+    <ol>
+      <li><b>(1)</b> <i>$T$ is a tree</i>: it is connected and acyclic.</li>
+      <li><b>(2)</b> $T$ is connected and has exactly $n-1$ edges.</li>
+      <li><b>(3)</b> $T$ is acyclic and has exactly $n-1$ edges.</li>
+      <li><b>(4)</b> $T$ is acyclic, and adding <i>any</i> single missing edge to $T$ creates exactly one cycle. <span style="color:var(--muted); font-size:0.9em;">(edge-maximal acyclic graph)</span></li>
+      <li><b>(5)</b> $T$ is connected, and <i>every</i> edge of $T$ is a bridge (deleting it disconnects $T$). <span style="color:var(--muted); font-size:0.9em;">(minimally connected graph)</span></li>
+      <li><b>(6)</b> Every pair of distinct vertices of $T$ is joined by a <i>unique</i> path.</li>
+    </ol>
+  </div>
+
+  <div class="note">
+    <b>Why a cycle of implications is enough.</b> To show six statements are pairwise equivalent, it suffices to prove one directed cycle through all of them — here $(1)\Rightarrow(2)\Rightarrow(3)\Rightarrow(4)\Rightarrow(5)\Rightarrow(6)\Rightarrow(1)$. Since implication is transitive, following the arrows around lets you get from any statement to any other, in either direction. That single cycle therefore proves all $\binom{6}{2}=15$ pairwise equivalences at once.
+  </div>
+
+  <div class="cyclemap" id="cyclemap"></div>
+
+  <h3>A running example</h3>
+  <p>The same 7-vertex tree is used throughout to illustrate each idea. Click a button to highlight the corresponding notion.</p>
+  <div class="diagram-panel">
+    <div class="btnrow">
+      <button class="modebtn active" data-mode="none" onclick="setMode('none')">Plain tree</button>
+      <button class="modebtn" data-mode="leaf" onclick="setMode('leaf')">Leaves</button>
+      <button class="modebtn" data-mode="bridge" onclick="setMode('bridge')">A bridge</button>
+      <button class="modebtn" data-mode="cycle" onclick="setMode('cycle')">Adding an edge</button>
+      <button class="modebtn" data-mode="path" onclick="setMode('path')">Unique path</button>
+    </div>
+    <svg id="treeSvg" viewBox="0 0 600 330" width="100%" style="max-width:520px;">
+      <line id="e-ab" class="edge" x1="300" y1="45" x2="150" y2="125"/>
+      <line id="e-ac" class="edge" x1="300" y1="45" x2="450" y2="125"/>
+      <line id="e-cd" class="edge" x1="450" y1="125" x2="380" y2="225"/>
+      <line id="e-ce" class="edge" x1="450" y1="125" x2="520" y2="225"/>
+      <line id="e-ef" class="edge" x1="520" y1="225" x2="460" y2="305"/>
+      <line id="e-eg" class="edge" x1="520" y1="225" x2="580" y2="305"/>
+      <line id="e-bd" class="edge new-edge" x1="150" y1="125" x2="380" y2="225" stroke-dasharray="6,5"/>
+      <g class="vertex" id="v-A"><circle cx="300" cy="45" r="15"/><text x="300" y="45">A</text></g>
+      <g class="vertex" id="v-B"><circle cx="150" cy="125" r="15"/><text x="150" y="125">B</text></g>
+      <g class="vertex" id="v-C"><circle cx="450" cy="125" r="15"/><text x="450" y="125">C</text></g>
+      <g class="vertex" id="v-D"><circle cx="380" cy="225" r="15"/><text x="380" y="225">D</text></g>
+      <g class="vertex" id="v-E"><circle cx="520" cy="225" r="15"/><text x="520" y="225">E</text></g>
+      <g class="vertex" id="v-F"><circle cx="460" cy="305" r="15"/><text x="460" y="305">F</text></g>
+      <g class="vertex" id="v-G"><circle cx="580" cy="305" r="15"/><text x="580" y="305">G</text></g>
+    </svg>
+    <div class="caption" id="caption">A tree on 7 vertices with 6 edges.</div>
+  </div>
+
+  <h3>The proof chain</h3>
+
+  <div class="card" style="border-left-color:var(--c1);">
+    <h3><span class="tag" style="background:var(--c1);">(1) &#8658; (2)</span> A tree has $n-1$ edges</h3>
+    <p><b>Claim.</b> If $T$ is connected and acyclic, it has exactly $n-1$ edges.</p>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show proof</button>
+    <div class="proof-body">
+      <p><b>Proof (induction on $n$).</b> If $n=1$, $T$ is a single vertex with $0=n-1$ edges.</p>
+      <p>Assume the claim holds for all trees with fewer than $n$ vertices, and let $T$ be a tree with $n\ge 2$ vertices. By Lemma 0, $T$ has a leaf $v$. Let $T^{\prime} = T - v$ (delete $v$ and its one incident edge).</p>
+      <p>$T^{\prime}$ is still acyclic (a subgraph of an acyclic graph is acyclic) and still connected: since $v$ had degree $1$, it lay on no path between any two other vertices, so all such paths survive intact in $T^{\prime}$. Thus $T^{\prime}$ is a tree on $n-1$ vertices, and by the induction hypothesis it has $(n-1)-1 = n-2$ edges.</p>
+      <p>$T$ has exactly one more edge than $T^{\prime}$ (the edge at $v$), so $T$ has $n-2+1 = n-1$ edges.</p>
+      <p class="qed">&#8718;</p>
+    </div>
+    <div class="note" style="margin-top:14px;">
+      <b>Corollary (used below).</b> Every connected graph on $n$ vertices has <i>at least</i> $n-1$ edges.
+      <button class="toggle-btn" onclick="toggleProof(this)">Show proof</button>
+      <div class="proof-body">
+        <p>If a connected graph $T$ contains a cycle, pick an edge $e$ on that cycle. Deleting $e$ keeps $T$ connected, because the two endpoints of $e$ remain joined via the rest of the cycle, and no other pair of vertices loses its only connection. Repeat this on any remaining cycle. Since the edge count strictly decreases each time, the process must stop — at a connected, acyclic spanning subgraph $T^{\prime}$, i.e. a <i>spanning tree</i> on the same $n$ vertices.</p>
+        <p>By (1)&#8658;(2) above, $T^{\prime}$ has $n-1$ edges. Since $T^{\prime}$ is obtained from $T$ only by deleting edges, $|E(T)| \ge |E(T^{\prime})| = n-1$.</p>
+        <p class="qed">&#8718;</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="border-left-color:var(--c2);">
+    <h3><span class="tag" style="background:var(--c2);">(2) &#8658; (3)</span> Connected + $n-1$ edges forces no cycles</h3>
+    <p><b>Claim.</b> If $T$ is connected with exactly $n-1$ edges, then $T$ is acyclic.</p>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show proof</button>
+    <div class="proof-body">
+      <p><b>Proof.</b> Suppose, for contradiction, that $T$ has a cycle. Pick an edge $e$ lying on it. As in the Corollary above, $T-e$ is still connected, now with $n-2$ edges.</p>
+      <p>But the Corollary says every connected graph on $n$ vertices needs at least $n-1$ edges — and $n-2 < n-1$. Contradiction.</p>
+      <p>So $T$ has no cycle: $T$ is acyclic. Together with the hypothesis of $n-1$ edges, this is exactly statement (3).</p>
+      <p class="qed">&#8718;</p>
+    </div>
+  </div>
+
+  <div class="card" style="border-left-color:var(--c3);">
+    <h3><span class="tag" style="background:var(--c3);">(3) &#8658; (4)</span> Acyclic + $n-1$ edges is edge-maximal</h3>
+    <p><b>Claim.</b> If $T$ is acyclic with exactly $n-1$ edges, then adding any missing edge creates exactly one cycle.</p>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show proof</button>
+    <div class="proof-body">
+      <p><b>Step 1 — $T$ must be connected.</b> If a forest (acyclic graph) has $n$ vertices split into $c$ connected components, each component is itself a tree, so by (1)&#8658;(2) it has (its own vertex count $-1$) edges. Summing over all $c$ components gives a total of $n-c$ edges. Since $T$ has $n-1$ edges, we get $c=1$: $T$ is connected. Being connected and acyclic, $T$ is a tree.</p>
+      <p><b>Step 2 — Any two vertices have a unique path.</b> Connectivity gives at least one path between any $u,v$. For at most one: if $u,v$ had two distinct paths $P_1 \ne P_2$, follow them from $u$ until they first diverge, and note they must later reconverge (both end at $v$); the two distinct routes between the divergence and reconvergence points form a cycle — contradicting acyclicity. So the path between any $u,v$ is unique; call it $P_{uv}$.</p>
+      <p><b>Step 3 — Adding an edge creates exactly one cycle.</b> Let $uv$ be any pair not already joined by an edge. Then $P_{uv}$ together with the new edge $uv$ forms a cycle in $T+uv$. If $T+uv$ had a second cycle $C$, then $C$ cannot avoid the new edge (otherwise $C \subseteq T$, contradicting $T$ acyclic); removing $uv$ from $C$ leaves a $u$&ndash;$v$ path inside $T$, which must equal $P_{uv}$ by uniqueness. So $C$ is the same cycle as $P_{uv}+uv$. Hence exactly one cycle is created.</p>
+      <p class="qed">&#8718;</p>
+    </div>
+  </div>
+
+  <div class="card" style="border-left-color:var(--c4);">
+    <h3><span class="tag" style="background:var(--c4);">(4) &#8658; (5)</span> Edge-maximal acyclic is minimally connected</h3>
+    <p><b>Claim.</b> If $T$ is acyclic and every missing edge would create a cycle, then $T$ is connected and every edge of $T$ is a bridge.</p>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show proof</button>
+    <div class="proof-body">
+      <p><b>Connectedness.</b> Suppose $T$ were disconnected, with $u$ and $v$ in different components. The edge $uv$ is missing, but adding it cannot create a cycle: a cycle through $uv$ would require another $u$&ndash;$v$ path already inside $T$, impossible since $u$ and $v$ lie in different components. This contradicts the hypothesis that adding <i>any</i> missing edge creates a cycle. So $T$ is connected — hence, with acyclicity, $T$ is a tree.</p>
+      <p><b>Every edge is a bridge.</b> Let $e=uv \in E(T)$. Because $T$ is acyclic, $e$ is the <i>only</i> path from $u$ to $v$: any other route from $u$ to $v$ avoiding $e$ would, together with $e$, form a cycle. So once $e$ is deleted, $u$ and $v$ have no remaining path — $T-e$ is disconnected, i.e. $e$ is a bridge. As $e$ was arbitrary, every edge of $T$ is a bridge.</p>
+      <p class="qed">&#8718;</p>
+    </div>
+  </div>
+
+  <div class="card" style="border-left-color:var(--c5);">
+    <h3><span class="tag" style="background:var(--c5);">(5) &#8658; (6)</span> Minimally connected gives unique paths</h3>
+    <p><b>Claim.</b> If $T$ is connected and every edge is a bridge, then every pair of vertices has a unique connecting path.</p>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show proof</button>
+    <div class="proof-body">
+      <p><b>Existence.</b> Immediate from connectivity: some path joins any $u,v$.</p>
+      <p><b>Uniqueness.</b> Suppose some pair $u,v$ had two distinct paths $P_1\ne P_2$. As in the argument above, two distinct paths between the same two vertices always force a cycle somewhere in the graph (they diverge and later reconverge, and the two routes in between form a cycle). So $T$ would contain a cycle $C$.</p>
+      <p>But no edge lying on a cycle can be a bridge: deleting an edge of $C$ still leaves its two endpoints connected via the rest of $C$, so the graph stays connected. This contradicts the hypothesis that <i>every</i> edge of $T$ is a bridge.</p>
+      <p>So no two distinct paths can exist between any pair of vertices: the path is unique.</p>
+      <p class="qed">&#8718;</p>
+    </div>
+  </div>
+
+  <div class="card" style="border-left-color:var(--c6);">
+    <h3><span class="tag" style="background:var(--c6);">(6) &#8658; (1)</span> Unique paths give a tree</h3>
+    <p><b>Claim.</b> If every pair of vertices is joined by exactly one path, then $T$ is connected and acyclic.</p>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show proof</button>
+    <div class="proof-body">
+      <p><b>Connected.</b> A path exists between every pair of vertices, in particular — so $T$ is connected.</p>
+      <p><b>Acyclic.</b> Suppose $T$ had a cycle $v_0v_1\cdots v_kv_0$ (with $k \ge 2$). Then $v_0$ and $v_1$ are joined by two different paths: the direct edge $v_0v_1$, and the longer route $v_0, v_k, v_{k-1}, \dots, v_1$ around the rest of the cycle. This contradicts the assumed uniqueness of the $v_0$&ndash;$v_1$ path.</p>
+      <p>So $T$ has no cycle. Being both connected and acyclic, $T$ is a tree — statement (1).</p>
+      <p class="qed">&#8718;</p>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:26px;">
+    The chain $(1)\Rightarrow(2)\Rightarrow(3)\Rightarrow(4)\Rightarrow(5)\Rightarrow(6)\Rightarrow(1)$ is now complete, so all six statements are pairwise equivalent. $\blacksquare$
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="sec4">
+  <div class="section-kicker">Section 4</div>
+  <h2>Degree Sequences of Trees</h2>
+  <div class="statement-box">
+    <p><b>Theorem.</b> A list of positive integers $d_1,d_2,\dots,d_n$ (with $n\ge2$) is the degree sequence of some tree on $n$ vertices <b>if and only if</b></p>
+    <p style="text-align:center; font-size:1.05em;">$d_i \ge 1$ for every $i$,&nbsp; and&nbsp; $\displaystyle\sum_{i=1}^n d_i = 2n-2$.</p>
+  </div>
+  <button class="toggle-btn" onclick="toggleProof(this)">Show proof</button>
+  <div class="proof-body">
+    <p><b>Necessity.</b> If $T$ is a tree on $n$ vertices, it has $n-1$ edges by (1)&#8658;(2) of Section 3. Every edge contributes $1$ to the degree of each of its two endpoints, so $\sum_i \deg(v_i) = 2|E(T)| = 2(n-1)$. Every vertex has degree $\ge 1$ since $T$ is connected with $n\ge 2$.</p>
+    <p><b>Sufficiency (construction via Prüfer sequences).</b> Given $d_1,\dots,d_n\ge 1$ with $\sum d_i = 2n-2$, build the list $S$ containing the label $i$ repeated exactly $d_i-1$ times, for each $i=1,\dots,n$. Since $\sum(d_i-1) = (2n-2)-n = n-2$, $S$ has exactly $n-2$ entries — a valid Prüfer sequence (Section 6). Decoding $S$ produces a tree in which vertex $i$ has degree exactly $1+(\text{occurrences of } i \text{ in } S) = 1+(d_i-1) = d_i$, realizing the prescribed sequence.</p>
+    <p class="qed">&#8718;</p>
+  </div>
+
+  <h3>Try it: is this a tree's degree sequence?</h3>
+  <div class="toolbox">
+    <label>Degree sequence (comma-separated):</label><br>
+    <input type="text" id="degseq-input" value="3,1,1,1,2">
+    <button class="run" onclick="checkDegreeSequence()">Check</button>
+    <div id="degseq-result"></div>
+    <div id="degseq-tree" style="text-align:center; margin-top:10px;"></div>
+  </div>
+
+  <h3>Practice problems</h3>
+  <div class="problem-card">
+    <p><b>1.</b> Is $(3,1,1,1,2)$ the degree sequence of a tree on $5$ vertices?</p>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show answer</button>
+    <div class="proof-body"><p>Sum $=3+1+1+1+2=8=2(5)-2$, and every term is $\ge1$. <b>Yes.</b></p></div>
+  </div>
+  <div class="problem-card">
+    <p><b>2.</b> Is $(1,1,1,1,1,1)$ the degree sequence of a tree on $6$ vertices?</p>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show answer</button>
+    <div class="proof-body"><p>Sum $=6$, but we need $2(6)-2=10$. <b>No</b> — in fact six vertices all of degree $1$ cannot even form a connected graph once $n\ge3$ (Lemma 1).</p></div>
+  </div>
+  <div class="problem-card">
+    <p><b>3.</b> Is $(4,2,2,1,1)$ the degree sequence of a tree on $5$ vertices?</p>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show answer</button>
+    <div class="proof-body"><p>Sum $=4+2+2+1+1=10$, but we need $2(5)-2=8$. <b>No.</b></p></div>
+  </div>
+  <div class="problem-card">
+    <p><b>4.</b> Is $(5,1,1,1,1,1)$ the degree sequence of a tree on $6$ vertices? If so, which tree?</p>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show answer</button>
+    <div class="proof-body"><p>Sum $=5+5=10=2(6)-2$, all $\ge1$. <b>Yes</b> — it is the star $K_{1,5}$, since the single vertex of degree $5$ must be adjacent to all other vertices.</p></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="sec5">
+  <div class="section-kicker">Section 5</div>
+  <h2>Counting Labelled Trees: Cayley's Formula</h2>
+  <p>So far we compared trees up to isomorphism (Section 1). Now fix the vertex set to be $\{1,2,\dots,n\}$ and count <i>labelled</i> trees — trees on these specific, distinguishable vertices, where relabelling counts as a different tree unless the labelling is identical.</p>
+  <div class="statement-box">
+    <p><b>Cayley's Formula.</b> The number of distinct labelled trees on $n\ge2$ vertices is</p>
+    <p style="text-align:center; font-size:1.15em;">$$n^{\,n-2}.$$</p>
+  </div>
+  <table class="cayley-table">
+    <tr><th>$n$</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+    <tr><th>$n^{n-2}$</th><td>1</td><td>1</td><td>3</td><td>16</td><td>125</td><td>1296</td><td>16807</td></tr>
+  </table>
+  <div class="note">
+    This is <a href="https://oeis.org/A000272" target="_blank" rel="noopener">OEIS A000272</a>. Compare it with the non-isomorphic counts from Section 1 ($1,1,1,2,3,6,11,\dots$): there are $16$ <i>labelled</i> trees on $4$ vertices, but only $2$ <i>shapes</i> — every labelling of the path $P_4$ or the star $K_{1,3}$ falls into one of those two shapes.
+  </div>
+  <p>Cayley's formula is most cleanly proved by exhibiting a bijection between labelled trees on $\{1,\dots,n\}$ and sequences of length $n-2$ over the alphabet $\{1,\dots,n\}$ — of which there are exactly $n^{n-2}$. This bijection is the <b>Prüfer correspondence</b>, developed next.</p>
+</section>
+
+<!-- ============================================================ -->
+<section id="sec6">
+  <div class="section-kicker">Section 6</div>
+  <h2>Prüfer Sequences</h2>
+  <p>The <b>Prüfer sequence</b> gives a two-way dictionary between labelled trees on $\{1,\dots,n\}$ and sequences of length $n-2$ over $\{1,\dots,n\}$.</p>
+
+  <h3>Encoding: a tree &rarr; a sequence</h3>
+  <div class="statement-box">
+    <p>While more than $2$ vertices remain:</p>
+    <ol>
+      <li>Find the <b>smallest-labelled leaf</b> in the current tree.</li>
+      <li>Record the label of its <b>unique neighbour</b>.</li>
+      <li>Delete that leaf and repeat.</li>
+    </ol>
+    <p style="margin-bottom:0;">After $n-2$ rounds exactly $2$ vertices remain; stop. The recorded labels, in order, form the Prüfer sequence.</p>
+  </div>
+
+  <h3>Decoding: a sequence &rarr; a tree</h3>
+  <div class="statement-box">
+    <p>Given $S=(s_1,\dots,s_{n-2})$ over $\{1,\dots,n\}$: give every label a "current degree", initialised to $1$ plus the number of times it occurs in $S$. Then repeatedly:</p>
+    <ol>
+      <li>Find the smallest-labelled vertex $\ell$ that currently has degree $1$ and hasn't yet been used as a leaf.</li>
+      <li>Join $\ell$ to the next unused entry of $S$; reduce both of their current degrees by $1$.</li>
+    </ol>
+    <p style="margin-bottom:0;">Once $S$ is exhausted, exactly two vertices of current degree $1$ remain — join them with one final edge.</p>
+  </div>
+
+  <div class="note">
+    <b>Key fact.</b> In the tree produced, $\deg(v) = 1 + (\text{number of times } v \text{ appears in } S)$. The labels that <i>never</i> appear in $S$ are exactly the leaves. Since encoding and decoding undo each other, this is a bijection between labelled trees on $n$ vertices and sequences of length $n-2$ over $n$ symbols — and there are exactly $n^{n-2}$ of the latter, which is Cayley's formula.
+  </div>
+
+  <h3>Interactive Prüfer tool</h3>
+  <div class="tabs">
+    <button class="tabbtn active" onclick="showPruferTab('encode')">Encode a tree</button>
+    <button class="tabbtn" onclick="showPruferTab('decode')">Decode a sequence</button>
+  </div>
+
+  <div class="tabpanel active" id="tab-encode">
+    <label>Choose an example labelled tree (on 6 vertices):</label><br>
+    <select id="encode-example" onchange="loadEncodeExample()">
+      <option value="0">1&ndash;2, 1&ndash;3, 3&ndash;4, 3&ndash;5, 5&ndash;6</option>
+      <option value="1">1&ndash;2, 2&ndash;3, 2&ndash;4, 4&ndash;5, 4&ndash;6</option>
+      <option value="2">1&ndash;4, 2&ndash;4, 3&ndash;4, 4&ndash;5, 5&ndash;6</option>
+    </select>
+    <button class="run" onclick="runEncode()">Encode &rarr; Prüfer sequence</button>
+    <div class="demo-flex" style="margin-top:14px;">
+      <div id="encode-tree-view" style="text-align:center;"></div>
+      <div id="encode-steps"></div>
+    </div>
+  </div>
+
+  <div class="tabpanel" id="tab-decode">
+    <label>Prüfer sequence (comma-separated; values between $1$ and $n$):</label><br>
+    <input type="text" id="decode-input" value="4,4,4,5">
+    <button class="run" onclick="runDecode()">Decode &rarr; tree</button>
+    <div class="demo-flex" style="margin-top:14px;">
+      <div id="decode-tree-view" style="text-align:center;"></div>
+      <div id="decode-steps"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="sec7">
+  <div class="section-kicker">Section 7</div>
+  <h2>Spanning Trees</h2>
+  <div class="defbox">
+    <p style="margin-bottom:0;"><b>Definition.</b> A <i>spanning tree</i> of a connected graph $G=(V,E)$ is a subgraph $T=(V,E')$, $E'\subseteq E$, that is itself a tree — it touches every vertex of $G$ while using only $|V|-1$ edges and containing no cycle.</p>
+  </div>
+
+  <div class="statement-box">
+    <p style="margin-bottom:0;"><b>Theorem.</b> Every connected graph has a spanning tree.</p>
+  </div>
+
+  <div class="card" style="border-left-color:var(--c2);">
+    <h3>Proof 1 &mdash; delete edges from cycles (top-down)</h3>
+    <p style="margin-bottom:0;">This is exactly the Corollary used in Section 3. If $G$ has a cycle, delete an edge from it: the two endpoints stay joined via the rest of the cycle, so the graph remains connected, now with one fewer edge. Repeat on any remaining cycle. Since the edge count strictly decreases and is bounded below, the process must terminate — at a connected, acyclic spanning subgraph, i.e. a spanning tree.</p>
+  </div>
+
+  <div class="card" style="border-left-color:var(--c4);">
+    <h3>Proof 2 &mdash; add edges between components (bottom-up)</h3>
+    <p>Start with all $n=|V|$ vertices of $G$ and no edges (so $n$ trivial components). Repeatedly pick any edge of $G$ whose two endpoints currently lie in <i>different</i> components, and add it, merging the two components into one. Stop when no such edge remains.</p>
+    <button class="toggle-btn" onclick="toggleProof(this)">Show that this works</button>
+    <div class="proof-body">
+      <p><b>Acyclic.</b> Every added edge joins two different, previously unconnected components, so it can never close a cycle (a cycle would need its endpoints already joined by some other path, i.e. already in the same component).</p>
+      <p><b>Connected at the end.</b> If two vertices ended up in different components, then — since $G$ itself is connected — some edge of $G$ along a path between them would still cross between those two components, and the process wouldn't have stopped. So at termination everything is in one component.</p>
+      <p><b>Exactly $n-1$ edges.</b> We start with $n$ components; each added edge merges two into one, decreasing the count by exactly $1$. Going from $n$ components to $1$ takes exactly $n-1$ additions.</p>
+      <p>Connected with $n-1$ edges — by Section 3, this is a tree, and by construction it spans every vertex of $G$.</p>
+      <p class="qed">&#8718;</p>
+    </div>
+    <p style="margin-top:10px; color:var(--muted); font-size:0.92em;">This "join two different components" rule is exactly the idea behind Kruskal's algorithm, and behind building a spanning tree via breadth-first or depth-first search.</p>
+  </div>
+
+  <h3>Interactive: build a spanning tree by breadth-first search</h3>
+  <p>The graph below has $7$ vertices and $8$ edges — $2$ more than the $6$ needed for a spanning tree, so it contains cycles. Pick a starting vertex and grow a spanning tree by breadth-first search.</p>
+  <div class="diagram-panel">
+    <div class="btnrow">
+      <span style="font-family:'Trebuchet MS',sans-serif; font-size:0.85em; align-self:center;">Start BFS from:</span>
+      <select id="bfs-root">
+        <option value="A">A</option><option value="B">B</option><option value="C">C</option>
+        <option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option>
+      </select>
+      <button class="modebtn" onclick="runBFSSpanning()">Build spanning tree</button>
+      <button class="modebtn" onclick="resetSpanning()">Reset</button>
+    </div>
+    <svg id="spanningSvg" viewBox="0 0 600 330" width="100%" style="max-width:520px;">
+      <line id="sp-e-ab" class="sp-edge" x1="300" y1="45" x2="150" y2="125"/>
+      <line id="sp-e-ac" class="sp-edge" x1="300" y1="45" x2="450" y2="125"/>
+      <line id="sp-e-cd" class="sp-edge" x1="450" y1="125" x2="380" y2="225"/>
+      <line id="sp-e-ce" class="sp-edge" x1="450" y1="125" x2="520" y2="225"/>
+      <line id="sp-e-ef" class="sp-edge" x1="520" y1="225" x2="460" y2="305"/>
+      <line id="sp-e-eg" class="sp-edge" x1="520" y1="225" x2="580" y2="305"/>
+      <line id="sp-e-bd" class="sp-edge" x1="150" y1="125" x2="380" y2="225"/>
+      <line id="sp-e-fg" class="sp-edge" x1="460" y1="305" x2="580" y2="305"/>
+      <g class="sp-vertex" id="sp-v-A"><circle cx="300" cy="45" r="15"/><text x="300" y="45">A</text></g>
+      <g class="sp-vertex" id="sp-v-B"><circle cx="150" cy="125" r="15"/><text x="150" y="125">B</text></g>
+      <g class="sp-vertex" id="sp-v-C"><circle cx="450" cy="125" r="15"/><text x="450" y="125">C</text></g>
+      <g class="sp-vertex" id="sp-v-D"><circle cx="380" cy="225" r="15"/><text x="380" y="225">D</text></g>
+      <g class="sp-vertex" id="sp-v-E"><circle cx="520" cy="225" r="15"/><text x="520" y="225">E</text></g>
+      <g class="sp-vertex" id="sp-v-F"><circle cx="460" cy="305" r="15"/><text x="460" y="305">F</text></g>
+      <g class="sp-vertex" id="sp-v-G"><circle cx="580" cy="305" r="15"/><text x="580" y="305">G</text></g>
+    </svg>
+    <div class="caption" id="sp-caption">8 edges shown; 2 of them lie on cycles (B&ndash;D and F&ndash;G close loops A-B-D-C-A and E-F-G-E).</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="sec8">
+  <div class="section-kicker">Section 8</div>
+  <h2>Classifying Trees by Diameter</h2>
+  <div class="defbox">
+    <p style="margin-bottom:0;"><b>Definition.</b> The <i>diameter</i> of a tree $T$ is the greatest distance between any two of its vertices. Since paths in a tree are unique (statement (6), Section 3), this is the same as the number of edges in $T$'s longest path — and the two endpoints of a longest path are always leaves (a non-leaf endpoint could always be extended further, lengthening the path).</p>
+  </div>
+  <p>A tree of diameter $d$ needs at least $d+1$ vertices: the longest path itself already has $d+1$ vertices. Equality holds only for the path $P_{d+1}$, which is therefore the unique <i>smallest</i> tree of diameter $d$.</p>
+  <p>Reusing the catalogue of every non-isomorphic tree on $4$ to $7$ vertices from Section 1, here is <b>every</b> such tree sorted by its diameter. (Diameter $7$ needs at least $8$ vertices, so only the minimal example — the path $P_8$ — is shown; for $n\ge 8$ many more non-isomorphic shapes of diameter $7$ appear, just as branching created more shapes at each fixed diameter below.)</p>
+
+  <div id="diameter-table"></div>
+
+  <div class="note">
+    A pattern worth noticing: diameter $2$ is realized only by stars (exactly one shape per $n$); diameter $3$ only by the path $P_4$ or by double stars; and from diameter $4$ onward, branching gives genuinely more freedom — trees of diameter $4$ all have a single center vertex within distance $2$ of every other vertex, with at least two branches reaching all the way out to distance $2$ (this is the "radius vs. diameter" relationship: for even diameter $d$, the center is one vertex of eccentricity $d/2$; for odd diameter $d$, the center is a pair of adjacent vertices, each of eccentricity $(d+1)/2$).
+  </div>
+</section>
+
+</div>
+
+<footer>Trees &mdash; from the definition to six equivalent faces of it.</footer>
+
+<script>
+function toggleProof(btn){
+  const body = btn.nextElementSibling.classList.contains('proof-body') ? btn.nextElementSibling : btn.parentElement.querySelector('.proof-body');
+  body.classList.toggle('open');
+  btn.textContent = body.classList.contains('open') ? 'Hide proof' : 'Show proof';
+}
+
+/* ---------- cycle map (1 -> 2 -> ... -> 6 -> 1) ---------- */
+(function(){
+  const colors = ['#5b6ee1','#3f8f5f','#8256b0','#c98a2c','#c14e4e','#2f8f8a'];
+  const n = 6, R = 78, cx = 110, cy = 110;
+  let svg = `<svg viewBox="0 0 220 220" width="220" height="220">
+    <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#888"/></marker></defs>`;
+  const pts = [];
+  for(let i=0;i<n;i++){
+    const ang = -Math.PI/2 + i*(2*Math.PI/n);
+    pts.push([cx+R*Math.cos(ang), cy+R*Math.sin(ang)]);
+  }
+  for(let i=0;i<n;i++){
+    const [x1,y1]=pts[i], [x2,y2]=pts[(i+1)%n];
+    const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
+    const ux=dx/len, uy=dy/len;
+    const sx=x1+ux*20, sy=y1+uy*20, ex=x2-ux*22, ey=y2-uy*22;
+    svg += `<line x1="${sx}" y1="${sy}" x2="${ex}" y2="${ey}" stroke="#999" stroke-width="1.6" marker-end="url(#arr)"/>`;
+  }
+  for(let i=0;i<n;i++){
+    const [x,y]=pts[i];
+    svg += `<circle cx="${x}" cy="${y}" r="18" fill="${colors[i]}"/>`;
+    svg += `<text x="${x}" y="${y+5}" text-anchor="middle" font-family="Trebuchet MS,sans-serif" font-size="14" fill="#fff" font-weight="700">${i+1}</text>`;
+  }
+  svg += `</svg>`;
+  document.getElementById('cyclemap').innerHTML = svg;
+})();
+
+/* ---------- interactive running-example tree ---------- */
+const svgStyleSheet = document.createElement('style');
+svgStyleSheet.textContent = `
+  #treeSvg .edge{stroke:#b9b3a2; stroke-width:3;}
+  #treeSvg .new-edge{stroke:transparent;}
+  #treeSvg .vertex circle{fill:#5b6ee1; stroke:#2f3670; stroke-width:1.5;}
+  #treeSvg .vertex text{font-family:'Trebuchet MS',sans-serif; font-size:14px; fill:#fff; text-anchor:middle; dominant-baseline:middle; font-weight:700;}
+`;
+document.head.appendChild(svgStyleSheet);
+
+const edgeIds = ['e-ab','e-ac','e-cd','e-ce','e-ef','e-eg'];
+const vertexIds = ['v-A','v-B','v-C','v-D','v-E','v-F','v-G'];
+
+function resetDiagram(){
+  edgeIds.forEach(id=>{
+    const el = document.getElementById(id);
+    el.setAttribute('stroke','#b9b3a2'); el.setAttribute('stroke-width','3');
+  });
+  document.getElementById('e-bd').setAttribute('stroke','transparent');
+  vertexIds.forEach(id=>{
+    const c = document.querySelector('#'+id+' circle');
+    c.setAttribute('fill','#5b6ee1');
+  });
+}
+
+function setMode(mode){
+  document.querySelectorAll('.modebtn').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+  resetDiagram();
+  const cap = document.getElementById('caption');
+  if(mode==='none'){
+    cap.textContent = 'A tree on 7 vertices with 6 edges.';
+  } else if(mode==='leaf'){
+    ['v-B','v-D','v-F','v-G'].forEach(id=>document.querySelector('#'+id+' circle').setAttribute('fill','#c98a2c'));
+    cap.textContent = 'Leaves (degree-1 vertices): B, D, F, G.';
+  } else if(mode==='bridge'){
+    document.getElementById('e-ce').setAttribute('stroke','#c14e4e');
+    document.getElementById('e-ce').setAttribute('stroke-width','5');
+    cap.textContent = 'Edge C\u2013E is a bridge: removing it splits {A,B,C,D} from {E,F,G}.';
+  } else if(mode==='cycle'){
+    document.getElementById('e-bd').setAttribute('stroke','#8256b0');
+    document.getElementById('e-bd').setAttribute('stroke-width','3');
+    ['e-ab','e-ac','e-cd'].forEach(id=>{
+      document.getElementById(id).setAttribute('stroke','#8256b0');
+      document.getElementById(id).setAttribute('stroke-width','4');
+    });
+    cap.textContent = 'Adding edge B\u2013D creates exactly one cycle: B\u2013A\u2013C\u2013D\u2013B.';
+  } else if(mode==='path'){
+    ['e-ab','e-ac','e-ce','e-eg'].forEach(id=>{
+      document.getElementById(id).setAttribute('stroke','#5b6ee1');
+      document.getElementById(id).setAttribute('stroke-width','5');
+    });
+    ['v-B','v-A','v-C','v-E','v-G'].forEach(id=>document.querySelector('#'+id+' circle').setAttribute('fill','#3a48a8'));
+    cap.textContent = 'The unique path from B to G: B\u2013A\u2013C\u2013E\u2013G.';
+  }
+}
+
+/* ---------- generic small-multiple tree renderer for the gallery ---------- */
+function renderMiniTree(edges, n, root){
+  const adj = Array.from({length:n}, () => []);
+  edges.forEach(([a,b]) => { adj[a].push(b); adj[b].push(a); });
+  const parent = new Array(n).fill(-1);
+  const depth = new Array(n).fill(0);
+  const visited = new Array(n).fill(false);
+  const children = Array.from({length:n}, () => []);
+  const stack = [root];
+  visited[root] = true;
+  while(stack.length){
+    const u = stack.pop();
+    adj[u].forEach(w => {
+      if(!visited[w]){
+        visited[w] = true; parent[w] = u; depth[w] = depth[u] + 1;
+        children[u].push(w); stack.push(w);
+      }
+    });
+  }
+  let leafCounter = 0;
+  const xpos = new Array(n).fill(0);
+  function assignX(u){
+    if(children[u].length === 0){ xpos[u] = leafCounter++; return; }
+    children[u].forEach(assignX);
+    const xs = children[u].map(c => xpos[c]);
+    xpos[u] = (Math.min(...xs) + Math.max(...xs)) / 2;
+  }
+  assignX(root);
+  const maxDepth = Math.max(...depth);
+  const spacingX = 26, spacingY = 30, pad = 16;
+  const width = Math.max(leafCounter - 1, 0) * spacingX + 2*pad;
+  const height = maxDepth * spacingY + 2*pad;
+  const px = v => pad + xpos[v]*spacingX;
+  const py = v => pad + depth[v]*spacingY;
+  let svg = `<svg viewBox="0 0 ${Math.max(width,2*pad)} ${Math.max(height,2*pad)}" width="${Math.max(width,2*pad)}" height="${Math.max(height,2*pad)}">`;
+  edges.forEach(([a,b]) => {
+    const child = (parent[a]===b) ? a : b;
+    const par = (parent[a]===b) ? b : a;
+    svg += `<line x1="${px(par)}" y1="${py(par)}" x2="${px(child)}" y2="${py(child)}" stroke="#a9a293" stroke-width="2"/>`;
+  });
+  for(let v=0; v<n; v++){
+    svg += `<circle cx="${px(v)}" cy="${py(v)}" r="5.5" fill="${v===root ? '#5b6ee1' : '#8a93b8'}" stroke="#2f3670" stroke-width="1"/>`;
+  }
+  svg += `</svg>`;
+  return svg;
+}
+
+const treeGallery = {
+  4: [
+    {edges:[[0,1],[1,2],[2,3]], root:0, label:'Path P\u2084'},
+    {edges:[[0,1],[0,2],[0,3]], root:0, label:'Star K\u2081,\u2083'}
+  ],
+  5: [
+    {edges:[[0,1],[1,2],[2,3],[3,4]], root:0, label:'Path P\u2085'},
+    {edges:[[0,1],[0,2],[0,3],[0,4]], root:0, label:'Star K\u2081,\u2084'},
+    {edges:[[0,1],[1,2],[0,3],[0,4]], root:0, label:'Spider (2,1,1)'}
+  ],
+  6: [
+    {edges:[[0,1],[1,2],[2,3],[3,4],[4,5]], root:0, label:'Path P\u2086'},
+    {edges:[[0,1],[0,2],[0,3],[0,4],[0,5]], root:0, label:'Star K\u2081,\u2085'},
+    {edges:[[0,1],[1,2],[0,3],[0,4],[0,5]], root:0, label:'Spider (2,1,1,1)'},
+    {edges:[[0,1],[1,2],[2,3],[0,4],[0,5]], root:0, label:'Spider (3,1,1)'},
+    {edges:[[0,1],[1,2],[0,3],[3,4],[0,5]], root:0, label:'Spider (2,2,1)'},
+    {edges:[[0,1],[0,2],[0,3],[1,4],[1,5]], root:0, label:'Double star S(2,2)'}
+  ],
+  7: [
+    {edges:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6]], root:0, label:'Path P\u2087'},
+    {edges:[[0,1],[0,2],[0,3],[0,4],[0,5],[0,6]], root:0, label:'Star K\u2081,\u2086'},
+    {edges:[[0,1],[1,2],[2,3],[3,4],[0,5],[0,6]], root:0, label:'Spider (4,1,1)'},
+    {edges:[[0,1],[1,2],[2,3],[0,4],[4,5],[0,6]], root:0, label:'Spider (3,2,1)'},
+    {edges:[[0,1],[1,2],[0,3],[3,4],[0,5],[5,6]], root:0, label:'Spider (2,2,2) \u2014 not a caterpillar'},
+    {edges:[[0,1],[1,2],[2,3],[0,4],[0,5],[0,6]], root:0, label:'Spider (3,1,1,1)'},
+    {edges:[[0,1],[1,2],[0,3],[3,4],[0,5],[0,6]], root:0, label:'Spider (2,2,1,1)'},
+    {edges:[[0,1],[1,2],[0,3],[0,4],[0,5],[0,6]], root:0, label:'Spider (2,1,1,1,1)'},
+    {edges:[[0,1],[0,2],[2,3],[0,4],[1,5],[1,6]], root:0, label:'Two branch vertices, adjacent'},
+    {edges:[[0,1],[0,2],[0,3],[3,4],[3,5],[3,6]], root:0, label:'Double star S(2,3)'},
+    {edges:[[0,1],[1,2],[0,3],[0,4],[2,5],[2,6]], root:1, label:'Two branch vertices, distance 2'}
+  ]
+};
+
+Object.keys(treeGallery).forEach(nStr => {
+  const container = document.getElementById('gallery-' + nStr);
+  treeGallery[nStr].forEach(spec => {
+    const n = parseInt(nStr, 10);
+    const svgHtml = renderMiniTree(spec.edges, n, spec.root);
+    const item = document.createElement('div');
+    item.className = 'gitem';
+    item.innerHTML = svgHtml + `<div class="glabel">${spec.label}</div>`;
+    container.appendChild(item);
+  });
+});
+</script>
+
+<script>
+/* ================= shared: generic labelled-tree SVG builder (1..n vertices) ================= */
+function buildTreeSVG(edgeList, vertices, root, opts){
+  opts = opts || {};
+  const adj = {}; vertices.forEach(v => adj[v] = []);
+  edgeList.forEach(([a,b]) => { adj[a].push(b); adj[b].push(a); });
+  const parent = {}, depth = {}, visited = {}, children = {};
+  vertices.forEach(v => { visited[v] = false; children[v] = []; });
+  const stack = [root]; visited[root] = true; depth[root] = 0; parent[root] = null;
+  while(stack.length){
+    const u = stack.pop();
+    adj[u].forEach(w => {
+      if(!visited[w]){ visited[w] = true; parent[w] = u; depth[w] = depth[u] + 1; children[u].push(w); stack.push(w); }
+    });
+  }
+  let leafCounter = 0;
+  const xpos = {};
+  function assignX(u){
+    if(children[u].length === 0){ xpos[u] = leafCounter++; return; }
+    children[u].forEach(assignX);
+    const xs = children[u].map(c => xpos[c]);
+    xpos[u] = (Math.min(...xs) + Math.max(...xs)) / 2;
+  }
+  assignX(root);
+  const maxDepth = Math.max(...vertices.map(v => depth[v]));
+  const spacingX = opts.spacingX || 30, spacingY = opts.spacingY || 34, pad = opts.pad || (opts.showLabels ? 20 : 16);
+  const width = Math.max(leafCounter - 1, 0) * spacingX + 2*pad;
+  const height = maxDepth * spacingY + 2*pad;
+  const px = v => pad + xpos[v]*spacingX, py = v => pad + depth[v]*spacingY;
+  let svg = `<svg viewBox="0 0 ${Math.max(width,2*pad)} ${Math.max(height,2*pad)}" width="${Math.max(width,2*pad)}" height="${Math.max(height,2*pad)}">`;
+  edgeList.forEach(([a,b]) => {
+    const child = parent[a]===b ? a : b;
+    const par = parent[a]===b ? b : a;
+    svg += `<line x1="${px(par)}" y1="${py(par)}" x2="${px(child)}" y2="${py(child)}" stroke="#a9a293" stroke-width="2"/>`;
+  });
+  const r = opts.showLabels ? 11 : 5.5;
+  vertices.forEach(v => {
+    const fill = opts.colorMap && opts.colorMap[v] ? opts.colorMap[v] : (v===root ? '#5b6ee1' : '#8a93b8');
+    svg += `<circle cx="${px(v)}" cy="${py(v)}" r="${r}" fill="${fill}" stroke="#2f3670" stroke-width="1"/>`;
+    if(opts.showLabels){
+      svg += `<text x="${px(v)}" y="${py(v)}" font-family="Trebuchet MS,sans-serif" font-size="11" fill="#fff" text-anchor="middle" dominant-baseline="middle" font-weight="700">${v}</text>`;
+    }
+  });
+  svg += `</svg>`;
+  return svg;
+}
+function buildLabeledTreeSVG(edges, n, root){
+  const vertices = []; for(let i=1;i<=n;i++) vertices.push(i);
+  return buildTreeSVG(edges, vertices, root, {showLabels:true});
+}
+
+/* ================= Section 4: degree sequence checker ================= */
+function checkDegreeSequence(){
+  const raw = document.getElementById('degseq-input').value.trim();
+  const seq = raw.length ? raw.split(',').map(s => parseInt(s.trim(), 10)) : [];
+  const n = seq.length;
+  const resultDiv = document.getElementById('degseq-result');
+  const treeDiv = document.getElementById('degseq-tree');
+  treeDiv.innerHTML = '';
+  if(n < 1 || seq.some(d => isNaN(d) || d < 0)){
+    resultDiv.innerHTML = `<div class="result-box bad">Please enter positive integers separated by commas.</div>`;
+    return;
+  }
+  if(n === 1){
+    resultDiv.innerHTML = `<div class="result-box ${seq[0]===0 ? 'ok' : 'bad'}">n = 1: the only valid sequence is (0), the isolated vertex.</div>`;
+    return;
+  }
+  if(seq.some(d => d < 1)){
+    resultDiv.innerHTML = `<div class="result-box bad">Every degree must be at least 1 for n &ge; 2 (a connected graph has no isolated vertices).</div>`;
+    return;
+  }
+  const sum = seq.reduce((a,b) => a+b, 0);
+  const needed = 2*n - 2;
+  if(sum !== needed){
+    resultDiv.innerHTML = `<div class="result-box bad">Sum of degrees = ${sum}, but a tree on n = ${n} vertices needs sum = 2n&minus;2 = ${needed}. <b>Not</b> a tree degree sequence.</div>`;
+    return;
+  }
+  resultDiv.innerHTML = `<div class="result-box ok">Sum of degrees = ${sum} = 2(${n})&minus;2, and every degree is &ge; 1. This <b>is</b> a valid tree degree sequence. Here is one realization (vertex $i$ carries the $i$-th degree you entered):</div>`;
+  const pruferArr = [];
+  seq.forEach((d,i) => { for(let k=0;k<d-1;k++) pruferArr.push(i+1); });
+  const {edges} = decodePrufer(pruferArr, n);
+  treeDiv.innerHTML = buildLabeledTreeSVG(edges, n, edges[0][0]);
+}
+
+/* ================= Section 6: Prüfer encode / decode ================= */
+function encodePrufer(edges, n){
+  const adj = {}; for(let i=1;i<=n;i++) adj[i] = new Set();
+  edges.forEach(([a,b]) => { adj[a].add(b); adj[b].add(a); });
+  const degree = {}; for(let i=1;i<=n;i++) degree[i] = adj[i].size;
+  const removed = {};
+  const seq = [], steps = [];
+  for(let step = 0; step < n-2; step++){
+    let leaf = -1;
+    for(let u=1;u<=n;u++){ if(!removed[u] && degree[u]===1){ leaf = u; break; } }
+    let neighbor = -1;
+    adj[leaf].forEach(w => { if(neighbor===-1 && !removed[w]) neighbor = w; });
+    seq.push(neighbor);
+    steps.push({removed:leaf, recorded:neighbor});
+    removed[leaf] = true;
+    degree[neighbor]--;
+  }
+  return {seq, steps};
+}
+function decodePrufer(seq, n){
+  const degree = {}; for(let i=1;i<=n;i++) degree[i] = 1;
+  seq.forEach(v => degree[v]++);
+  const used = {};
+  const edges = [], steps = [];
+  for(let i=0;i<seq.length;i++){
+    const v = seq[i];
+    let leaf = -1;
+    for(let u=1;u<=n;u++){ if(!used[u] && degree[u]===1){ leaf = u; break; } }
+    edges.push([leaf, v]);
+    steps.push({leaf:leaf, joined:v});
+    used[leaf] = true;
+    degree[leaf]--; degree[v]--;
+  }
+  const remaining = [];
+  for(let u=1;u<=n;u++){ if(!used[u] && degree[u]===1) remaining.push(u); }
+  edges.push([remaining[0], remaining[1]]);
+  steps.push({leaf:remaining[0], joined:remaining[1]});
+  return {edges, steps};
+}
+
+const encodeExamples = [
+  {edges:[[1,2],[1,3],[3,4],[3,5],[5,6]], n:6},
+  {edges:[[1,2],[2,3],[2,4],[4,5],[4,6]], n:6},
+  {edges:[[1,4],[2,4],[3,4],[4,5],[5,6]], n:6}
+];
+
+function showPruferTab(which){
+  const btns = document.querySelectorAll('.tabbtn');
+  document.querySelectorAll('.tabpanel').forEach(p => p.classList.remove('active'));
+  btns.forEach(b => b.classList.remove('active'));
+  if(which === 'encode'){
+    btns[0].classList.add('active');
+    document.getElementById('tab-encode').classList.add('active');
+  } else {
+    btns[1].classList.add('active');
+    document.getElementById('tab-decode').classList.add('active');
+  }
+}
+
+function loadEncodeExample(){
+  const idx = document.getElementById('encode-example').value;
+  const ex = encodeExamples[idx];
+  document.getElementById('encode-tree-view').innerHTML = buildLabeledTreeSVG(ex.edges, ex.n, ex.edges[0][0]);
+  document.getElementById('encode-steps').innerHTML = '';
+}
+
+function runEncode(){
+  const idx = document.getElementById('encode-example').value;
+  const ex = encodeExamples[idx];
+  const {seq, steps} = encodePrufer(ex.edges, ex.n);
+  let html = '<table class="step-table"><tr><th>Step</th><th>Leaf removed</th><th>Neighbour recorded</th></tr>';
+  steps.forEach((s,i) => { html += `<tr><td>${i+1}</td><td>${s.removed}</td><td>${s.recorded}</td></tr>`; });
+  html += '</table>';
+  html += `<div class="result-box ok">Prüfer sequence: (${seq.join(', ')})</div>`;
+  document.getElementById('encode-tree-view').innerHTML = buildLabeledTreeSVG(ex.edges, ex.n, ex.edges[0][0]);
+  document.getElementById('encode-steps').innerHTML = html;
+}
+
+function runDecode(){
+  const raw = document.getElementById('decode-input').value.trim();
+  const seq = raw.length ? raw.split(',').map(s => parseInt(s.trim(), 10)) : [];
+  const n = seq.length + 2;
+  if(n < 3 || seq.some(v => isNaN(v) || v < 1 || v > n)){
+    document.getElementById('decode-steps').innerHTML = `<div class="result-box bad">Enter n&minus;2 values, each an integer between 1 and n (n = number of entries + 2).</div>`;
+    document.getElementById('decode-tree-view').innerHTML = '';
+    return;
+  }
+  const {edges, steps} = decodePrufer(seq, n);
+  let html = '<table class="step-table"><tr><th>Step</th><th>Leaf used</th><th>Joined to</th></tr>';
+  steps.forEach((s,i) => { html += `<tr><td>${i+1}</td><td>${s.leaf}</td><td>${s.joined}</td></tr>`; });
+  html += '</table>';
+  html += `<div class="result-box ok">Reconstructed a tree on n = ${n} vertices.</div>`;
+  document.getElementById('decode-steps').innerHTML = html;
+  document.getElementById('decode-tree-view').innerHTML = buildLabeledTreeSVG(edges, n, edges[0][0]);
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  loadEncodeExample();
+  showBipartition();
+  buildDiameterTable();
+});
+
+/* ================= Section 8: classify trees by diameter ================= */
+function treeDiameter(edges, vertices){
+  const adj = {}; vertices.forEach(v => adj[v] = []);
+  edges.forEach(([a,b]) => { adj[a].push(b); adj[b].push(a); });
+  function bfsFarthest(src){
+    const dist = {}; dist[src] = 0; const q = [src]; let far = src;
+    while(q.length){
+      const u = q.shift();
+      adj[u].forEach(w => {
+        if(dist[w] === undefined){ dist[w] = dist[u] + 1; if(dist[w] > dist[far]) far = w; q.push(w); }
+      });
+    }
+    return {far, dist};
+  }
+  const r1 = bfsFarthest(vertices[0]);
+  const r2 = bfsFarthest(r1.far);
+  return r2.dist[r2.far];
+}
+
+function buildDiameterTable(){
+  const groups = {};
+  Object.keys(treeGallery).forEach(nStr => {
+    const n = parseInt(nStr, 10);
+    treeGallery[nStr].forEach(spec => {
+      const vertices = []; for(let i=0;i<n;i++) vertices.push(i);
+      const d = treeDiameter(spec.edges, vertices);
+      if(!groups[d]) groups[d] = [];
+      groups[d].push({n, label: spec.label, svg: renderMiniTree(spec.edges, n, spec.root)});
+    });
+  });
+  const p8edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]];
+  groups[7] = [{n:8, label:'Path P\u2088 \u2014 minimal example (n=8); more shapes appear for n>8', svg: renderMiniTree(p8edges, 8, 0)}];
+
+  let html = '';
+  for(let d=2; d<=7; d++){
+    const items = groups[d] || [];
+    const countLabel = (d === 7)
+      ? 'minimal example shown (needs n &ge; 8)'
+      : `${items.length} non-isomorphic tree${items.length===1?'':'s'} among n = 4..7`;
+    html += `<div class="gallery-block"><div class="count-strip"><b>Diameter ${d}:</b> ${countLabel}</div><div class="gallery-grid">`;
+    items.forEach(it => {
+      html += `<div class="gitem">${it.svg}<div class="glabel">n=${it.n}: ${it.label}</div></div>`;
+    });
+    html += `</div></div>`;
+  }
+  document.getElementById('diameter-table').innerHTML = html;
+}
+
+/* ================= Section 2: bipartition-by-distance demo ================= */
+const bipartiteTree = {edges:[[1,2],[1,3],[3,4],[3,5],[5,6],[5,7]], n:7};
+
+function showBipartition(){
+  const root = parseInt(document.getElementById('bipartite-root').value, 10);
+  const {edges, n} = bipartiteTree;
+  const vertices = []; for(let i=1;i<=n;i++) vertices.push(i);
+  const adj = {}; vertices.forEach(v => adj[v] = []);
+  edges.forEach(([a,b]) => { adj[a].push(b); adj[b].push(a); });
+  const depth = {}; const visited = {};
+  depth[root] = 0; visited[root] = true;
+  const queue = [root];
+  while(queue.length){
+    const u = queue.shift();
+    adj[u].forEach(w => {
+      if(!visited[w]){ visited[w] = true; depth[w] = depth[u] + 1; queue.push(w); }
+    });
+  }
+  const colorA = '#5b6ee1', colorB = '#c98a2c';
+  const colorMap = {};
+  const evens = [], odds = [];
+  vertices.forEach(v => {
+    if(depth[v] % 2 === 0){ colorMap[v] = colorA; evens.push(v); }
+    else { colorMap[v] = colorB; odds.push(v); }
+  });
+  document.getElementById('bipartite-view').innerHTML = buildTreeSVG(edges, vertices, root, {showLabels:true, colorMap});
+  document.getElementById('bipartite-caption').innerHTML =
+    `Rooted at ${root}: <span style="color:${colorA}; font-weight:700;">even distance</span> = {${evens.join(', ')}}, ` +
+    `<span style="color:${colorB}; font-weight:700;">odd distance</span> = {${odds.join(', ')}}. Every edge joins the two classes.`;
+}
+
+/* ================= Section 7: spanning tree via BFS ================= */
+const spGraph = {
+  A:['B','C'], B:['A','D'], C:['A','D','E'], D:['B','C'],
+  E:['C','F','G'], F:['E','G'], G:['E','F']
+};
+const spEdgeMap = {
+  'A-B':'sp-e-ab','B-A':'sp-e-ab', 'A-C':'sp-e-ac','C-A':'sp-e-ac',
+  'C-D':'sp-e-cd','D-C':'sp-e-cd', 'C-E':'sp-e-ce','E-C':'sp-e-ce',
+  'E-F':'sp-e-ef','F-E':'sp-e-ef', 'E-G':'sp-e-eg','G-E':'sp-e-eg',
+  'B-D':'sp-e-bd','D-B':'sp-e-bd', 'F-G':'sp-e-fg','G-F':'sp-e-fg'
+};
+const spAllEdgeIds = ['sp-e-ab','sp-e-ac','sp-e-cd','sp-e-ce','sp-e-ef','sp-e-eg','sp-e-bd','sp-e-fg'];
+const spAllVertexIds = ['A','B','C','D','E','F','G'];
+
+const spStyle = document.createElement('style');
+spStyle.textContent = `
+  #spanningSvg .sp-edge{stroke:#c9c2b0; stroke-width:2.5; stroke-dasharray:5,4;}
+  #spanningSvg .sp-vertex circle{fill:#8a93b8; stroke:#2f3670; stroke-width:1.5;}
+  #spanningSvg .sp-vertex text{font-family:'Trebuchet MS',sans-serif; font-size:14px; fill:#fff; text-anchor:middle; dominant-baseline:middle; font-weight:700;}
+`;
+document.head.appendChild(spStyle);
+
+function resetSpanning(){
+  spAllEdgeIds.forEach(id => {
+    const el = document.getElementById(id);
+    el.setAttribute('stroke', '#c9c2b0'); el.setAttribute('stroke-width', '2.5'); el.setAttribute('stroke-dasharray', '5,4');
+  });
+  spAllVertexIds.forEach(id => {
+    document.querySelector('#sp-v-' + id + ' circle').setAttribute('fill', '#8a93b8');
+  });
+  document.getElementById('sp-caption').textContent = '8 edges shown; 2 of them lie on cycles (B\u2013D and F\u2013G close loops A-B-D-C-A and E-F-G-E).';
+}
+
+function runBFSSpanning(){
+  resetSpanning();
+  const root = document.getElementById('bfs-root').value;
+  const visited = {}; visited[root] = true;
+  document.querySelector('#sp-v-' + root + ' circle').setAttribute('fill', '#3a48a8');
+  const queue = [root], order = [root], treeEdges = [];
+  while(queue.length){
+    const u = queue.shift();
+    (spGraph[u] || []).forEach(w => {
+      if(!visited[w]){
+        visited[w] = true; queue.push(w); order.push(w);
+        treeEdges.push(u + '-' + w);
+      }
+    });
+  }
+  treeEdges.forEach(key => {
+    const el = document.getElementById(spEdgeMap[key]);
+    el.setAttribute('stroke', '#3f8f5f'); el.setAttribute('stroke-width', '5'); el.removeAttribute('stroke-dasharray');
+  });
+  spAllVertexIds.forEach(id => {
+    if(visited[id]) document.querySelector('#sp-v-' + id + ' circle').setAttribute('fill', '#3a48a8');
+  });
+  document.getElementById('sp-caption').textContent =
+    `BFS order from ${root}: ${order.join(' \u2192 ')}. Spanning tree uses ${treeEdges.length} of the 8 edges (highlighted green).`;
+}
+</script>
+
+</body>
+</html>
