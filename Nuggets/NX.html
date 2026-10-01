@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graph Theory with NetworkX – Assignment</title>
+<style>
+:root{--bg:#fafaf7;--fg:#1d2330;--mut:#5b6475;--card:#fff;--bd:#dfe3ea;--ac:#1f5fbf;--code:#f0f2f6}
+@media(prefers-color-scheme:dark){:root{--bg:#14171d;--fg:#e6e9ef;--mut:#9aa3b2;--card:#1b1f27;--bd:#2c323d;--ac:#7fb0ff;--code:#222733}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Georgia,'Times New Roman',serif}
+main{max-width:900px;margin:auto;padding:24px 18px 60px}
+h1{font-size:1.9rem;margin:.2em 0}h2{margin-top:2em;border-bottom:2px solid var(--ac);padding-bottom:4px;color:var(--ac)}
+h3{margin:.2em 0 .4em}
+.sub{color:var(--mut)}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;font:14px/1.5 Consolas,Menlo,monospace}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font:.9em Consolas,Menlo,monospace}
+pre code{padding:0;background:none}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px 18px;margin:14px 0}
+.card .fn{color:var(--mut);font-size:.92rem}
+table{border-collapse:collapse;width:100%;margin:10px 0}td,th{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--code)}
+.num{display:inline-block;background:var(--ac);color:var(--bg);border-radius:50%;width:1.7em;height:1.7em;text-align:center;line-height:1.7em;font-size:.9rem;margin-right:6px}
+ol,ul{padding-left:1.3em}
+</style>
+</head>
+<body>
+<main>
+<h1>Graph Theory with NetworkX</h1>
+<p class="sub">Assignment (10 marks) · Introduction, getting started, and topic-wise tasks</p>
+
+<h2>1. What is NetworkX?</h2>
+<p><b>NetworkX</b> is a free Python package for creating, manipulating and studying graphs. It has ready-made graph families (complete, cycle, Petersen, …), and algorithms for connectivity, colouring, matching, flows, planarity and more. It also converts graphs to matrices (via NumPy) and draws them (via Matplotlib). In this assignment you will use it as a <i>laboratory</i> to test the theorems you study in class.</p>
+
+<h2>2. Getting started</h2>
+<p><b>Option A (no installation):</b> open <code>colab.research.google.com</code>, create a new notebook and run the code cells there. NetworkX is pre-installed.<br>
+<b>Option B (own computer):</b> install Python 3.9+ and run:</p>
+<pre><code>pip install networkx matplotlib numpy scipy</code></pre>
+<p>Check the installation:</p>
+<pre><code>import networkx as nx
+print(nx.__version__)</code></pre>
+
+<h3>Your first graph</h3>
+<pre><code>import networkx as nx
+import matplotlib.pyplot as plt
+
+G = nx.Graph()                       # empty undirected graph
+G.add_node(1)                        # add a vertex
+G.add_nodes_from([2, 3, 4])          # add several vertices
+G.add_edge(1, 2)                     # add an edge
+G.add_edges_from([(2, 3), (3, 4), (4, 1), (1, 3)])
+
+print(G.nodes)                       # [1, 2, 3, 4]
+print(G.edges)                       # list of edges
+print(G.number_of_nodes(), G.number_of_edges())
+print(dict(G.degree()))              # degree of each vertex
+
+nx.draw(G, with_labels=True, node_color="lightblue", node_size=700)
+plt.show()</code></pre>
+
+<h3>Built-in graphs</h3>
+<pre><code>K5 = nx.complete_graph(5)            # K5
+C6 = nx.cycle_graph(6)               # cycle C6
+P  = nx.petersen_graph()             # Petersen graph
+K33 = nx.complete_bipartite_graph(3, 3)
+Q3 = nx.hypercube_graph(3)           # cube
+H  = nx.gnp_random_graph(10, 0.3, seed=1)   # random graph G(n,p)</code></pre>
+
+<h3>Basic commands you will use often</h3>
+<table>
+<tr><th>Task</th><th>Command</th></tr>
+<tr><td>Neighbours of vertex v</td><td><code>list(G.neighbors(v))</code></td></tr>
+<tr><td>Remove vertex / edge</td><td><code>G.remove_node(v)</code>, <code>G.remove_edge(u,v)</code></td></tr>
+<tr><td>Subgraph on a vertex set S</td><td><code>G.subgraph(S)</code></td></tr>
+<tr><td>Complement</td><td><code>nx.complement(G)</code></td></tr>
+<tr><td>Are two graphs isomorphic?</td><td><code>nx.is_isomorphic(G1, G2)</code></td></tr>
+<tr><td>Adjacency matrix (NumPy)</td><td><code>nx.to_numpy_array(G)</code></td></tr>
+<tr><td>Eigenvalues of a symmetric matrix</td><td><code>numpy.linalg.eigvalsh(M)</code></td></tr>
+<tr><td>Directed graph with edge capacities</td><td><code>D = nx.DiGraph(); D.add_edge('s','a', capacity=3)</code></td></tr>
+<tr><td>Draw nicely</td><td><code>nx.draw_circular(G, with_labels=True)</code>, <code>nx.draw_planar(G)</code></td></tr>
+</table>
+
+<h3>A complete mini-example (Eulerian check)</h3>
+<pre><code>G = nx.cycle_graph(5)
+print(nx.is_eulerian(G))                 # True
+print(list(nx.eulerian_circuit(G)))      # an Euler circuit
+print(all(d % 2 == 0 for _, d in G.degree()))   # theorem: all degrees even</code></pre>
+<p>Note the pattern: <b>use a function</b> from NetworkX, then <b>verify the theorem</b> independently. You are expected to follow this pattern in your assignment.</p>
+<p class="sub">Documentation: <code>networkx.org/documentation/stable</code>. Use <code>help(nx.function_name)</code> in Python for quick help.</p>
+
+<h2>3. Assignment rules</h2>
+<ul>
+<li>Each student works on the <b>same topic as his/her presentation</b> (Section 4). If a topic is shared by two students, submit separately.</li>
+<li>Submit one Python file (or Colab notebook) with comments, <b>plus</b> a 1–2 page PDF containing the output, drawings of graphs, and your short explanation.</li>
+<li>Do all three tasks (A, B, C) of your topic. Code must run without errors. Copying code without understanding will be tested in a short viva.</li>
+<li>Write the relevant theorem/definition as a comment before each part of the code.</li>
+</ul>
+
+<h3>Marking scheme (10 marks)</h3>
+<table>
+<tr><th>Component</th><th>Marks</th></tr>
+<tr><td>Task A – constructing graphs and using NetworkX functions correctly</td><td>2</td></tr>
+<tr><td>Task B – verifying a theorem/property computationally</td><td>2</td></tr>
+<tr><td>Task C – exploration / small experiment and your conclusion</td><td>2</td></tr>
+<tr><td>Clarity: comments, figures, short written explanation</td><td>2</td></tr>
+<tr><td>Viva (explain your code in 2–3 minutes)</td><td>2</td></tr>
+</table>
+
+<h2>4. Topic-wise tasks</h2>
+<p class="sub">The “Useful” line lists functions to explore; you must read their documentation yourself.</p>
+
+<div class="card"><h3><span class="num">1</span>Degree sequence</h3>
+<ol><li><b>A.</b> Compute the degree sequence (non-increasing) of K<sub>5</sub>, C<sub>6</sub>, the Petersen graph and a star K<sub>1,6</sub>.</li>
+<li><b>B.</b> Verify the handshaking lemma on 10 random graphs. Test whether the sequences (3,3,2,2,1,1), (4,4,3,1,0) and (3,3,3,1) are graphical, and realise a graphical one using Havel–Hakimi.</li>
+<li><b>C.</b> Find two non-isomorphic graphs with the same degree sequence and draw them.</li></ol>
+<div class="fn">Useful: <code>G.degree()</code>, <code>nx.is_graphical</code>, <code>nx.havel_hakimi_graph</code>, <code>nx.is_isomorphic</code></div></div>
+
+<div class="card"><h3><span class="num">2</span>Connected graphs</h3>
+<ol><li><b>A.</b> Build a graph with 3 components; list the components and their sizes.</li>
+<li><b>B.</b> Verify: a graph with n vertices and fewer than n−1 edges is disconnected; a connected graph has at least n−1 edges.</li>
+<li><b>C.</b> For n = 50, estimate the probability that G(n,p) is connected for several p (100 trials each) and compare with the threshold p ≈ ln n / n. Plot your result.</li></ol>
+<div class="fn">Useful: <code>nx.is_connected</code>, <code>nx.connected_components</code>, <code>nx.gnp_random_graph</code></div></div>
+
+<div class="card"><h3><span class="num">3</span>Paley graphs / Cayley graphs</h3>
+<ol><li><b>A.</b> Generate Paley graphs for primes p = 5, 13, 17, 29 (p ≡ 1 mod 4); draw at least two. Build the Cayley graph of Z<sub>n</sub> with connection set S = {±1, ±3}, both by hand and with <code>nx.circulant_graph</code>.</li>
+<li><b>B.</b> Verify that the Paley graph is regular of degree (p−1)/2, and that every pair of adjacent (non-adjacent) vertices has the same number of common neighbours (strongly regular).</li>
+<li><b>C.</b> Check whether the Paley graph is isomorphic to its complement. Build a Cayley graph of a non-cyclic group (e.g. Z<sub>2</sub>×Z<sub>2</sub>×Z<sub>2</sub>) and identify it.</li></ol>
+<div class="fn">Useful: <code>nx.paley_graph</code> (returns a directed graph; use <code>.to_undirected()</code>), <code>nx.circulant_graph</code>, <code>nx.common_neighbors</code></div></div>
+
+<div class="card"><h3><span class="num">4</span>Trees</h3>
+<ol><li><b>A.</b> Generate 5 random trees on 8 vertices and confirm each is a tree. Find a spanning tree of the Petersen graph.</li>
+<li><b>B.</b> Verify: a tree on n vertices has n−1 edges; it has at least two leaves; adding any edge creates exactly one cycle. Convert trees to Prüfer sequences and back.</li>
+<li><b>C.</b> Verify Cayley's formula (n<sup>n−2</sup> labelled trees) for n ≤ 6 by counting spanning trees of K<sub>n</sub> via the determinant of a Laplacian cofactor.</li></ol>
+<div class="fn">Useful: <code>nx.is_tree</code>, <code>nx.random_labeled_tree</code>, <code>nx.minimum_spanning_tree</code>, <code>nx.to_prufer_sequence</code>, <code>nx.from_prufer_sequence</code></div></div>
+
+<div class="card"><h3><span class="num">5</span>Hamiltonian graphs</h3>
+<ol><li><b>A.</b> Write your own backtracking (or <code>itertools.permutations</code>) function that finds a Hamiltonian cycle if one exists.</li>
+<li><b>B.</b> Test it on C<sub>n</sub>, K<sub>n</sub>, the cube Q<sub>3</sub>, K<sub>3,4</sub>, the Petersen graph and the dodecahedral graph. Verify Dirac's condition (δ ≥ n/2 ⇒ Hamiltonian) on random graphs.</li>
+<li><b>C.</b> Find a non-Hamiltonian graph that violates Dirac's condition but still has a Hamiltonian path; explain why the converse of Dirac fails.</li></ol>
+<div class="fn">Useful: <code>nx.petersen_graph</code>, <code>nx.dodecahedral_graph</code>, <code>nx.hypercube_graph</code>. (NetworkX has no general Hamiltonian test.)</div></div>
+
+<div class="card"><h3><span class="num">6</span>Eulerian graphs</h3>
+<ol><li><b>A.</b> Model the Königsberg bridges as a MultiGraph and show it has no Euler circuit or path.</li>
+<li><b>B.</b> For 15 graphs (built-in and random connected ones), verify: Eulerian ⇔ connected with all degrees even; semi-Eulerian ⇔ exactly two odd vertices.</li>
+<li><b>C.</b> Given a connected graph with 2k odd vertices, add the minimum number of edges to make it Eulerian (pair up odd vertices) and print the Euler circuit.</li></ol>
+<div class="fn">Useful: <code>nx.MultiGraph</code>, <code>nx.is_eulerian</code>, <code>nx.is_semieulerian</code>, <code>nx.eulerian_circuit</code>, <code>nx.eulerian_path</code></div></div>
+
+<div class="card"><h3><span class="num">7</span>Self-complementary graphs</h3>
+<ol><li><b>A.</b> Show that P<sub>4</sub> and C<sub>5</sub> are self-complementary using <code>nx.complement</code> and <code>nx.is_isomorphic</code>.</li>
+<li><b>B.</b> Using the graph atlas (all graphs up to 7 vertices), list all self-complementary graphs for each n ≤ 7. Verify that they exist only when n ≡ 0 or 1 (mod 4) and have n(n−1)/4 edges.</li>
+<li><b>C.</b> Count them for each n and compare with your presentation; draw the n = 5 ones.</li></ol>
+<div class="fn">Useful: <code>nx.complement</code>, <code>nx.is_isomorphic</code>, <code>nx.graph_atlas_g()</code></div></div>
+
+<div class="card"><h3><span class="num">8</span>Automorphism group of a graph</h3>
+<ol><li><b>A.</b> Write a function that lists all automorphisms of a small graph (as vertex permutations) using the isomorphism matcher on G with itself.</li>
+<li><b>B.</b> Compute |Aut(G)| for K<sub>4</sub>, C<sub>5</sub>, C<sub>6</sub>, P<sub>5</sub>, K<sub>1,4</sub>, K<sub>2,3</sub> and the Petersen graph (expected 120). Match with the known groups (S<sub>n</sub>, D<sub>n</sub>, …).</li>
+<li><b>C.</b> Compute the orbits of vertices; decide which graphs above are vertex-transitive.</li></ol>
+<div class="fn">Useful: <code>from networkx.algorithms.isomorphism import GraphMatcher</code>; <code>GraphMatcher(G,G).isomorphisms_iter()</code></div></div>
+
+<div class="card"><h3><span class="num">9</span>Planar graphs</h3>
+<ol><li><b>A.</b> Test planarity of K<sub>4</sub>, K<sub>5</sub>, K<sub>3,3</sub>, the Petersen graph, the cube and the dodecahedron; draw the planar ones with a planar layout.</li>
+<li><b>B.</b> For planar graphs verify Euler's formula V − E + F = 2 (count faces from the embedding) and the bound E ≤ 3V − 6.</li>
+<li><b>C.</b> Show that deleting one edge of K<sub>5</sub> gives a planar graph; show that K<sub>3,3</sub> contains no triangle, so E ≤ 2V − 4 fails, proving non-planarity.</li></ol>
+<div class="fn">Useful: <code>nx.check_planarity</code> (returns <code>(is_planar, embedding)</code>), <code>nx.draw_planar</code>, <code>embedding.traverse_face</code></div></div>
+
+<div class="card"><h3><span class="num">10</span>Coloring</h3>
+<ol><li><b>A.</b> Colour the Petersen graph with the greedy algorithm using at least three different strategies; compare the number of colours used.</li>
+<li><b>B.</b> Write a brute-force function to find the chromatic number χ(G) of a small graph. Verify χ(C<sub>even</sub>)=2, χ(C<sub>odd</sub>)=3, χ(K<sub>n</sub>)=n, χ(Petersen)=3 and Brooks' bound.</li>
+<li><b>C.</b> Draw a coloured graph where greedy uses more than χ(G) colours (change the vertex order).</li></ol>
+<div class="fn">Useful: <code>nx.coloring.greedy_color(G, strategy="largest_first")</code>, strategies <code>smallest_last</code>, <code>DSATUR</code>, <code>random_sequential</code>; <code>nx.draw(G, node_color=...)</code></div></div>
+
+<div class="card"><h3><span class="num">11</span>Vertex connectivity and edge connectivity</h3>
+<ol><li><b>A.</b> Compute κ(G) and λ(G) for K<sub>n</sub>, C<sub>n</sub>, K<sub>m,n</sub>, the Petersen graph and the cube.</li>
+<li><b>B.</b> Verify Whitney's inequality κ ≤ λ ≤ δ on 30 random connected graphs.</li>
+<li><b>C.</b> Find a minimum vertex cut and minimum edge cut, remove them, and show the graph becomes disconnected. Construct a graph with κ &lt; λ &lt; δ.</li></ol>
+<div class="fn">Useful: <code>nx.node_connectivity</code>, <code>nx.edge_connectivity</code>, <code>nx.minimum_node_cut</code>, <code>nx.minimum_edge_cut</code></div></div>
+
+<div class="card"><h3><span class="num">12</span>Bipartite graphs</h3>
+<ol><li><b>A.</b> Build K<sub>3,4</sub> and a random bipartite graph; obtain the two parts and draw with the parts in two columns.</li>
+<li><b>B.</b> Verify: G is bipartite ⇔ it has no odd cycle. Test on cycles, trees, hypercubes, the Petersen graph and random graphs (use <code>nx.cycle_basis</code> to inspect cycle lengths).</li>
+<li><b>C.</b> Verify that the spectrum of a bipartite graph is symmetric about 0; check it fails for a non-bipartite graph.</li></ol>
+<div class="fn">Useful: <code>nx.is_bipartite</code>, <code>nx.bipartite.sets</code>, <code>nx.bipartite.color</code>, <code>nx.bipartite.random_graph</code>, <code>nx.bipartite_layout</code></div></div>
+
+<div class="card"><h3><span class="num">13</span>Independent sets</h3>
+<ol><li><b>A.</b> Find a maximal independent set of the Petersen graph.</li>
+<li><b>B.</b> Compute the independence number α(G) exactly (via maximum cliques of the complement) for C<sub>n</sub>, K<sub>n</sub>, K<sub>m,n</sub>, the Petersen graph and the cube. Verify α(G) = ω(complement of G).</li>
+<li><b>C.</b> Compare a randomly obtained maximal independent set with the maximum one; run 100 trials and report how often you get a maximum set.</li></ol>
+<div class="fn">Useful: <code>nx.maximal_independent_set</code>, <code>nx.find_cliques</code>, <code>nx.complement</code>, <code>nx.graph_clique_number</code> (or take max over <code>find_cliques</code>)</div></div>
+
+<div class="card"><h3><span class="num">14</span>Vertex covering and edge covering</h3>
+<ol><li><b>A.</b> Find a minimum edge cover of a graph and an approximate vertex cover. Check that your sets really cover.</li>
+<li><b>B.</b> Compute the vertex cover number β by brute force. Verify Gallai's identities α + β = n and α′ + β′ = n (for graphs with no isolated vertex), where α′ is the matching number and β′ the edge cover number.</li>
+<li><b>C.</b> Check König's theorem (β = α′) on bipartite graphs, and find a non-bipartite graph where it fails.</li></ol>
+<div class="fn">Useful: <code>nx.min_edge_cover</code>, <code>nx.algorithms.approximation.min_weighted_vertex_cover</code>, <code>nx.max_weight_matching</code></div></div>
+
+<div class="card"><h3><span class="num">15</span>Network flow problems</h3>
+<ol><li><b>A.</b> Build a directed network with source s, sink t and at least 7 edges with capacities; draw it with capacity labels.</li>
+<li><b>B.</b> Compute the maximum flow and a minimum cut. Verify max-flow = min-cut capacity and flow conservation at each internal vertex.</li>
+<li><b>C.</b> Model a bipartite matching problem as a flow network (unit capacities) and solve it with <code>maximum_flow</code>. Optionally add costs and use <code>max_flow_min_cost</code>.</li></ol>
+<div class="fn">Useful: <code>nx.DiGraph</code> with <code>capacity=</code>, <code>nx.maximum_flow</code>, <code>nx.minimum_cut</code>, <code>nx.max_flow_min_cost</code>, <code>nx.get_edge_attributes</code></div></div>
+
+<div class="card"><h3><span class="num">16</span>Adjacency matrix</h3>
+<ol><li><b>A.</b> Obtain the adjacency matrix of K<sub>4</sub>, C<sub>5</sub>, P<sub>4</sub> and the Petersen graph; rebuild a graph from a given matrix.</li>
+<li><b>B.</b> Verify: (A<sup>k</sup>)<sub>ij</sub> = number of walks of length k from i to j; trace(A<sup>3</sup>) = 6 × (number of triangles); row sums = degrees.</li>
+<li><b>C.</b> Compute the eigenvalues of the Petersen graph (3, 1, −2 with multiplicities 1, 5, 4) and of K<sub>n</sub>; check that the largest eigenvalue lies between average and maximum degree.</li></ol>
+<div class="fn">Useful: <code>nx.to_numpy_array</code>, <code>nx.from_numpy_array</code>, <code>nx.adjacency_matrix</code>, <code>numpy.linalg.eigvalsh</code>, <code>nx.triangles</code></div></div>
+
+<div class="card"><h3><span class="num">17</span>Laplacian matrix</h3>
+<ol><li><b>A.</b> Compute L = D − A for several graphs and check that it equals D − A built manually.</li>
+<li><b>B.</b> Verify: L is positive semidefinite; the multiplicity of eigenvalue 0 equals the number of components; every row sums to 0; matrix-tree theorem (any cofactor = number of spanning trees).</li>
+<li><b>C.</b> Compute the algebraic connectivity of paths, cycles and K<sub>n</sub> for n = 4…10, plot against n, and relate to vertex connectivity (a(G) ≤ κ(G) for non-complete G).</li></ol>
+<div class="fn">Useful: <code>nx.laplacian_matrix(G).toarray()</code>, <code>nx.laplacian_spectrum</code>, <code>nx.algebraic_connectivity</code> (needs SciPy)</div></div>
+
+<div class="card"><h3><span class="num">18</span>Distance matrix</h3>
+<ol><li><b>A.</b> Compute the distance matrix of P<sub>5</sub>, C<sub>6</sub>, K<sub>3,3</sub> and the Petersen graph.</li>
+<li><b>B.</b> From the matrix read off eccentricities, radius, diameter and centre; verify rad ≤ diam ≤ 2·rad on 20 random connected graphs. Compare with the NetworkX functions.</li>
+<li><b>C.</b> Compute the Wiener index (sum of distances over unordered pairs). Among all trees on 8 vertices, find the ones with minimum and maximum Wiener index (hint: star and path).</li></ol>
+<div class="fn">Useful: <code>nx.floyd_warshall_numpy</code>, <code>nx.shortest_path_length</code>, <code>nx.eccentricity</code>, <code>nx.diameter</code>, <code>nx.radius</code>, <code>nx.center</code>, <code>nx.wiener_index</code></div></div>
+
+<div class="card"><h3><span class="num">19</span>Matching</h3>
+<ol><li><b>A.</b> Find a maximum matching in the Petersen graph, C<sub>7</sub> and a random graph; draw matched edges in a different colour.</li>
+<li><b>B.</b> Verify: a perfect matching exists in K<sub>2n</sub> and even cycles but not odd cycles; for a bipartite graph check Hall's condition (|N(S)| ≥ |S| for all subsets S) against the result of the algorithm.</li>
+<li><b>C.</b> Solve a small job-assignment problem (4 workers, 4 jobs with weights) with a maximum-weight matching; also test Tutte's/Petersen's theorem: every bridgeless cubic graph has a perfect matching.</li></ol>
+<div class="fn">Useful: <code>nx.max_weight_matching(G, maxcardinality=True)</code>, <code>nx.is_perfect_matching</code>, <code>nx.is_maximal_matching</code>, <code>nx.bipartite.maximum_matching</code>, <code>nx.min_weight_matching</code></div></div>
+
+<h2>5. Tips for a good submission</h2>
+<ul>
+<li>Use small examples first; draw them before running heavy tests.</li>
+<li>Always print results with a label, e.g. <code>print("kappa(Petersen) =", nx.node_connectivity(P))</code>.</li>
+<li>Use <code>seed=</code> in random functions so that your results can be reproduced.</li>
+<li>If a function does not exist in NetworkX (for example a Hamiltonian test), write your own and explain the logic in comments.</li>
+<li>You may consult the official documentation, but your explanations must be in your own words.</li>
+</ul>
+</main>
+</body>
+</html>
