@@ -306,89 +306,99 @@
       </div>
     </section>
 
-    <!-- SECTION 5: Minimum Edges for Bounded Diameter -->
-    <section id="diameter-bounds" class="bg-slate-950/80 rounded-2xl border border-cyan-900/60 p-6 sm:p-8 space-y-6">
-      <div class="border-b border-slate-800 pb-3">
-        <span class="text-xs font-bold text-orange tracking-widest uppercase">SECTION 5</span>
-        <h3 class="text-2xl font-bold text-orange mt-1">Minimum Edges Required to Guarantee Diameter ≤ d</h3>
-      </div>
+    <!-- ====== BEGIN Improved Diameter Extremal Section ====== -->
+<section id="clique-chain-extremal">
+  <h3>Improved Extremal Construction for Diameter ≤ <em>d</em>+1</h3>
 
-      <div class="space-y-6">
-        <div class="text-white text-sm leading-relaxed space-y-4">
-          <p>
-            What is the minimum number of edges <span class="math text-yellow">m</span> required so that ANY graph on <span class="math text-yellow">n</span> vertices is guaranteed to have <strong>diameter ≤ d</strong>, regardless of structural arrangement?
-          </p>
+  <p>
+    The simple path‑plus‑clique graph described above is <strong>not</strong> the edge‑maximal graph for a given diameter bound.
+    A much richer family is the <em>clique chain</em> (or <em>path of cliques</em>).
+    Let
+    \[
+      n = n_1 + n_2 + \cdots + n_{d+2}, \qquad n_i \ge 1 .
+    \]
+    Form a complete graph \(K_{n_i}\) on each set of \(n_i\) vertices, and join every vertex of \(K_{n_i}\) to every vertex of \(K_{n_{i+1}}\) for \(i=1,\dots,d+1\).
+    No other edges are present.
+  </p>
 
-          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-4">
-            <h4 class="text-base font-bold text-lime">Ore's Theorem & General Edge Formula</h4>
-            
-            <div class="grid md:grid-cols-2 gap-4">
-              <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-1">
-                <span class="text-xs font-bold text-cyan uppercase">Case d = 1</span>
-                <p class="text-xs text-white">
-                  Diameter ≤ 1 requires a fully complete graph K<sub>n</sub>.
-                </p>
-                <div class="font-mono text-sm text-yellow font-bold pt-1">
-                  m = C(n, 2) = n(n-1)/2
-                </div>
-              </div>
+  <p>
+    This graph has diameter exactly \(d+1\) because the farthest two vertices (one in \(K_{n_1}\) and one in \(K_{n_{d+2}}\)) are at distance \(d+1\).
+    Its edge count is
+    \[
+      e(G) = \sum_{i=1}^{d+2} \binom{n_i}{2} + \sum_{i=1}^{d+1} n_i n_{i+1}.
+    \]
+    Choosing the \(n_i\) as equal as possible (differing by at most 1) <strong>maximises</strong> the number of edges among all graphs on \(n\) vertices with diameter at most \(d+1\).
+    The path‑plus‑clique graph is the extreme case where all but the last clique are singletons.
+  </p>
 
-              <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-1">
-                <span class="text-xs font-bold text-cyan uppercase">Case d = 2</span>
-                <p class="text-xs text-white">
-                  To guarantee diameter ≤ 2, edge count must exceed max edges of a graph with diameter 3.
-                </p>
-                <div class="font-mono text-sm text-yellow font-bold pt-1">
-                  m = C(n-2, 2) + 2
-                </div>
-              </div>
-            </div>
+  <p>
+    Your proposed partition with two non‑trivial cliques of sizes \(a\) and \(b\) and the remaining \(d\) cliques of size 1 is already a significant improvement:
+    \[
+      n_1 = a,\quad n_2 = b,\quad n_3 = \dots = n_{d+2} = 1,
+      \qquad a+b+d = n .
+    \]
+    It yields many more edges than the simple path‑plus‑clique while still having diameter \(d+1\).
+  </p>
 
-            <!-- General Formula Box -->
-            <div class="bg-slate-950 border border-orange-glow p-4 rounded-lg space-y-2">
-              <span class="text-xs font-bold text-orange uppercase tracking-wider">General Formula for Diameter ≤ d (d ≥ 2)</span>
-              <div class="text-xl font-mono font-extrabold text-lime text-center py-2">
-                m = C(n - d, 2) + d = (n - d)(n - d - 1) / 2 + d
-              </div>
-              <p class="text-xs text-cyan leading-relaxed">
-                <em>Structural Logic:</em> The extremal graph of diameter d + 1 is formed by a path of length d (d + 1 vertices) connected to a clique of the remaining n - (d + 1) vertices attached at one end. Adding 1 more edge breaks this longest path and forces diam(G) ≤ d.
-              </p>
-            </div>
-          </div>
-        </div>
+  <figure style="text-align:center; margin:1.5em 0;">
+    <!-- Inline SVG schematic of a clique chain -->
+    <svg width="620" height="120" viewBox="0 0 620 120" xmlns="http://www.w3.org/2000/svg">
+      <!-- Clique ellipses -->
+      <ellipse cx="60"  cy="60" rx="38" ry="22" fill="#d0e6ff" stroke="#1a56db" stroke-width="2"/>
+      <ellipse cx="180" cy="60" rx="38" ry="22" fill="#d0e6ff" stroke="#1a56db" stroke-width="2"/>
+      <ellipse cx="300" cy="60" rx="38" ry="22" fill="#d0e6ff" stroke="#1a56db" stroke-width="2"/>
+      <ellipse cx="420" cy="60" rx="38" ry="22" fill="#d0e6ff" stroke="#1a56db" stroke-width="2"/>
+      <ellipse cx="540" cy="60" rx="38" ry="22" fill="#d0e6ff" stroke="#1a56db" stroke-width="2"/>
 
-        <!-- Dynamic Table -->
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
-          <div class="flex items-center gap-3">
-            <label class="text-xs font-bold text-yellow">Select Number of Vertices (n):</label>
-            <select id="matrix-n" onchange="renderDiameterTable()" class="bg-slate-950 text-cyan border border-slate-700 text-xs rounded px-3 py-1.5 outline-none font-mono font-bold">
-              <option value="5">n = 5</option>
-              <option value="6" selected>n = 6</option>
-              <option value="7">n = 7</option>
-              <option value="8">n = 8</option>
-              <option value="10">n = 10</option>
-            </select>
-          </div>
+      <!-- Labels -->
+      <text x="60"  y="65" text-anchor="middle" font-size="14" fill="#003366">K_{n₁}</text>
+      <text x="180" y="65" text-anchor="middle" font-size="14" fill="#003366">K_{n₂}</text>
+      <text x="300" y="65" text-anchor="middle" font-size="14" fill="#003366">…</text>
+      <text x="420" y="65" text-anchor="middle" font-size="14" fill="#003366">K_{n_{d+1}}</text>
+      <text x="540" y="65" text-anchor="middle" font-size="14" fill="#003366">K_{n_{d+2}}</text>
 
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs text-white border-collapse">
-              <thead>
-                <tr class="border-b border-slate-800 text-cyan font-bold">
-                  <th class="py-2.5 px-3">Target Max Diameter (d)</th>
-                  <th class="py-2.5 px-3">Algebraic Formula</th>
-                  <th class="py-2.5 px-3 text-lime">Required Edges (m)</th>
-                  <th class="py-2.5 px-3">Total Possible Edges</th>
-                  <th class="py-2.5 px-3 text-orange">% of Complete Graph</th>
-                </tr>
-              </thead>
-              <tbody id="diameter-table-body">
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
+      <!-- Double arrows between consecutive cliques -->
+      <defs>
+        <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1a56db"/>
+        </marker>
+      </defs>
+      <line x1="98"  y1="60" x2="142" y2="60" stroke="#1a56db" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <line x1="218" y1="60" x2="262" y2="60" stroke="#1a56db" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <line x1="338" y1="60" x2="382" y2="60" stroke="#1a56db" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <line x1="458" y1="60" x2="502" y2="60" stroke="#1a56db" stroke-width="2" marker-end="url(#arrowhead)"/>
 
+      <!-- Diameter annotation -->
+      <path d="M 60 100 Q 300 140 540 100" fill="none" stroke="#cc0000" stroke-width="2" stroke-dasharray="4,2"/>
+      <text x="300" y="115" text-anchor="middle" font-size="13" fill="#cc0000">diameter = d+1</text>
+    </svg>
+    <figcaption style="font-size:0.9em; color:#555;">
+      A clique chain with \(d+2\) cliques.  
+      Complete bipartite graphs between consecutive cliques are indicated by the arrows.
+    </figcaption>
+  </figure>
+
+  <p>
+    <strong>Edge count comparison.</strong>  
+    For example, with \(n=10\) and \(d=2\) (diameter ≤ 3):
+  </p>
+  <table class="table" style="width:auto; margin:1em auto; border-collapse:collapse;">
+    <thead>
+      <tr><th>Construction</th><th>Edges</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Path + clique</td><td>\(\binom{7}{2}+2 = 23\)</td></tr>
+      <tr><td>Two cliques \(a=4,b=4\) + 2 singletons</td><td>\(\binom{4}{2}+\binom{4}{2}+4\cdot4+4+4 = 6+6+16+8 = 36\)</td></tr>
+      <tr><td>Balanced clique chain (4 cliques of sizes 3,3,2,2)</td><td>\(\binom{3}{2}+\binom{3}{2}+\binom{2}{2}+\binom{2}{2}+3\cdot3+3\cdot2+2\cdot2 = 3+3+1+1+9+6+4 = 27\)</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    The balanced chain is not always the absolute maximum for a given <em>n</em> and <em>d</em>; the exact optimum depends on the interplay between the internal clique edges and the bipartite edges.
+    However, the clique‑chain family is the correct starting point for an extremal analysis, and the two‑large‑clique partition you suggested is a natural and powerful sub‑family.
+  </p>
+</section>
+<!-- ====== END Improved Diameter Extremal Section ====== -->
   </main>
 
   <footer class="border-t border-slate-800 bg-slate-950 py-6 text-center text-xs text-cyan">
