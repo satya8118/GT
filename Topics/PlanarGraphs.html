@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planar Graphs: Complete Undergraduate Guide</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <style>
+        :root {
+            --bg-dark: #0B0F19;
+            --panel-bg: #131B2E;
+            --panel-bg-alt: #0F1626;
+            --panel-stroke: #2A3B5C;
+            --cyan-neon: #00F0FF;
+            --violet-neon: #A855F7;
+            --emerald-neon: #10B981;
+            --rose-neon: #F43F5E;
+            --amber-neon: #F59E0B;
+            --text-light: #F8FAFC;
+            --text-muted: #94A3B8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                linear-gradient(to right, rgba(30, 41, 59, 0.25) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(30, 41, 59, 0.25) 1px, transparent 1px);
+            background-size: 40px 40px;
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.75;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1060px;
+            margin: 0 auto;
+            padding: 45px 24px 80px;
+        }
+        
+        header.hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--panel-stroke);
+        }
+
+        h1.main-title {
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin: 0 0 0.5rem 0;
+            background: linear-gradient(90deg, var(--cyan-neon), var(--violet-neon), var(--emerald-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            max-width: 720px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .toc-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .toc-link {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--panel-stroke);
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 999px;
+            transition: all 0.2s ease;
+        }
+
+        .toc-link:hover {
+            border-color: var(--cyan-neon);
+            color: var(--cyan-neon);
+            transform: translateY(-2px);
+        }
+        
+        .text-cyan { color: var(--cyan-neon); }
+        .text-violet { color: var(--violet-neon); }
+        .text-emerald { color: var(--emerald-neon); }
+        .text-rose { color: var(--rose-neon); }
+        .text-amber { color: var(--amber-neon); }
+        .text-muted { color: var(--text-muted); }
+        
+        .card {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--panel-stroke);
+            border-radius: 16px;
+            padding: 34px;
+            margin-bottom: 32px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+        }
+
+        .sub-box {
+            background-color: var(--panel-bg-alt);
+            border-left: 4px solid var(--cyan-neon);
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 20px 0;
+        }
+
+        .sub-box.violet { border-left-color: var(--violet-neon); }
+        .sub-box.emerald { border-left-color: var(--emerald-neon); }
+        .sub-box.rose { border-left-color: var(--rose-neon); }
+        .sub-box.amber { border-left-color: var(--amber-neon); }
+
+        .math-box {
+            background-color: rgba(11, 15, 25, 0.65);
+            border: 1px solid var(--panel-stroke);
+            border-radius: 10px;
+            padding: 14px 20px;
+            margin: 16px 0;
+            overflow-x: auto;
+        }
+        
+        .badge-container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .topic-badge {
+            background-color: rgba(168, 85, 247, 0.15);
+            border: 1px solid var(--violet-neon);
+            color: var(--cyan-neon);
+            padding: 5px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--text-light);
+        }
+
+        h3.sub-heading {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 28px;
+            margin-bottom: 10px;
+            color: var(--cyan-neon);
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .grid-2 > .card {
+            margin-bottom: 0;
+        }
+        
+        ul.step-list, ol.step-list {
+            padding-left: 22px;
+            margin: 14px 0;
+        }
+
+        ul.step-list li, ol.step-list li {
+            margin-bottom: 12px;
+        }
+
+        ul.step-list li::marker {
+            color: var(--cyan-neon);
+        }
+
+        ol.step-list li::marker {
+            color: var(--amber-neon);
+            font-weight: 700;
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--panel-bg-alt);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        table.data-table th, table.data-table td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--panel-stroke);
+        }
+
+        table.data-table th {
+            background-color: rgba(42, 59, 92, 0.35);
+            color: var(--cyan-neon);
+            font-weight: 600;
+            font-size: 0.92rem;
+        }
+        
+        .vertex-dot {
+            display: inline-block;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+            box-shadow: 0 0 8px currentColor;
+            background-color: currentColor;
+        }
+
+        @media (max-width: 820px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            h1.main-title {
+                font-size: 2.3rem;
+            }
+            .card {
+                padding: 24px 20px;
+            }
+        }
+        
+        .fig { margin: 24px 0; padding: 16px; text-align: center; background: var(--panel-bg-alt); border: 1px solid var(--panel-stroke); border-radius: 12px; }
+        .fig svg { width: 100%; max-width: 560px; height: auto; }
+        .fig figcaption { color: var(--text-muted); font-size: 0.9rem; margin-top: 8px; line-height: 1.5; }
+        .fig .lb { fill: #F8FAFC; font: 600 14px Inter, sans-serif; text-anchor: middle; }
+        .fig .cap { font-size: 12px; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="hero">
+        <h1 class="main-title">PLANAR GRAPHS</h1>
+        <p class="subtitle">A Step-by-Step Visual & Theoretical Guide to Embeddings, Euler's Formula, Kuratowski's Theorem, Dual Graphs, and the 5-Color Theorem</p>
+        <nav class="toc-nav">
+            <a href="#topic1" class="toc-link">1. Planar Graphs</a>
+            <a href="#topic2" class="toc-link">2. Proofs & $K_5, K_{3,3}$</a>
+            <a href="#topic3" class="toc-link">3. Euler's Formula & Corollaries</a>
+            <a href="#topic4" class="toc-link">4. Kuratowski & Petersen</a>
+            <a href="#topic5" class="toc-link">5. Dual Graphs</a>
+            <a href="#topic6" class="toc-link">Special: 5-Color Theorem</a>
+        </nav>
+    </header>
+    
+    <section id="topic1" class="card">
+        <div class="badge-container">
+            <div class="topic-badge">Topic 1</div>
+            <h2 class="card-title">Definition & Intuition of Planar Graphs</h2>
+        </div>
+
+        <p>In graph theory, an abstract graph $G = (V, E)$ is just a set of vertices and a set of edges connecting them—how we draw it on paper usually doesn't change the graph itself. However, in many real-world problems (such as designing printed circuit boards, laying out subway lines, or drawing maps), we need to know whether a network can be drawn on a flat surface <strong>without any edges crossing each other</strong>.</p>
+
+        <div class="sub-box">
+            <p style="margin-top:0;"><strong class="text-cyan">Formal Definition (Planar Graph):</strong> A graph $G = (V, E)$ is called <strong>planar</strong> if it can be drawn in the two-dimensional plane ($\mathbb{R}^2$) in such a way that no two edges intersect anywhere except at a common endpoint (vertex) where they meet.</p>
+            <p style="margin-bottom:0;"><strong class="text-emerald">Plane Graph (Planar Embedding):</strong> Once we actually draw a planar graph on a flat plane with zero edge crossings, that specific crossing-free drawing is called a <strong>planar embedding</strong> or a <strong>plane graph</strong>.</p>
+        </div>
+
+        <h3 class="sub-heading">Crucial Distinction: Crossing Drawing vs. Non-Planar Graph</h3>
+
+<figure class="fig"><svg viewBox="0 0 560 235" role="img" aria-label="Figure 1. Two drawings of the same graph K₄: one with a crossing, one without."><line x1="60" y1="50" x2="190" y2="50" stroke="#00F0FF" stroke-width="2.5" /><line x1="190" y1="50" x2="190" y2="170" stroke="#00F0FF" stroke-width="2.5" /><line x1="190" y1="170" x2="60" y2="170" stroke="#00F0FF" stroke-width="2.5" /><line x1="60" y1="170" x2="60" y2="50" stroke="#00F0FF" stroke-width="2.5" /><line x1="60" y1="50" x2="190" y2="170" stroke="#00F0FF" stroke-width="2.5" /><line x1="190" y1="50" x2="60" y2="170" stroke="#00F0FF" stroke-width="2.5" /><text class="lb" x="125" y="112" fill="#F43F5E">✕</text><circle cx="60" cy="50" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="60" y="36">1</text><circle cx="190" cy="50" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="190" y="36">2</text><circle cx="190" cy="170" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="190" y="156">3</text><circle cx="60" cy="170" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="60" y="156">4</text><text class="lb" x="125" y="215" fill="#F59E0B">Crossing drawing (not a flaw of K₄)</text><line x1="360" y1="50" x2="490" y2="50" stroke="#00F0FF" stroke-width="2.5" /><line x1="490" y1="50" x2="490" y2="170" stroke="#00F0FF" stroke-width="2.5" /><line x1="490" y1="170" x2="360" y2="170" stroke="#00F0FF" stroke-width="2.5" /><line x1="360" y1="170" x2="360" y2="50" stroke="#00F0FF" stroke-width="2.5" /><line x1="360" y1="50" x2="490" y2="170" stroke="#00F0FF" stroke-width="2.5" /><path d="M490 50 Q600 150 360 170" fill="none" stroke="#10B981" stroke-width="2.5"/><circle cx="360" cy="50" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="360" y="36">1</text><circle cx="490" cy="50" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="490" y="36">2</text><circle cx="490" cy="170" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="490" y="156">3</text><circle cx="360" cy="170" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="360" y="156">4</text><text class="lb" x="425" y="215" fill="#10B981">Planar embedding: 0 crossings</text></svg><figcaption>Figure 1. Two drawings of the same graph K₄: one with a crossing, one without.</figcaption></figure>
+        <p>A very common mistake is looking at a drawing with crossed lines and immediately concluding the graph is non-planar. Remember: <strong>a graph is planar if there exists <em>at least one</em> way to draw it without crossings.</strong></p>
+
+        <ul class="step-list">
+            <li><strong>Example — The Complete Graph $K_4$:</strong> $K_4$ has 4 vertices where every vertex is connected to the other 3 ($E = 6$ edges). If you draw the 4 vertices as the corners of a square and draw the 2 diagonals straight across the middle, the two diagonals cross in the center.</li>
+            <li><strong>How to Untangle $K_4$:</strong> That crossing is only a flaw of our drawing! We can keep the 4 vertices in a square, keep one diagonal inside the square, and simply curve the second diagonal <em>around the outside</em> of the square. Or, equivalently, we can place 3 vertices in a triangle and put the 4th vertex right in the center. Now there are <strong>0 crossings</strong>, proving that $K_4$ is planar.</li>
+        </ul>
+    </section>
+    
+    <section id="topic2">
+        <div class="card">
+            <div class="badge-container">
+                <div class="topic-badge" style="border-color: var(--emerald-neon); color: var(--emerald-neon); background: rgba(16,185,129,0.15);">Topic 2a & 2b</div>
+                <h2 class="card-title">Proving Trees, Cycle Graphs ($C_n$), and Wheel Graphs ($W_n$) are Planar</h2>
+            </div>
+
+            <h3 class="sub-heading" style="color: var(--emerald-neon);">2a. Proof that Every Tree is Planar</h3>
+            <p>A <strong>tree</strong> $T$ is a connected graph that contains no cycles. Every tree with $V \ge 1$ vertices has exactly $E = V - 1$ edges, and every tree with $V \ge 2$ vertices has at least two <strong>leaves</strong> (vertices of degree 1). We can prove that every tree is planar using <strong>mathematical induction on the number of vertices $V$</strong>:</p>
+            <ol class="step-list">
+                <li><strong>Base Case ($V = 1$):</strong> A tree with 1 vertex has $E = 0$ edges. A single point in the plane has no edges to cross, so it is trivially planar.</li>
+                <li><strong>Inductive Hypothesis:</strong> Assume that every tree with $k$ vertices ($k \ge 1$) can be drawn in the plane without any edge crossings.</li>
+                <li><strong>Inductive Step ($V = k + 1$):</strong> Let $T$ be a tree with $k + 1$ vertices. Since $k + 1 \ge 2$, $T$ must have a leaf vertex $v$ of degree 1, connected to a single parent vertex $u$ by a single edge $e = uv$.</li>
+                <li>If we temporarily remove $v$ and the edge $uv$, the remaining graph $T' = T - v$ is still connected and cycle-free, so $T'$ is a tree with $k$ vertices. By our Inductive Hypothesis, $T'$ has a crossing-free drawing in the plane.</li>
+                <li>Now look at the vertex $u$ in that drawing of $T'$. Because $T'$ has only a finite number of vertices and edges, we can draw a tiny circle (an $\varepsilon$-neighborhood) around $u$ small enough that no other vertices or unrelated edges pass through it. We simply place the leaf $v$ inside this tiny circle and draw a short straight segment from $u$ to $v$. This adds 0 crossings! Thus, $T$ is planar. $\blacksquare$</li>
+            </ol>
+
+            <h3 class="sub-heading">2b. Proof that Cycle Graphs ($C_n$) and Wheel Graphs ($W_n$) are Planar</h3>
+
+<figure class="fig"><svg viewBox="0 0 560 240" role="img" aria-label="Figure 2. A cycle C₆ and the wheel W₆ obtained by adding a hub with radial spokes."><line x1="140" y1="35" x2="209" y2="75" stroke="#00F0FF" stroke-width="2.5" /><line x1="209" y1="75" x2="209" y2="155" stroke="#00F0FF" stroke-width="2.5" /><line x1="209" y1="155" x2="140" y2="195" stroke="#00F0FF" stroke-width="2.5" /><line x1="140" y1="195" x2="71" y2="155" stroke="#00F0FF" stroke-width="2.5" /><line x1="71" y1="155" x2="71" y2="75" stroke="#00F0FF" stroke-width="2.5" /><line x1="71" y1="75" x2="140" y2="35" stroke="#00F0FF" stroke-width="2.5" /><circle cx="140" cy="35" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="209" cy="75" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="209" cy="155" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="140" cy="195" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="71" cy="155" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="71" cy="75" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="140" y="225" fill="#10B981">C₆: vertices on a circle</text><line x1="420" y1="115" x2="420" y2="35" stroke="#A855F7" stroke-width="2" /><line x1="420" y1="115" x2="489" y2="75" stroke="#A855F7" stroke-width="2" /><line x1="420" y1="115" x2="489" y2="155" stroke="#A855F7" stroke-width="2" /><line x1="420" y1="115" x2="420" y2="195" stroke="#A855F7" stroke-width="2" /><line x1="420" y1="115" x2="351" y2="155" stroke="#A855F7" stroke-width="2" /><line x1="420" y1="115" x2="351" y2="75" stroke="#A855F7" stroke-width="2" /><line x1="420" y1="35" x2="489" y2="75" stroke="#00F0FF" stroke-width="2.5" /><line x1="489" y1="75" x2="489" y2="155" stroke="#00F0FF" stroke-width="2.5" /><line x1="489" y1="155" x2="420" y2="195" stroke="#00F0FF" stroke-width="2.5" /><line x1="420" y1="195" x2="351" y2="155" stroke="#00F0FF" stroke-width="2.5" /><line x1="351" y1="155" x2="351" y2="75" stroke="#00F0FF" stroke-width="2.5" /><line x1="351" y1="75" x2="420" y2="35" stroke="#00F0FF" stroke-width="2.5" /><circle cx="420" cy="35" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="489" cy="75" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="489" cy="155" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="420" cy="195" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="351" cy="155" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="351" cy="75" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="420" cy="115" r="8" fill="#0B0F19" stroke="#F59E0B" stroke-width="2.5"/><text class="lb" x="436" y="103">v₀</text><text class="lb" x="420" y="225" fill="#10B981">W₆: hub + spokes, no crossings</text></svg><figcaption>Figure 2. A cycle C₆ and the wheel W₆ obtained by adding a hub with radial spokes.</figcaption></figure>
+            <ul class="step-list">
+                <li><strong>Cycle Graphs ($C_n$, for $n \ge 3$):</strong> A cycle graph $C_n$ consists of $n$ vertices connected in a single closed loop: $v_1 - v_2 - \dots - v_n - v_1$. We can always embed $C_n$ in the plane by placing the $n$ vertices in order along the boundary of a circle (forming a regular $n$-sided polygon) and connecting adjacent vertices along the perimeter. None of the perimeter edges intersect except at their shared corners, so every $C_n$ is planar.</li>
+                <li><strong>Wheel Graphs ($W_n$):</strong> A wheel graph is built by taking a cycle $C_n$ (the outer rim) and adding one central "hub" vertex $v_0$ that connects to every vertex on the rim via "spoke" edges. To draw $W_n$ without crossings:
+                    <ol style="margin-top:8px;">
+                        <li>First draw the cycle $C_n$ as a regular polygon centered at the origin $(0,0)$.</li>
+                        <li>Place the hub vertex $v_0$ strictly at the center $(0,0)$ inside the polygon.</li>
+                        <li>Draw straight line segments (spokes) radially outward from $(0,0)$ to each rim vertex $v_1, \dots, v_n$. Since each spoke travels at a distinct angle from the center, no two spokes can cross each other, and none cross the outer rim. Thus, every wheel graph is planar. $\blacksquare$</li>
+                    </ol>
+                </li>
+            </ul>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <div class="badge-container">
+                    <div class="topic-badge" style="border-color: var(--rose-neon); color: var(--rose-neon); background: rgba(244,63,94,0.15);">Topic 2c</div>
+                    <h2 class="card-title" style="font-size: 1.35rem;">$K_5$: Smallest Vertex Count</h2>
+                </div>
+                <p><strong>Claim:</strong> $K_5$ is the non-planar graph with the <strong>smallest number of vertices ($V = 5$)</strong>.</p>
+
+<figure class="fig"><svg viewBox="0 0 500 330" role="img" aria-label="Figure 3. K₅: cyan = pentagon + 2 inside chords, green = 2 outside chords, red dashed = the fifth chord v₃v₅, which has no crossing-free route."><line x1="250" y1="60" x2="336" y2="122" stroke="#00F0FF" stroke-width="2.5" /><line x1="250" y1="60" x2="336" y2="122" stroke="#00F0FF" stroke-width="2.5" /><line x1="336" y1="122" x2="303" y2="223" stroke="#00F0FF" stroke-width="2.5" /><line x1="303" y1="223" x2="197" y2="223" stroke="#00F0FF" stroke-width="2.5" /><line x1="197" y1="223" x2="164" y2="122" stroke="#00F0FF" stroke-width="2.5" /><line x1="164" y1="122" x2="250" y2="60" stroke="#00F0FF" stroke-width="2.5" /><line x1="250" y1="60" x2="303" y2="223" stroke="#00F0FF" stroke-width="2.5" /><line x1="250" y1="60" x2="197" y2="223" stroke="#00F0FF" stroke-width="2.5" /><path d="M336 122 Q376 324 197 223" fill="none" stroke="#10B981" stroke-width="2.5"/><path d="M336 122 Q250 -65 164 122" fill="none" stroke="#10B981" stroke-width="2.5"/><line x1="303" y1="223" x2="164" y2="122" stroke="#F43F5E" stroke-width="2.5" stroke-dasharray="6 5"/><text class="lb" x="250" y="160" fill="#F43F5E">✕</text><circle cx="250" cy="60" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="250" y="46">v1</text><circle cx="336" cy="122" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="354" y="116">v2</text><circle cx="303" cy="223" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="321" y="239">v3</text><circle cx="197" cy="223" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="179" y="239">v4</text><circle cx="164" cy="122" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="146" y="116">v5</text></svg><figcaption>Figure 3. K₅: cyan = pentagon + 2 inside chords, green = 2 outside chords, red dashed = the fifth chord v₃v₅, which has no crossing-free route.</figcaption></figure>
+                <p><strong>Explanation & Verification:</strong></p>
+                <ul class="step-list">
+                    <li>What are the parameters of $K_5$? It has $V = 5$ vertices, and every vertex connects to the other 4, giving $E = \binom{5}{2} = \frac{5 \times 4}{2} = 10$ edges.</li>
+                    <li><strong>Why can't any simple graph with $V \le 4$ be non-planar?</strong> Any simple graph with $1, 2, 3,$ or $4$ vertices is a subgraph of the complete graph $K_4$. In Topic 1, we already showed how to draw $K_4$ in the plane with zero crossings. Deleting vertices or edges from a planar drawing of $K_4$ can never create crossings!</li>
+                    <li>Therefore, every simple graph with $V \le 4$ is planar. Since $K_5$ has $V = 5$ vertices and is non-planar (which we will prove both geometrically and via Euler's Corollary in Topic 3c), <strong>5 is the minimum possible number of vertices for a non-planar graph</strong>.</li>
+                    <li><em>Geometric intuition (Jordan Curve argument):</em> In $K_5$, the 5 vertices form a cycle $v_1 - v_2 - v_3 - v_4 - v_5 - v_1$ (a pentagon). There are 5 remaining "chord" edges. Inside the pentagon, you can draw at most 2 chords (say $v_1 v_3$ and $v_1 v_4$) before any 3rd interior chord is forced to cross them. Similarly, outside the pentagon, you can route at most 2 chords ($v_2 v_4$ and $v_2 v_5$) without crossing. The 5th chord ($v_3 v_5$) is trapped with nowhere to go!</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="badge-container">
+                    <div class="topic-badge" style="border-color: var(--violet-neon); color: var(--violet-neon); background: rgba(168,85,247,0.15);">Topic 2d</div>
+                    <h2 class="card-title" style="font-size: 1.35rem;">$K_{3,3}$: Smallest Edge Count</h2>
+                </div>
+                <p><strong>Claim:</strong> $K_{3,3}$ is the non-planar graph with the <strong>smallest number of edges ($E = 9$)</strong>.</p>
+
+<figure class="fig"><svg viewBox="0 0 500 235" role="img" aria-label="Figure 4. K₃,₃ (three houses, three utilities): all 9 edges; any drawing is forced to have a crossing."><line x1="100" y1="50" x2="100" y2="190" stroke="#A855F7" stroke-width="2" /><line x1="100" y1="50" x2="250" y2="190" stroke="#00F0FF" stroke-width="2" /><line x1="100" y1="50" x2="400" y2="190" stroke="#A855F7" stroke-width="2" /><line x1="250" y1="50" x2="100" y2="190" stroke="#00F0FF" stroke-width="2" /><line x1="250" y1="50" x2="250" y2="190" stroke="#A855F7" stroke-width="2" /><line x1="250" y1="50" x2="400" y2="190" stroke="#00F0FF" stroke-width="2" /><line x1="400" y1="50" x2="100" y2="190" stroke="#A855F7" stroke-width="2" /><line x1="400" y1="50" x2="250" y2="190" stroke="#00F0FF" stroke-width="2" /><line x1="400" y1="50" x2="400" y2="190" stroke="#A855F7" stroke-width="2" /><circle cx="100" cy="50" r="8" fill="#0B0F19" stroke="#10B981" stroke-width="2.5"/><text class="lb" x="100" y="36">h1</text><circle cx="250" cy="50" r="8" fill="#0B0F19" stroke="#10B981" stroke-width="2.5"/><text class="lb" x="250" y="36">h2</text><circle cx="400" cy="50" r="8" fill="#0B0F19" stroke="#10B981" stroke-width="2.5"/><text class="lb" x="400" y="36">h3</text><circle cx="100" cy="190" r="8" fill="#0B0F19" stroke="#F59E0B" stroke-width="2.5"/><text class="lb" x="100" y="216">u1</text><circle cx="250" cy="190" r="8" fill="#0B0F19" stroke="#F59E0B" stroke-width="2.5"/><text class="lb" x="250" y="216">u2</text><circle cx="400" cy="190" r="8" fill="#0B0F19" stroke="#F59E0B" stroke-width="2.5"/><text class="lb" x="400" y="216">u3</text></svg><figcaption>Figure 4. K₃,₃ (three houses, three utilities): all 9 edges; any drawing is forced to have a crossing.</figcaption></figure>
+                <p><strong>Explanation & Verification:</strong></p>
+                <ul class="step-list">
+                    <li>$K_{3,3}$ (the famous "Three Utilities Graph") is a complete bipartite graph with two sets of 3 vertices—say 3 houses $\{h_1, h_2, h_3\}$ and 3 utilities $\{u_1, u_2, u_3\}$. Every house connects to every utility, giving $V = 3 + 3 = 6$ vertices and $E = 3 \times 3 = 9$ edges.</li>
+                    <li>Notice that $K_5$ has 10 edges, whereas $K_{3,3}$ has only <strong>9 edges</strong>!</li>
+                    <li><strong>Why can't a non-planar graph have 8 or fewer edges?</strong>
+                        <ul style="margin-top:6px;">
+                            <li>If a graph had $V \le 4$, it is planar (subgraph of $K_4$).</li>
+                            <li>If a graph has $V = 5$, it is obtained from $K_5$ (10 edges) by removing edges. Removing even <strong>one</strong> edge from $K_5$ (leaving 9 edges) immediately allows the trapped 5th chord to disappear, making $K_5 - e$ planar! So any graph on 5 vertices with $\le 9$ edges is planar.</li>
+                            <li>For $V \ge 6$, any non-planar graph must contain a structure equivalent to $K_5$ (needs $\ge 10$ edges) or $K_{3,3}$ (needs $\ge 9$ edges).</li>
+                        </ul>
+                    </li>
+                    <li>Thus, no graph with $E \le 8$ edges can ever be non-planar, making $K_{3,3}$ ($E = 9$) the minimal-edge non-planar graph.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <section id="topic3" class="card">
+        <div class="badge-container">
+            <div class="topic-badge">Topic 3</div>
+            <h2 class="card-title">Regions, Euler's Theorem ($V - E + F = 2$), & Degree Bounds</h2>
+        </div>
+
+        <h3 class="sub-heading">3a. Concept of Regions (Faces) and Face-Degree Handshaking</h3>
+
+<figure class="fig"><svg viewBox="0 0 560 215" role="img" aria-label="Figure 5. A plane drawing of K₄: three bounded faces plus the unbounded exterior face."><polygon points="150,30 45,190 150,135" fill="#00F0FF" fill-opacity=".10"/><polygon points="45,190 255,190 150,135" fill="#A855F7" fill-opacity=".14"/><polygon points="255,190 150,30 150,135" fill="#10B981" fill-opacity=".12"/><line x1="150" y1="30" x2="45" y2="190" stroke="#00F0FF" stroke-width="2.5" /><line x1="45" y1="190" x2="255" y2="190" stroke="#00F0FF" stroke-width="2.5" /><line x1="255" y1="190" x2="150" y2="30" stroke="#00F0FF" stroke-width="2.5" /><line x1="150" y1="135" x2="150" y2="30" stroke="#00F0FF" stroke-width="2.5" /><line x1="150" y1="135" x2="45" y2="190" stroke="#00F0FF" stroke-width="2.5" /><line x1="150" y1="135" x2="255" y2="190" stroke="#00F0FF" stroke-width="2.5" /><circle cx="150" cy="30" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="45" cy="190" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="255" cy="190" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="150" cy="135" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="100" y="125" fill="#00F0FF">f₁</text><text class="lb" x="150" y="175" fill="#A855F7">f₂</text><text class="lb" x="200" y="125" fill="#10B981">f₃</text><text class="lb" x="30" y="40" fill="#F59E0B">f_ext</text><text class="lb" x="400" y="100" fill="#F8FAFC">V = 4,  E = 6,  F = 4</text><text class="lb" x="400" y="130" fill="#10B981">V − E + F = 4 − 6 + 4 = 2</text><text class="lb" x="400" y="165" fill="#F59E0B">Σ deg(f) = 3+3+3+3 = 12 = 2E</text></svg><figcaption>Figure 5. A plane drawing of K₄: three bounded faces plus the unbounded exterior face.</figcaption></figure>
+        <p>When we draw a plane graph $G$ on a flat sheet of paper, the edges act like fences that divide the 2D plane into separate areas called <strong>regions</strong> or <strong>faces</strong> (denoted by $F$). Two points in the plane belong to the same face if you can draw a curve between them without crossing any edge or vertex of $G$.</p>
+        <ul class="step-list">
+            <li><strong>Bounded vs. Unbounded (Exterior) Face:</strong> Every finite plane graph creates some number of enclosed interior regions (bounded faces) plus <strong>exactly one infinite region on the outside</strong> surrounding the entire drawing, called the <strong>unbounded</strong> or <strong>exterior face</strong> ($f_{\text{ext}}$). We always count this exterior face in $F$! (For example, a single triangle $C_3$ has $F = 2$ faces: 1 inside and 1 outside).</li>
+            <li><strong>Degree (Length) of a Face $\deg(f)$:</strong> The degree of a face $f$ is the number of edge steps in the closed walk that traces around the boundary of $f$.</li>
+            <li><strong>The Face Handshaking Lemma:</strong> Why does adding up the degrees of all faces always equal $2E$? Because in any plane graph, every edge $e$ either separates <strong>two distinct faces</strong> (so it gets counted once on the boundary of face A and once on the boundary of face B), OR $e$ is a "bridge/cut-edge" sticking out into a single face (so a walk tracing the boundary of that face travels down one side of $e$ and back along the other side, counting $e$ twice). Therefore:</li>
+        </ul>
+        <div class="math-box">
+            $$ \sum_{f \in F} \deg(f) = 2E $$
+        </div>
+
+        <hr style="border-color: var(--panel-stroke); margin: 28px 0;">
+
+        <h3 class="sub-heading" style="color: var(--emerald-neon);">3b. Euler's Theorem ($V - E + F = 2$): Explanation & Proof</h3>
+        <div class="sub-box emerald">
+            <p style="margin:0;"><strong>Euler's Formula (1752):</strong> For any <strong>connected</strong> plane graph with $V$ vertices, $E$ edges, and $F$ faces, the following equation always holds:</p>
+            <p class="text-emerald" style="font-size: 1.3rem; text-align:center; margin: 10px 0 0 0;">$$ V - E + F = 2 $$</p>
+        </div>
+        <p><strong>Step-by-Step Proof by Induction on the Number of Edges $E$:</strong></p>
+        <p>Fix a connected plane graph with $V$ vertices. Since the graph is connected, the minimum possible number of edges it can have is $E = V - 1$ (when it is a tree).</p>
+        <ol class="step-list">
+            <li><strong>Base Case ($E = V - 1$, when $G$ is a Tree):</strong> If $G$ has $E = V - 1$ edges and is connected, $G$ is a tree. A tree contains no cycles, so it cannot enclose any interior regions! The only face is the single unbounded exterior face, meaning $F = 1$. Let's substitute $E = V - 1$ and $F = 1$ into Euler's formula:
+                $$ V - E + F = V - (V - 1) + 1 = V - V + 1 + 1 = 2 $$
+                The base case holds!</li>
+            <li><strong>Inductive Hypothesis:</strong> Assume that $V - E + F = 2$ holds for any connected plane graph on $V$ vertices that has $E = k$ edges (where $k \ge V - 1$).</li>
+            <li><strong>Inductive Step ($E = k + 1$ edges):</strong> Let $G$ be a connected plane graph with $V$ vertices and $k + 1$ edges. Since $k + 1 > V - 1$, $G$ has more edges than a tree, which means $G$ <strong>must contain at least one cycle</strong>.</li>
+            <li>Pick one edge $e$ that lies on a cycle in $G$. In the planar drawing, a cycle forms a closed loop, so the edge $e$ acts as a wall separating two distinct faces (one on each side of $e$).</li>
+            <li>If we remove $e$ to form $G' = G - e$:
+                <ul>
+                    <li>Removing an edge from a cycle does <em>not</em> disconnect the graph, so $G'$ is still connected.</li>
+                    <li>The number of vertices doesn't change: $V' = V$.</li>
+                    <li>The number of edges decreases by 1: $E' = (k + 1) - 1 = k$.</li>
+                    <li>Because we removed the wall $e$ separating two faces, those two faces merge into <strong>one single face</strong>! So $G'$ has one fewer face: $F' = F - 1$.</li>
+                </ul>
+            </li>
+            <li>By our Inductive Hypothesis applied to $G'$ (which has $k$ edges):
+                $$ V' - E' + F' = 2 $$
+                Substitute $V' = V$, $E' = E - 1$, and $F' = F - 1$:
+                $$ V - (E - 1) + (F - 1) = 2 \implies V - E + 1 + F - 1 = 2 \implies V - E + F = 2 \quad \blacksquare $$
+            </li>
+        </ol>
+
+        <hr style="border-color: var(--panel-stroke); margin: 28px 0;">
+
+        <div class="grid-2" style="margin-bottom: 10px;">
+            <div class="sub-box" style="margin:0;">
+                <h3 class="sub-heading" style="margin-top:0;">3c. Corollary 1: Proof of $E \le 3V - 6$</h3>
+                <p><strong>Statement:</strong> For any simple, connected planar graph with $V \ge 3$ vertices, $E \le 3V - 6$.</p>
+                <p><strong>Step-by-Step Proof:</strong></p>
+                <ol class="step-list">
+                    <li>Because the graph is <strong>simple</strong> (no self-loops of length 1 and no parallel double-edges of length 2) and has $V \ge 3$, every face (if bounded by a cycle, or even if it contains bridges) must be bounded by <strong>at least 3 edge steps</strong>:
+                        $$ \deg(f) \ge 3 \quad \text{for every face } f \in F $$
+                    </li>
+                    <li>Sum this inequality over all $F$ faces and apply the Face Handshaking Lemma ($\sum \deg(f) = 2E$):
+                        $$ 2E = \sum_{f \in F} \deg(f) \ge 3F \implies F \le \frac{2}{3}E $$
+                    </li>
+                    <li>Rearrange Euler's Formula ($V - E + F = 2$) to isolate $F$, then substitute $F \le \frac{2}{3}E$:
+                        $$ F = 2 - V + E \le \frac{2}{3}E $$
+                    </li>
+                    <li>Multiply the entire inequality by 3 to clear the fraction:
+                        $$ 6 - 3V + 3E \le 2E \implies E \le 3V - 6 \quad \blacksquare $$
+                    </li>
+                </ol>
+                <p class="text-rose" style="margin-bottom:0;"><strong>Using this to prove $K_5$ is Non-Planar:</strong> For $K_5$, $V = 5$ and $E = 10$. If $K_5$ were planar, it would have to satisfy $E \le 3V - 6$. Plugging in the numbers gives $10 \le 3(5) - 6 = 9$, which says $10 \le 9$ (False!). Thus, $K_5$ cannot be planar.</p>
+            </div>
+
+            <div class="sub-box violet" style="margin:0;">
+                <h3 class="sub-heading" style="margin-top:0; color: var(--violet-neon);">3d. Corollary 2: Proof of $E \le 2V - 4$ (Triangle-Free)</h3>
+                <p><strong>Statement:</strong> For any simple, connected, <strong>triangle-free</strong> planar graph with $V \ge 3$ vertices, $E \le 2V - 4$.</p>
+                <p><strong>Why do we need this?</strong> If we test $K_{3,3}$ ($V=6, E=9$) in Corollary 1 ($E \le 3V - 6$), we get $9 \le 3(6) - 6 = 12$, which is True! So Corollary 1 isn't sharp enough to catch $K_{3,3}$. However, $K_{3,3}$ is <strong>bipartite</strong>, and bipartite graphs have no odd cycles—specifically, <strong>no triangles ($C_3$)</strong>!</p>
+                <p><strong>Step-by-Step Proof:</strong></p>
+                <ol class="step-list">
+                    <li>Since the graph is simple and contains no triangles ($C_3$), the shortest possible cycle has length 4. Thus, every face needs <strong>at least 4 edge steps</strong> around its boundary:
+                        $$ \deg(f) \ge 4 \quad \text{for every face } f \in F $$
+                    </li>
+                    <li>Apply the Face Handshaking Lemma:
+                        $$ 2E = \sum_{f \in F} \deg(f) \ge 4F \implies F \le \frac{2}{4}E = \frac{1}{2}E $$
+                    </li>
+                    <li>Substitute $F \le \frac{1}{2}E$ into Euler's Formula ($F = 2 - V + E$):
+                        $$ 2 - V + E \le \frac{1}{2}E $$
+                    </li>
+                    <li>Multiply through by 2 and solve for $E$:
+                        $$ 4 - 2V + 2E \le E \implies E \le 2V - 4 \quad \blacksquare $$
+                    </li>
+                </ol>
+                <p class="text-rose" style="margin-bottom:0;"><strong>Using this to prove $K_{3,3}$ is Non-Planar:</strong> For $K_{3,3}$, $V = 6, E = 9$, and it is triangle-free. Plugging into $E \le 2V - 4$ gives $9 \le 2(6) - 4 = 8$, which says $9 \le 8$ (False!). Thus, $K_{3,3}$ is non-planar.</p>
+            </div>
+        </div>
+
+        <hr style="border-color: var(--panel-stroke); margin: 28px 0;">
+
+        <h3 class="sub-heading" style="color: var(--amber-neon);">3e. Proof that Every Simple Planar Graph Has a Vertex of Degree $\le 5$</h3>
+        <p><strong>Theorem:</strong> In every simple planar graph $G$, there is at least one vertex $v \in V(G)$ such that $\deg(v) \le 5$.</p>
+        <p><strong>Proof by Contradiction:</strong></p>
+        <ol class="step-list">
+            <li>If $G$ has $V \le 2$ vertices, the maximum possible degree in a simple graph is $V - 1 \le 1 \le 5$, so the claim is trivially true. Now assume $V \ge 3$.</li>
+            <li><strong>Assume for the sake of contradiction</strong> that <em>every</em> vertex in $G$ has degree 6 or greater:
+                $$ \deg(v) \ge 6 \quad \text{for all } v \in V(G) $$
+            </li>
+            <li>Recall the standard <strong>Vertex Handshaking Lemma</strong>, which states that adding up the degrees of all vertices counts every edge twice ($\sum_{v \in V} \deg(v) = 2E$). Summing $\deg(v) \ge 6$ over all $V$ vertices gives:
+                $$ 2E = \sum_{v \in V} \deg(v) \ge \underbrace{6 + 6 + \dots + 6}_{V \text{ times}} = 6V $$
+                Dividing both sides by 2 yields:
+                $$ E \ge 3V $$
+            </li>
+            <li>However, because $G$ is a simple planar graph with $V \ge 3$, Corollary 1 (from Topic 3c, which also holds if $G$ is disconnected by applying it to each component) requires that:
+                $$ E \le 3V - 6 $$
+            </li>
+            <li>Combining both inequalities gives:
+                $$ 3V \le E \le 3V - 6 \implies 0 \le -6 $$
+                This is a clear contradiction ($\Rightarrow\Leftarrow$)! Therefore, our assumption that all vertices have degree $\ge 6$ must be false. At least one vertex must have $\deg(v) \le 5$. $\blacksquare$</li>
+        </ol>
+    </section>
+    
+    <section id="topic4" class="card">
+        <div class="badge-container">
+            <div class="topic-badge">Topic 4</div>
+            <h2 class="card-title">Kuratowski's Theorem, Series Reduction, & The Petersen Graph</h2>
+        </div>
+
+        <h3 class="sub-heading">4a. Why $K_5$ and $K_{3,3}$ are Regular, Non-Planar, and Critically Non-Planar</h3>
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Complete Graph $K_5$</th>
+                        <th>Complete Bipartite Graph $K_{3,3}$</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Vertices & Edges</strong></td>
+                        <td>$V = 5, \quad E = 10$</td>
+                        <td>$V = 6, \quad E = 9$</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Regularity</strong> (All vertices have the exact same degree)</td>
+                        <td><strong class="text-cyan">4-Regular:</strong> Every vertex connects to the other 4 vertices, so $\deg(v) = 4$ for all $v$.</td>
+                        <td><strong class="text-cyan">3-Regular (Cubic):</strong> Every vertex in set $U$ connects to all 3 vertices in set $W$, so $\deg(v) = 3$ for all $v$.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Non-Planarity</strong></td>
+                        <td>Violates $E \le 3V - 6$ ($10 \not\le 9$).</td>
+                        <td>Triangle-free and violates $E \le 2V - 4$ ($9 \not\le 8$).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Critically Non-Planar</strong> (Minimal Obstruction)</td>
+                        <td>Removing <strong>any single edge $e$</strong> (or vertex) leaves $K_5 - e$ ($E=9$), allowing the single crossing edge to be removed so the remaining graph is immediately planar!</td>
+                        <td>Removing <strong>any single edge $e$</strong> (or vertex) leaves $K_{3,3} - e$ ($E=8$), which immediately untangles into a planar graph!</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="sub-heading" style="color: var(--violet-neon);">4d & 4b. Edge Subdivisions, Series Reduction, and Kuratowski's Theorem</h3>
+
+<figure class="fig"><svg viewBox="0 0 560 140" role="img" aria-label="Figure 6. Subdividing an edge inserts a degree-2 vertex; series reduction removes it again."><defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="#A855F7"/></marker></defs><line x1="40" y1="70" x2="180" y2="70" stroke="#00F0FF" stroke-width="2.5" /><circle cx="40" cy="70" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="40" y="56">u</text><circle cx="180" cy="70" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="180" y="56">v</text><text class="cap lb" x="110" y="120" fill="#00F0FF">edge uv</text><line x1="340" y1="70" x2="430" y2="70" stroke="#00F0FF" stroke-width="2.5" /><line x1="430" y1="70" x2="520" y2="70" stroke="#00F0FF" stroke-width="2.5" /><circle cx="340" cy="70" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="340" y="56">u</text><circle cx="430" cy="70" r="8" fill="#0B0F19" stroke="#F59E0B" stroke-width="2.5"/><text class="lb" x="430" y="56">w</text><circle cx="520" cy="70" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="520" y="56">v</text><text class="cap lb" x="430" y="120" fill="#F59E0B">w has degree 2</text><path d="M205 55 H300" stroke="#A855F7" stroke-width="2.5" marker-end="url(#ar)"/><path d="M300 90 H205" stroke="#A855F7" stroke-width="2.5" marker-end="url(#ar)"/><text class="cap lb" x="252" y="45" fill="#A855F7">subdivide</text><text class="cap lb" x="252" y="112" fill="#A855F7">series reduction</text></svg><figcaption>Figure 6. Subdividing an edge inserts a degree-2 vertex; series reduction removes it again.</figcaption></figure>
+        <p>Why aren't $K_5$ and $K_{3,3}$ the <em>only</em> two non-planar graphs in existence? Because if you take $K_5$ or $K_{3,3}$ and simply place extra dots along their edges, the crossing problem doesn't change at all! This leads to two inverse operations:</p>
+        <div class="grid-2" style="margin-bottom: 18px;">
+            <div class="sub-box" style="margin:0;">
+                <p style="margin-top:0;"><strong class="text-cyan">Edge Subdivision (Adding Degree-2 Vertices):</strong></p>
+                <p style="margin-bottom:0;">To <strong>subdivide</strong> an edge $e = uv$, we delete the edge $uv$, add a brand-new vertex $w$ in the middle, and connect $u - w - v$ with two edges. Notice that the new vertex $w$ has <strong>$\deg(w) = 2$</strong>. A <strong>subdivision of a graph $H$</strong> is any graph obtained by performing zero or more edge subdivisions on $H$.</p>
+            </div>
+            <div class="sub-box violet" style="margin:0;">
+                <p style="margin-top:0;"><strong class="text-violet">Series Reduction / Smoothing (Removing Degree-2 Vertices):</strong></p>
+                <p style="margin-bottom:0;"><strong>Series reduction</strong> is the exact reverse of subdivision! If a vertex $w$ has <strong>$\deg(w) = 2$</strong> with neighbors $u$ and $v$ (where $u$ and $v$ are not already connected), we can "smooth out" $w$ by deleting $w$ and merging the two edges $(u,w)$ and $(w,v)$ into a single continuous edge $(u,v)$.</p>
+            </div>
+        </div>
+
+        <p>Adding or smoothing degree-2 vertices along an edge only stretches or shortens a curve on paper—it <strong>never changes whether a graph can be drawn without crossings</strong>. In 1930, Polish mathematician Kazimierz Kuratowski proved that $K_5$ and $K_{3,3}$ (and their subdivisions) are the <em>only</em> fundamental causes of non-planarity:</p>
+
+        <div class="sub-box emerald">
+            <p style="margin:0;"><strong class="text-emerald">Kuratowski's Theorem (1930):</strong> A finite graph $G$ is planar <strong>if and only if</strong> $G$ does not contain a subgraph that is a <strong>subdivision of $K_5$ or $K_{3,3}$</strong>.</p>
+        </div>
+
+        <hr style="border-color: var(--panel-stroke); margin: 28px 0;">
+
+        <h3 class="sub-heading" style="color: var(--amber-neon);">4c. Procedural Proof: Showing the Petersen Graph is Non-Planar via Kuratowski's Theorem</h3>
+
+<figure class="fig"><svg viewBox="0 0 560 285" role="img" aria-label="Figure 7. The Petersen graph: an outer pentagon, an inner pentagram, and five spokes."><line x1="220" y1="40" x2="325" y2="116" stroke="#00F0FF" stroke-width="2.5" /><line x1="325" y1="116" x2="285" y2="239" stroke="#00F0FF" stroke-width="2.5" /><line x1="285" y1="239" x2="155" y2="239" stroke="#00F0FF" stroke-width="2.5" /><line x1="155" y1="239" x2="115" y2="116" stroke="#00F0FF" stroke-width="2.5" /><line x1="115" y1="116" x2="220" y2="40" stroke="#00F0FF" stroke-width="2.5" /><line x1="220" y1="100" x2="249" y2="190" stroke="#A855F7" stroke-width="2.5" /><line x1="268" y1="135" x2="191" y2="190" stroke="#A855F7" stroke-width="2.5" /><line x1="249" y1="190" x2="172" y2="135" stroke="#A855F7" stroke-width="2.5" /><line x1="191" y1="190" x2="220" y2="100" stroke="#A855F7" stroke-width="2.5" /><line x1="172" y1="135" x2="268" y2="135" stroke="#A855F7" stroke-width="2.5" /><line x1="220" y1="40" x2="220" y2="100" stroke="#10B981" stroke-width="2" /><line x1="325" y1="116" x2="268" y2="135" stroke="#10B981" stroke-width="2" /><line x1="285" y1="239" x2="249" y2="190" stroke="#10B981" stroke-width="2" /><line x1="155" y1="239" x2="191" y2="190" stroke="#10B981" stroke-width="2" /><line x1="115" y1="116" x2="172" y2="135" stroke="#10B981" stroke-width="2" /><circle cx="220" cy="40" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="325" cy="116" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="285" cy="239" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="155" cy="239" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="115" cy="116" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="220" cy="100" r="8" fill="#0B0F19" stroke="#A855F7" stroke-width="2.5"/><circle cx="268" cy="135" r="8" fill="#0B0F19" stroke="#A855F7" stroke-width="2.5"/><circle cx="249" cy="190" r="8" fill="#0B0F19" stroke="#A855F7" stroke-width="2.5"/><circle cx="191" cy="190" r="8" fill="#0B0F19" stroke="#A855F7" stroke-width="2.5"/><circle cx="172" cy="135" r="8" fill="#0B0F19" stroke="#A855F7" stroke-width="2.5"/><text class="cap lb" x="430" y="110" fill="#00F0FF">outer 5-cycle</text><text class="cap lb" x="430" y="140" fill="#A855F7">inner pentagram</text><text class="cap lb" x="430" y="170" fill="#10B981">5 spokes</text><text class="cap lb" x="430" y="205" fill="#F59E0B">10 vertices, 15 edges, 3-regular</text></svg><figcaption>Figure 7. The Petersen graph: an outer pentagon, an inner pentagram, and five spokes.</figcaption></figure>
+        <p>The <strong>Petersen Graph</strong> has $V = 10$ vertices and $E = 15$ edges, drawn as an outer pentagon ($0, 1, 2, 3, 4$) connected via 5 spokes to an inner 5-pointed star ($5, 6, 7, 8, 9$, where $0$ connects to $5$, $1$ to $6$, $2$ to $7$, $3$ to $8$, and $4$ to $9$). How do we systematically find a subdivision of $K_{3,3}$ inside it?</p>
+
+        <ol class="step-list">
+            <li><strong>Step 1 — Delete 1 Vertex and 1 Extra Edge to Form a Subgraph $H$:</strong>
+                <ul>
+                    <li>First, delete vertex $3$ (one of the outer pentagon vertices) along with its three incident edges: $(2,3)$, $(3,4)$, and $(3,8)$.</li>
+                    <li>Also delete the single outer edge $(0,1)$. What remains is a valid subgraph $H$ of the Petersen graph with $V = 9$ vertices and $E = 11$ edges.</li>
+                </ul>
+            </li>
+            <li><strong>Step 2 — Identify the Two Bipartite Vertex Sets $U$ and $W$ (Each of Size 3):</strong>
+                <ul>
+                    <li>Color 3 vertices <strong class="text-cyan">Cyan</strong> as set $U = \{0, 1, 6\}$.</li>
+                    <li>Color 3 vertices <strong class="text-rose">Rose</strong> as set $W = \{5, 7, 9\}$.</li>
+                </ul>
+            </li>
+            <li><strong>Step 3 — Check the Remaining 3 Vertices ($2, 4,$ and $8$):</strong>
+                <ul>
+                    <li>Look at the 3 leftover vertices $\{2, 4, 8\}$ in our subgraph $H$. Because we deleted vertex $3$ and its 3 edges, each of $\{2, 4, 8\}$ lost one of its original 3 edges and now has <strong>degree 2</strong>!</li>
+                    <li>Specifically:
+                        <ul>
+                            <li>Vertex <strong class="text-amber">$4$</strong> ($\deg = 2$) sits on the 2-edge path $0 - 4 - 9$ connecting $0 \in U$ to $9 \in W$.</li>
+                            <li>Vertex <strong class="text-amber">$2$</strong> ($\deg = 2$) sits on the 2-edge path $1 - 2 - 7$ connecting $1 \in U$ to $7 \in W$.</li>
+                            <li>Vertex <strong class="text-amber">$8$</strong> ($\deg = 2$) sits on the 2-edge path $6 - 8 - 5$ connecting $6 \in U$ to $5 \in W$.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>Step 4 — Apply Series Reduction to Smooth Out $\{2, 4, 8\}$:</strong>
+                <ul>
+                    <li>Smooth out the three degree-2 vertices $4, 2,$ and $8$, replacing the paths $0-4-9$, $1-2-7$, and $6-8-5$ with direct edges $(0,9)$, $(1,7)$, and $(6,5)$.</li>
+                    <li>Now check all connections between $U = \{0, 1, 6\}$ and $W = \{5, 7, 9\}$:
+                        <ul>
+                            <li><strong>Vertex $0 \in U$</strong> connects to $5$ (spoke), $7$ (via $5-7$? Wait: let's verify all 9 edges!).</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ol>
+
+        <div class="sub-box amber">
+            <p style="margin-top:0;"><strong class="text-amber">Complete 9-Path Verification Table for the $K_{3,3}$ Subdivision in Petersen:</strong></p>
+            <p>Even simpler: if you delete <strong>only vertex $3$</strong> (and its 3 edges $(2,3), (3,4), (3,8)$) from the Petersen graph, the remaining 9 vertices consist of:</p>
+            <ul style="margin-bottom:0;">
+                <li><strong>Set $U = \{0, 2, 6\}$</strong> and <strong>Set $W = \{1, 5, 9\}$</strong>, with degree-2 subdivision vertices $\{4, 7, 8\}$!</li>
+                <li>From <strong>$0 \in U$</strong>: direct edge $(0,1)$ to $1$; direct spoke $(0,5)$ to $5$; subdivided path $0 - \mathbf{4} - 9$ to $9$. (Connected to all of $W$!)</li>
+                <li>From <strong>$2 \in U$</strong>: direct edge $(2,1)$ to $1$; subdivided path $2 - \mathbf{7} - 5$ to $5$; subdivided path $2 - \mathbf{7} - 9$? No—use $U = \{1, 4, 8\}$ and $W = \{0, 2, 6\}$ or contract the 5 spokes!</li>
+            </ul>
+        </div>
+        <p>Let's write down the <strong>100% exact edge-by-edge $K_{3,3}$ subdivision</strong> inside the Petersen graph so you can verify every single path on paper:</p>
+        <div class="math-box">
+            <p style="margin-top:0;"><strong class="text-cyan">Exact Bipartition Sets in Petersen ($V=10, E=15$):</strong></p>
+            <p>Delete outer vertex <strong>$3$</strong> and its 3 incident edges $(2,3), (3,4), (3,8)$, plus delete the single inner star edge <strong>$(5,8)$</strong>? No—in a $K_{3,3}$ subdivision, the 6 main "branch" vertices have degree 3, and the remaining vertices have degree 2! Since $K_{3,3}$ has 9 edges, if we subdivide 3 of its edges (adding 3 degree-2 vertices), the subdivided $K_{3,3}$ has $6 + 3 = 9$ vertices and $9 + 3 = 12$ edges. When we delete vertex $3$ and its 3 incident edges from the Petersen graph ($10 - 1 = 9$ vertices, $15 - 3 = 12$ edges), <strong>every single remaining edge is used—zero extra edges need to be deleted!</strong></p>
+            <p>Here are the exact 6 degree-3 vertices ($U$ and $W$) and the 3 degree-2 vertices after deleting vertex $3$:</p>
+            <ul style="margin-bottom:0;">
+                <li>When vertex $3$ is deleted, its 3 neighbors <strong>$2, 4,$ and $8$</strong> drop from degree 3 to <strong>degree 2</strong>! So the 3 degree-2 subdivision vertices are <strong>must be $\{2, 4, 8\}$</strong>.</li>
+                <li>The remaining 6 vertices Still have degree 3! They form our two bipartition sets:
+                    <br><strong class="text-cyan">Set $U = \{0, 6, 7\}$</strong> and <strong class="text-rose">Set $W = \{1, 5, 9\}$</strong>.</li>
+                <li>Let's check all 9 paths between $U = \{0, 6, 7\}$ and $W = \{1, 5, 9\}$ (using all 12 remaining edges):
+                    <ol style="margin-top:8px;">
+                        <li><strong>From $0 \in U$:</strong> connects to $1 \in W$ via edge $(0,1)$; connects to $5 \in W$ via spoke $(0,5)$; connects to $9 \in W$ via path $0 - \mathbf{4} - 9$ (smoothing degree-2 vertex $4$).</li>
+                        <li><strong>From $6 \in U$:</strong> connects to $1 \in W$ via spoke $(6,1)$; connects to $5 \in W$ via path $6 - \mathbf{8} - 5$ (smoothing degree-2 vertex $8$); connects to $9 \in W$ via inner star edge $(6,9)$.</li>
+                        <li><strong>From $7 \in U$:</strong> connects to $1 \in W$ via path $7 - \mathbf{2} - 1$ (smoothing degree-2 vertex $2$); connects to $5 \in W$ via inner star edge $(7,5)$; connects to $9 \in W$ via inner star edge $(7,9)$.</li>
+                    </ol>
+                </li>
+            </ul>
+        </div>
+        <p>Every vertex in $U = \{0, 6, 7\}$ connects to every vertex in $W = \{1, 5, 9\}$ via completely edge-disjoint paths! Smoothing $\{2, 4, 8\}$ via series reduction produces $K_{3,3}$ directly. By Kuratowski's Theorem, the Petersen graph is non-planar. $\blacksquare$</p>
+    </section>
+    
+    <section id="topic5" class="card">
+        <div class="badge-container">
+            <div class="topic-badge">Topic 5</div>
+            <h2 class="card-title">Dual Graphs ($G^*$) of Planar Graphs: Full Explanation</h2>
+        </div>
+
+        <p>Every plane graph $G$ (a planar graph drawn with a specific crossing-free embedding) has a companion graph called its <strong>geometric dual graph</strong>, denoted $G^*$. Intuitively, if you think of the faces of $G$ as countries on a map and the edges of $G$ as borders between countries, the dual graph $G^*$ places a capital city inside each country and draws a road across every border connecting neighboring capitals!</p>
+
+        <h3 class="sub-heading">Step-by-Step Construction of the Dual Graph $G^*$</h3>
+
+<figure class="fig"><svg viewBox="0 0 560 295" role="img" aria-label="Figure 8. K₄ (cyan) and its dual (red, dashed): K₄ is self-dual."><line x1="150" y1="40" x2="60" y2="190" stroke="#00F0FF" stroke-width="2.5" /><line x1="60" y1="190" x2="240" y2="190" stroke="#00F0FF" stroke-width="2.5" /><line x1="240" y1="190" x2="150" y2="40" stroke="#00F0FF" stroke-width="2.5" /><line x1="150" y1="130" x2="150" y2="40" stroke="#00F0FF" stroke-width="2.5" /><line x1="150" y1="130" x2="60" y2="190" stroke="#00F0FF" stroke-width="2.5" /><line x1="150" y1="130" x2="240" y2="190" stroke="#00F0FF" stroke-width="2.5" /><line x1="120" y1="120" x2="180" y2="120" stroke="#F43F5E" stroke-width="2" stroke-dasharray="5 4"/><line x1="120" y1="120" x2="150" y2="170" stroke="#F43F5E" stroke-width="2" stroke-dasharray="5 4"/><line x1="150" y1="170" x2="180" y2="120" stroke="#F43F5E" stroke-width="2" stroke-dasharray="5 4"/><line x1="150" y1="170" x2="150" y2="275" stroke="#F43F5E" stroke-width="2" stroke-dasharray="5 4"/><path d="M120 120 C15 110 15 265 150 275" fill="none" stroke="#F43F5E" stroke-width="2" stroke-dasharray="5 4"/><path d="M180 120 C285 110 285 265 150 275" fill="none" stroke="#F43F5E" stroke-width="2" stroke-dasharray="5 4"/><circle cx="150" cy="40" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="60" cy="190" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="240" cy="190" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="150" cy="130" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="120" cy="120" r="8" fill="#0B0F19" stroke="#F43F5E" stroke-width="2.5"/><text class="lb" x="102.0" y="125.0" fill="#F43F5E">f₁</text><circle cx="150" cy="170" r="8" fill="#0B0F19" stroke="#F43F5E" stroke-width="2.5"/><text class="lb" x="150.0" y="158.0" fill="#F43F5E">f₂</text><circle cx="180" cy="120" r="8" fill="#0B0F19" stroke="#F43F5E" stroke-width="2.5"/><text class="lb" x="198.0" y="125.0" fill="#F43F5E">f₃</text><circle cx="150" cy="275" r="8" fill="#0B0F19" stroke="#F43F5E" stroke-width="2.5"/><text class="lb" x="180" y="280" fill="#F43F5E">f_ext</text><text class="lb" x="430" y="100" fill="#00F0FF">● cyan: primal G</text><text class="lb" x="430" y="130" fill="#F43F5E">● red dashed: dual G*</text><text class="cap lb" x="430" y="170" fill="#F59E0B">one dual vertex per face,</text><text class="cap lb" x="430" y="190" fill="#F59E0B">one dual edge crosses each primal edge</text></svg><figcaption>Figure 8. K₄ (cyan) and its dual (red, dashed): K₄ is self-dual.</figcaption></figure>
+        <ol class="step-list">
+            <li><strong>Step 1 (Faces $\to$ Dual Vertices):</strong> Inside every face $f$ of the plane graph $G$—<strong>including the unbounded exterior face $f_{\text{ext}}$</strong>—place exactly one dual vertex $v_f^*$.</li>
+            <li><strong>Step 2 (Primal Edges $\to$ Dual Edges):</strong> For every edge $e$ in the original graph $G$, look at the faces on either side of $e$:
+                <ul>
+                    <li>If $e$ separates two distinct faces $f_1$ and $f_2$, draw a dual edge $e^*$ connecting the dual vertex $v_{f_1}^*$ to $v_{f_2}^*$ so that $e^*$ crosses <em>only</em> the edge $e$ (and no other edges).</li>
+                    <li><strong>Special Case (Bridge / Cut-edge):</strong> What if an edge $e$ in $G$ is a bridge that has the <em>same</em> face $f_1$ on both sides of it? Then the dual edge $e^*$ crosses $e$ and connects $v_{f_1}^*$ back to itself, forming a <strong>self-loop</strong> in $G^*$!</li>
+                    <li><strong>Special Case (Two faces sharing multiple edges):</strong> If two faces $f_1$ and $f_2$ share $k$ different boundary edges between them, then $v_{f_1}^*$ and $v_{f_2}^*$ will be connected by $k$ <strong>parallel (multiple) edges</strong> in $G^*$. Thus, $G^*$ is often a <em>pseudograph / multigraph</em> even when $G$ is a simple graph!</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3 class="sub-heading" style="color: var(--emerald-neon);">Fundamental Properties of the Dual Graph $G^*$</h3>
+        <div class="math-box">
+            $$ V^* = F, \qquad E^* = E, \qquad F^* = V, \qquad \deg_{G^*}(v_f^*) = \deg_G(f) $$
+        </div>
+        <ul class="step-list">
+            <li><strong>Planarity of $G^*$:</strong> The dual graph $G^*$ can always be drawn without its dual edges crossing each other, so $G^*$ is always a planar (multi)graph.</li>
+            <li><strong>Duality is Symmetric for Connected Graphs ($G^{**} \cong G$):</strong> If $G$ is a connected plane graph, taking the dual of the dual ($G^{**}$) gives you back a graph isomorphic to the original graph $G$! Why? Because inside each face of $G^*$, there sits exactly one original vertex of $G$.</li>
+            <li><strong>Self-Dual Graphs ($G \cong G^*$):</strong> A plane graph is called <strong>self-dual</strong> if its dual graph $G^*$ is isomorphic to $G$ itself (which immediately requires $V = F$, so by Euler's formula $2V - E = 2$).
+                <ul>
+                    <li><strong>Classic Example:</strong> Any Wheel Graph $W_n$ (including the tetrahedron $K_4 = W_3$) is self-dual! For instance, in $K_4$, there are $V = 4$ vertices, $E = 6$ edges, and $F = 4$ triangular faces (3 interior triangles + 1 exterior triangle). Placing a dual vertex in each of the 4 faces and connecting them across the 6 edges produces another $K_4$!</li>
+                </ul>
+            </li>
+            <li><strong>Important Subtlety — Duals Depend on the Embedding:</strong> If a planar graph $G$ can be drawn in two topologically different ways in the plane (which can happen when $G$ is not 3-connected), those two different plane drawings of the same graph $G$ can actually produce non-isomorphic dual graphs!</li>
+        </ul>
+    </section>
+    
+    <section id="topic6" class="card">
+        <div class="badge-container">
+            <div class="topic-badge" style="border-color: var(--cyan-neon); color: var(--cyan-neon); background: rgba(0,240,255,0.15);">Special Topic</div>
+            <h2 class="card-title">Proving Every Planar Graph is 5-Colorable</h2>
+        </div>
+
+        <p>A <strong>proper $k$-coloring</strong> of a graph $G$ assigns one of $k$ colors to each vertex so that no two adjacent vertices (vertices connected by an edge) have the same color. While the famous 4-Color Theorem requires extensive computer case-checking to prove, the <strong>5-Color Theorem</strong> (proved by Percy John Heawood in 1890) has one of the most elegant human proofs in all of mathematics, combining Topic 3e with a clever trick called <strong>Kempe Chains</strong>.</p>
+
+        <h3 class="sub-heading">Complete Step-by-Step Proof by Induction on $V$</h3>
+
+<figure class="fig"><svg viewBox="0 0 560 320" role="img" aria-label="Figure 9. Subcase 2B of the 5-color proof: the Kempe chain P₁,₃ closes a loop around v₂."><polygon points="250,170 250,60 335,60 405,170 315,259" fill="#00F0FF" fill-opacity=".10"/><line x1="250" y1="170" x2="250" y2="60" stroke="#94A3B8" stroke-width="1.5" /><line x1="250" y1="170" x2="355" y2="136" stroke="#94A3B8" stroke-width="1.5" /><line x1="250" y1="170" x2="315" y2="259" stroke="#94A3B8" stroke-width="1.5" /><line x1="250" y1="170" x2="185" y2="259" stroke="#94A3B8" stroke-width="1.5" /><line x1="250" y1="170" x2="145" y2="136" stroke="#94A3B8" stroke-width="1.5" /><line x1="250" y1="60" x2="335" y2="60" stroke="#00F0FF" stroke-width="3.5" /><line x1="335" y1="60" x2="405" y2="170" stroke="#00F0FF" stroke-width="3.5" /><line x1="405" y1="170" x2="315" y2="259" stroke="#00F0FF" stroke-width="3.5" /><circle cx="335" cy="60" r="8" fill="#0B0F19" stroke="#10B981" stroke-width="2.5"/><circle cx="405" cy="170" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><circle cx="250" cy="60" r="8" fill="#0B0F19" stroke="#00F0FF" stroke-width="2.5"/><text class="lb" x="250" y="46">v1</text><circle cx="355" cy="136" r="8" fill="#0B0F19" stroke="#A855F7" stroke-width="2.5"/><text class="lb" x="377" y="132">v2</text><circle cx="315" cy="259" r="8" fill="#0B0F19" stroke="#10B981" stroke-width="2.5"/><text class="lb" x="337" y="277">v3</text><circle cx="185" cy="259" r="8" fill="#0B0F19" stroke="#F43F5E" stroke-width="2.5"/><text class="lb" x="163" y="277">v4</text><circle cx="145" cy="136" r="8" fill="#0B0F19" stroke="#F59E0B" stroke-width="2.5"/><text class="lb" x="123" y="132">v5</text><circle cx="250" cy="170" r="8" fill="#0B0F19" stroke="#F59E0B" stroke-width="2.5"/><text class="lb" x="234" y="174">v</text><text class="cap lb" x="405" y="60" fill="#00F0FF">P₁,₃ (c₁/c₃ alternating)</text><text class="cap lb" x="300" y="150" fill="#A855F7">inside</text><text class="cap lb" x="110" y="260" fill="#F43F5E">outside</text><text class="cap lb" x="250" y="305" fill="#F59E0B">The loop v → v₁ ⇝ v₃ → v traps v₂ inside and leaves v₄ outside, so no c₂/c₄ path can join them.</text></svg><figcaption>Figure 9. Subcase 2B of the 5-color proof: the Kempe chain P₁,₃ closes a loop around v₂.</figcaption></figure>
+        <ol class="step-list">
+            <li><strong>Base Case ($V \le 5$):</strong> If a graph has 5 or fewer vertices, we can simply give every vertex its own unique color from $\{c_1, c_2, c_3, c_4, c_5\}$. Thus, it is trivially 5-colorable.</li>
+            <li><strong>Inductive Hypothesis:</strong> Assume that every simple planar graph with $k$ vertices ($k \ge 5$) can be properly colored using at most 5 colors.</li>
+            <li><strong>Inductive Step ($V = k + 1$):</strong> Let $G$ be a simple planar graph with $k + 1$ vertices. By <strong>Topic 3e</strong>, we proved that $G$ is guaranteed to contain at least one vertex $v$ with <strong>$\deg(v) \le 5$</strong>.</li>
+            <li>Temporarily remove $v$ (and its incident edges) to form $G' = G - v$. Since $G'$ is a planar graph with $k$ vertices, by our Inductive Hypothesis, $G'$ has a valid 5-coloring using colors $\{c_1, c_2, c_3, c_4, c_5\}$. Now we put $v$ back into the graph and find a valid color for $v$:</li>
+        </ol>
+
+        <div class="sub-box emerald">
+            <p style="margin-top:0;"><strong class="text-emerald">Case 1 (The Easy Case): $\deg(v) \le 4$, OR $\deg(v) = 5$ with a Repeated Color</strong></p>
+            <p style="margin-bottom:0;">If $v$ has at most 4 neighbors, or if $v$ has 5 neighbors but two of them share the same color, then the neighbors of $v$ use <strong>at most 4 distinct colors</strong> out of the 5 available colors $\{c_1, c_2, c_3, c_4, c_5\}$. That leaves at least one unused color! We simply assign that unused color to $v$, and we are done.</p>
+        </div>
+
+        <div class="sub-box rose">
+            <p style="margin-top:0;"><strong class="text-rose">Case 2 (The Hard Case): $\deg(v) = 5$ and All 5 Neighbors Have Different Colors</strong></p>
+            <p>Suppose $v$ has exactly 5 neighbors, and in our planar drawing of $G$, those 5 neighbors appear around $v$ in clockwise circular order as $v_1, v_2, v_3, v_4, v_5$, colored with all 5 distinct colors:</p>
+            <p style="text-align:center;">
+                <span class="vertex-dot text-cyan"></span>$v_1: c_1$ &nbsp;|&nbsp;
+                <span class="vertex-dot text-violet"></span>$v_2: c_2$ &nbsp;|&nbsp;
+                <span class="vertex-dot text-emerald"></span>$v_3: c_3$ &nbsp;|&nbsp;
+                <span class="vertex-dot text-rose"></span>$v_4: c_4$ &nbsp;|&nbsp;
+                <span class="vertex-dot text-amber"></span>$v_5: c_5$
+            </p>
+            <p>Since all 5 colors are taken by $v$'s neighbors, we must slightly modify the coloring of $G - v$ to free up a color for $v$. To do this, look at two non-adjacent neighbors around the circle: <strong>$v_1$ (color $c_1$)</strong> and <strong>$v_3$ (color $c_3$)</strong>.</p>
+            <p>Define the <strong>Kempe Subgraph $G_{1,3}$</strong> to be the subgraph of $G - v$ consisting <em>only</em> of all vertices in the graph that are currently colored $c_1$ or $c_3$ (and the edges between them). There are only two possibilities:</p>
+
+            <ul class="step-list" style="margin-bottom:0;">
+                <li><strong class="text-emerald">Subcase 2A ($v_1$ and $v_3$ are in DIFFERENT connected components of $G_{1,3}$):</strong>
+                    <br>There is no alternating $c_1 - c_3$ path connecting $v_1$ to $v_3$. Take only the connected component of $G_{1,3}$ that contains $v_1$, and <strong>swap colors $c_1 \leftrightarrow c_3$</strong> on every vertex inside that component!
+                    <br><em>Why is this still a valid coloring?</em> Any edge inside that component just swaps its two endpoints from $(c_1, c_3)$ to $(c_3, c_1)$, and any vertex outside the component either has a completely different color ($c_2, c_4, c_5$) or isn't connected to this component at all.
+                    <br><em>What did this achieve?</em> Vertex $v_1$ changed from $c_1$ to $c_3$, while $v_3$ (being in a separate component) stayed $c_3$! Now both $v_1$ and $v_3$ have color $c_3$, meaning <strong>color $c_1$ is completely free for $v$!</strong></li>
+
+                <li><strong class="text-cyan">Subcase 2B ($v_1$ and $v_3$ are in the SAME connected component of $G_{1,3}$):</strong>
+                    <br>If Subcase 2A doesn't work, it means there is an alternating $c_1 - c_3$ path $P_{1,3}$ in $G - v$ that starts at $v_1$ and ends at $v_3$.
+                    <br>Now look at the closed loop formed by $v \to v_1 \leadsto P_{1,3} \leadsto v_3 \to v$. Because $G$ is drawn in the plane without edge crossings, this closed loop forms a wall in the plane!
+                    <br>Because the neighbors $v_1, v_2, v_3, v_4, v_5$ are arranged in clockwise order around $v$, this loop <strong>traps $v_2$ on the inside</strong> and leaves <strong>$v_4$ on the outside</strong> (or vice versa).
+                    <br>Now try the exact same Kempe chain trick on <strong>$v_2$ (color $c_2$)</strong> and <strong>$v_4$ (color $c_4$)</strong> using the subgraph $G_{2,4}$ of all vertices colored $c_2$ or $c_4$. Could there be a path $P_{2,4}$ of $c_2 - c_4$ vertices connecting $v_2$ to $v_4$?
+                    <br><strong>NO!</strong> To get from the inside ($v_2$) to the outside ($v_4$) without edges crossing, the path $P_{2,4}$ would have to pass through a vertex of the boundary loop $P_{1,3}$. But every vertex on $P_{1,3}$ is colored $c_1$ or $c_3$, whereas every vertex on $P_{2,4}$ is colored $c_2$ or $c_4$! They have no colors in common ($\{c_1, c_3\} \cap \{c_2, c_4\} = \emptyset$), so they cannot share a vertex!
+                    <br>Therefore, $v_2$ and $v_4$ are <strong>100% guaranteed to be in different connected components of $G_{2,4}$</strong>! We simply swap colors $c_2 \leftrightarrow c_4$ in $v_2$'s component of $G_{2,4}$, which changes $v_2$ to color $c_4$, leaves $v_4$ as $c_4$, and frees up <strong>color $c_2$ for our center vertex $v$</strong>! $\blacksquare$</li>
+            </ul>
+        </div>
+    </section>
+
+</div>
+
+</body>
+</html>
