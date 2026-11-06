@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graph Theory Viva Questions</title>
+
+<!-- TikZJax -->
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<!-- MathJax -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<style>
+  :root {
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --text: #1f2937;
+    --accent: #2563eb;
+    --accent-dark: #1d4ed8;
+    --border: #e5e7eb;
+    --solution-bg: #f0f9ff;
+    --heading: #1e3a8a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg); color: var(--text);
+    margin: 0; padding: 0 16px 60px; line-height: 1.65;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  h1 { text-align: center; color: var(--heading); margin: 24px 0 4px; font-size: 26px; }
+  .subtitle { text-align: center; color: #4b5563; font-size: 14px; margin-bottom: 20px; }
+  h2 { color: var(--heading); border-bottom: 2px solid #93c5fd; padding-bottom: 6px; margin-top: 44px; font-size: 20px; }
+  .controls {
+    position: sticky; top: 0; background: var(--bg);
+    padding: 12px 0; text-align: center; z-index: 10;
+    border-bottom: 1px solid var(--border); margin-bottom: 10px;
+  }
+  .controls button {
+    padding: 8px 18px; margin: 0 6px; border: none; border-radius: 6px;
+    background: var(--accent); color: #fff; cursor: pointer;
+    font-size: 14px; font-weight: 500; transition: background 0.15s;
+  }
+  .controls button:hover { background: var(--accent-dark); }
+  .question {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px 18px; margin: 14px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .question h3 { margin: 0 0 10px; font-size: 16px; font-weight: 600; color: #111827; }
+  .toggle {
+    padding: 6px 14px; border: 1px solid var(--accent); border-radius: 6px;
+    background: #fff; color: var(--accent); cursor: pointer;
+    font-size: 13px; font-weight: 500; transition: background 0.15s, color 0.15s;
+  }
+  .toggle:hover { background: var(--accent); color: #fff; }
+  .solution { max-height: 0; overflow: hidden; padding: 0; margin: 0; border: none; background: transparent; }
+  .solution.visible {
+    max-height: 400000px; overflow: visible;
+    padding: 12px 16px; margin-top: 14px;
+    border-left: 4px solid var(--accent);
+    background: var(--solution-bg); border-radius: 4px;
+  }
+  .solution p { margin: 8px 0; }
+  .solution ul { margin: 8px 0; padding-left: 24px; }
+  .solution li { margin: 4px 0; }
+  .tikz-wrap { text-align: center; margin: 10px 0 4px; }
+  .note {
+    background: #fef3c7; border-left: 4px solid #f59e0b;
+    padding: 10px 14px; border-radius: 4px; font-size: 14px; margin: 16px 0;
+  }
+  .trap {
+    background: #fee2e2; border-left: 4px solid #ef4444;
+    padding: 8px 12px; border-radius: 4px; margin-top: 8px; font-size: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Graph Theory Viva Question Bank</h1>
+<p class="subtitle">Symmetric matrices · Adjacency matrix · Laplacian · Distance matrix · Automorphism group · Vertex &amp; edge cover · Self-complementary graphs</p>
+
+<div class="controls">
+  <button onclick="showAll()">Show All Solutions</button>
+  <button onclick="hideAll()">Hide All Solutions</button>
+</div>
+
+<div class="note">
+  <strong>Assumptions.</strong> \(G\) is a simple undirected graph on \(n\) vertices with \(m\) edges.
+  \(A\) is the adjacency matrix, \(D=\operatorname{diag}(\deg v)\), \(L=D-A\) the Laplacian,
+  and \(\operatorname{Dist}\) the distance matrix (for connected \(G\)). \(J\) is the all-ones matrix.
+  “Distinct eigenvalues” means distinct eigenvalues of the adjacency matrix unless stated otherwise.
+  For vertex cover / edge cover questions, \(\tau(G)\) is the vertex cover number, \(\alpha(G)\) the independence number,
+  \(\nu(G)\) the matching number, and \(\rho(G)\) the edge cover number.
+</div>
+
+<!-- ============ SECTION 1: SYMMETRIC MATRICES ============ -->
+<h2>1. Symmetric matrices</h2>
+
+<div class="question">
+  <h3>Q1. Show that the degree of the minimal polynomial of a symmetric matrix equals the number of its distinct eigenvalues.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> First we see the overall picture. 1. Similar matrices have the same minimal polynomial. 2. Symmetric mattrices are diagonalizable. That is  a symmetrix matrix similar to a diagonal matrix. 3. The minimal polynomial of a digonal matrix is product of distint linear factors. Check with a example. That is it. If you need more explanation, then see below.</p>
+    
+    <p>We prove this in three steps: first for a diagonal matrix, then for any diagonalizable matrix, and finally we use the fact that every real symmetric matrix is diagonalizable.</p>
+
+    <p><strong>Notation.</strong> Let \(m_A(x)\) denote the minimal polynomial of \(A\), i.e. the monic polynomial of least degree with \(m_A(A)=0\).</p>
+
+    <p><strong>Step 1: Diagonal matrix.</strong>
+    Let \(D=\operatorname{diag}(d_1,\dots,d_n)\), and let \(\mu_1,\dots,\mu_k\) be the distinct numbers occurring among \(d_1,\dots,d_n\). Define</p>
+    \[ m(x)=\prod_{j=1}^{k}(x-\mu_j). \]
+    <p>For a polynomial \(p(x)=\sum_r a_r x^r\), we have \(p(D)=\sum_r a_r D^r=\operatorname{diag}\bigl(p(d_1),\dots,p(d_n)\bigr)\). Hence</p>
+    \[ m(D)=\operatorname{diag}\bigl(m(d_1),\dots,m(d_n)\bigr)=0, \]
+    <p>because each \(d_i\) equals some \(\mu_j\), so \(m(d_i)=0\). Therefore the minimal polynomial of \(D\) divides \(m\), and its degree is at most \(k\).</p>
+    <p>Conversely, let \(p\ne0\) be any polynomial with \(p(D)=0\). Then \(p(d_i)=0\) for all \(i\), so \(p(\mu_j)=0\) for all \(j=1,\dots,k\), i.e. \(p\) has the \(k\) distinct roots \(\mu_1,\dots,\mu_k\). A nonzero polynomial cannot have more roots than its degree, so \(\deg p\ge k\).</p>
+    <p>Combining both bounds, \(m_D(x)=m(x)\) has degree exactly \(k\), the number of distinct eigenvalues of \(D\). Note that \(m\) is square-free, even though eigenvalues may repeat on the diagonal.</p>
+
+    <p><strong>Step 2: Diagonalizable matrix.</strong>
+    Let \(A=SDS^{-1}\) with \(D\) diagonal. For every nonnegative integer \(r\), \(A^r=SD^rS^{-1}\); hence for every polynomial \(p\),</p>
+    \[ p(A)=S\,p(D)\,S^{-1}. \]
+    <p>Since \(S\) is invertible, \(p(A)=0\iff p(D)=0\). So \(A\) and \(D\) have exactly the same annihilating polynomials, and therefore the same minimal polynomial:</p>
+    \[ m_A(x)=m_D(x). \]
+    <p>By Step 1, \(\deg m_A=\deg m_D=\) number of distinct eigenvalues of \(D\), and similar matrices have the same characteristic polynomial, hence the same distinct eigenvalues. So \(\deg m_A=\) number of distinct eigenvalues of \(A\).</p>
+
+    <p><strong>Step 3: Symmetric matrix.</strong>
+    By the spectral theorem, every real symmetric matrix is orthogonally diagonalizable: there exist an orthogonal matrix \(Q\) (so \(Q^{-1}=Q^T\)) and a real diagonal matrix \(D\) such that</p>
+    \[ A=QDQ^T=QDQ^{-1}. \]
+    <p>Hence \(A\) is diagonalizable, and Step 2 applies. Therefore</p>
+    \[ \boxed{\deg m_A(x)=\text{number of distinct eigenvalues of }A.} \]
+    <p>Equivalently, if the distinct eigenvalues of \(A\) are \(\mu_1,\dots,\mu_k\), then</p>
+    \[ m_A(x)=\prod_{j=1}^{k}(x-\mu_j), \]
+    <p>which is square-free, while the characteristic polynomial is \(\chi_A(x)=\prod_{j=1}^{k}(x-\mu_j)^{m_j}\), where \(m_j\) is the algebraic multiplicity of \(\mu_j\).</p>
+
+    <p><strong>Example 1 (diagonal).</strong> Let \(A=\operatorname{diag}(2,2,5)\). The distinct eigenvalues are \(2\) and \(5\), so we predict \(m_A(x)=(x-2)(x-5)\), of degree \(2\). Check:</p>
+    \[ (A-2I)(A-5I)=\operatorname{diag}(0,0,3)\cdot\operatorname{diag}(-3,-3,0)=0. \]
+    <p>No polynomial of degree \(1\) annihilates \(A\), because \(A\ne2I\) and \(A\ne5I\). Hence \(\deg m_A=2\).</p>
+
+    <p><strong>Example 2 (genuinely non-diagonal-looking symmetric matrix).</strong> Let \(A=\begin{bmatrix}3&1\\1&3\end{bmatrix}\). Its eigenvalues are \(4\) and \(2\), with eigenvectors \((1,1)^T\) and \((1,-1)^T\). The minimal polynomial should be</p>
+    \[ m_A(x)=(x-4)(x-2)=x^2-6x+8. \]
+    <p>Check directly:</p>
+    \[ A^2-6A+8I=\begin{bmatrix}10&6\\6&10\end{bmatrix}-\begin{bmatrix}18&6\\6&18\end{bmatrix}+\begin{bmatrix}8&0\\0&8\end{bmatrix}=0. \]
+    <p>Degree \(2\) equals the number of distinct eigenvalues \(4,2\).</p>
+
+    <p><strong>Why "diagonalizable" is essential.</strong> Take \(J=\begin{bmatrix}1&1\\0&1\end{bmatrix}\). There is only one distinct eigenvalue, \(1\), yet</p>
+    \[ J-I=\begin{bmatrix}0&1\\0&0\end{bmatrix}\ne0,\qquad (J-I)^2=0. \]
+    <p>So \(m_J(x)=(x-1)^2\) has degree \(2\ne1\). This matrix is not diagonalizable (algebraic multiplicity \(2\), geometric multiplicity \(1\)). Symmetry rules out exactly this phenomenon.</p>
+
+    <p><strong>Remarks.</strong></p>
+    <ul>
+      <li>Every eigenvalue of \(A\) is a root of \(m_A\), so in general \(\deg m_A\ge\) number of distinct eigenvalues. Equality holds precisely for diagonalizable matrices.</li>
+      <li>For symmetric \(A\), \(m_A\) is square-free and equals the product of the distinct linear factors of \(\chi_A\).</li>
+      <li>For symmetric \(A\), algebraic and geometric multiplicities of every eigenvalue coincide.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q2. If \(A,B\) are symmetric matrices, show that \(AB\) is symmetric if and only if \(AB=BA\).</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Since \(A^T=A\) and \(B^T=B\),</p>
+    \[ (AB)^T=B^TA^T=BA. \]
+    <p>Therefore</p>
+    \[ AB\text{ is symmetric}\iff (AB)^T=AB\iff BA=AB. \]
+    <p>So \(AB\) is symmetric exactly when \(A\) and \(B\) commute.</p>
+    <div class="trap">
+      Trap: the product of two symmetric matrices need not be symmetric. Example:
+      \[ A=\begin{bmatrix}1&2\\2&1\end{bmatrix},\quad B=\begin{bmatrix}1&0\\0&3\end{bmatrix} \]
+      are both symmetric, but
+      \[ AB=\begin{bmatrix}1&6\\2&3\end{bmatrix},\qquad BA=\begin{bmatrix}1&2\\6&3\end{bmatrix}, \]
+      so \(AB\ne BA\), and \(AB\) is not symmetric.
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q3. Let \(A\) be a square matrix. Show that \(A+A^T\), \(AA^T\), \(A^TA\) are symmetric matrices.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Using \((X+Y)^T=X^T+Y^T\) and \((XY)^T=Y^TX^T\):</p>
+    \[ (A+A^T)^T=A^T+(A^T)^T=A^T+A=A+A^T, \]
+    \[ (AA^T)^T=(A^T)^T A^T=A A^T, \]
+    \[ (A^TA)^T=A^T(A^T)^T=A^T A. \]
+    <p>So all three matrices are symmetric.</p>
+    <p><strong>Additional facts.</strong> The matrices \(AA^T\) and \(A^TA\) are always positive semidefinite, since for any \(x\),</p>
+    \[ x^T(AA^T)x=\|A^Tx\|^2\ge0,\qquad x^T(A^TA)x=\|Ax\|^2\ge0. \]
+    <p>Moreover, \(AA^T\) and \(A^TA\) have the same nonzero eigenvalues (with the same multiplicities).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q4. If all the eigenvalues of the matrix \(\begin{bmatrix}c&1&1\\1&c&1\\1&1&c\end{bmatrix}\) are positive, show that \(c\gt 1\).</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Write
+    \[ M=(c-1)I+J, \]
+    where \(J\) is the \(3\times3\) all-ones matrix. The eigenvectors of \(J\) are standard:</p>
+    <ul>
+      <li>\(\mathbf 1=(1,1,1)^T\), with \(J\mathbf 1=3\mathbf 1\);</li>
+      <li>any vector \(x\perp\mathbf 1\), with \(Jx=0\) (two independent such vectors).</li>
+    </ul>
+    <p>These are also eigenvectors of \(M\). Hence the eigenvalues of \(M\) are</p>
+    \[ \lambda_1=(c-1)+3=c+2 \quad\text{(multiplicity }1\text{)}, \]
+    \[ \lambda_2=\lambda_3=c-1 \quad\text{(multiplicity }2\text{)}. \]
+    <p>All eigenvalues are positive iff both \(c+2\gt0\) and \(c-1\gt0\), i.e. iff \(c\gt1\) (since \(c\gt1\) already implies \(c+2\gt0\)).</p>
+    <p><strong>Cross-check via the characteristic polynomial.</strong> For this matrix,</p>
+    \[ \det(M-\lambda I)=(c+2-\lambda)(c-1-\lambda)^2, \]
+    <p>so the eigenvalues are \(c+2,c-1,c-1\) as found. Also \(M\) is real symmetric, so all its eigenvalues are real; positivity is equivalent to \(M\) being positive definite.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q5. If \(A\) is an invertible symmetric matrix, show that its inverse is also symmetric.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Since \(A\) is invertible, \(A^{-1}\) exists. Using the identities \((XY)^T=Y^TX^T\) and \((X^{-1})^T=(X^T)^{-1}\),</p>
+    \[ (A^{-1})^T=(A^T)^{-1}=A^{-1}, \]
+    <p>where the last equality uses \(A^T=A\). Hence \(A^{-1}\) is symmetric.</p>
+    <p><strong>Remark.</strong> For any invertible matrix \(A\), \(A^{-1}\) is symmetric iff \(A\) is symmetric. Also, if \(A\) is symmetric positive definite, then \(A^{-1}\) is symmetric positive definite, and the eigenvalues of \(A^{-1}\) are the reciprocals of those of \(A\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q6. Consider \(A=\begin{bmatrix}1&1&0\\0&2&3\\0&0&3\end{bmatrix}\). Write down a matrix \(P\) such that \(P^{-1}AP\) is a diagonal matrix.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Since \(A\) is upper triangular, its eigenvalues are the diagonal entries</p>
+    \[ \lambda_1=1,\qquad \lambda_2=2,\qquad \lambda_3=3, \]
+    which are distinct. Hence \(A\) is diagonalizable, and we may take \(P\) to be the matrix whose columns are eigenvectors.</p>
+
+    <p><strong>Eigenvector for \(\lambda_1=1\).</strong> Solve \((A-I)x=0\):</p>
+    \[
+      \begin{bmatrix}0&1&0\\0&1&3\\0&0&2\end{bmatrix}
+      \begin{bmatrix}x_1\\x_2\\x_3\end{bmatrix}=0
+      \implies x_2=0,\; x_2+3x_3=0,\; 2x_3=0,
+    \]
+    <p>so \(x_2=x_3=0\) and \(x_1\) is free. Take</p>
+    \[ v_1=\begin{bmatrix}1\\0\\0\end{bmatrix}. \]
+
+    <p><strong>Eigenvector for \(\lambda_2=2\).</strong> Solve \((A-2I)x=0\):</p>
+    \[
+      \begin{bmatrix}-1&1&0\\0&0&3\\0&0&1\end{bmatrix}
+      \begin{bmatrix}x_1\\x_2\\x_3\end{bmatrix}=0
+      \implies -x_1+x_2=0,\; x_3=0,
+    \]
+    <p>so \(x_1=x_2\) and \(x_3=0\). Take</p>
+    \[ v_2=\begin{bmatrix}1\\1\\0\end{bmatrix}. \]
+
+    <p><strong>Eigenvector for \(\lambda_3=3\).</strong> Solve \((A-3I)x=0\):</p>
+    \[
+      \begin{bmatrix}-2&1&0\\0&-1&3\\0&0&0\end{bmatrix}
+      \begin{bmatrix}x_1\\x_2\\x_3\end{bmatrix}=0
+      \implies -2x_1+x_2=0,\; -x_2+3x_3=0,
+    \]
+    <p>so \(x_2=2x_1\) and \(x_3=\tfrac{2}{3}x_1\). Taking \(x_1=3\) gives</p>
+    \[ v_3=\begin{bmatrix}3\\6\\2\end{bmatrix}. \]
+
+    <p><strong>Answer.</strong> Take</p>
+    \[
+      P=\begin{bmatrix}1&1&3\\0&1&6\\0&0&2\end{bmatrix},
+      \qquad
+      D=\begin{bmatrix}1&0&0\\0&2&0\\0&0&3\end{bmatrix},
+    \]
+    <p>then \(P^{-1}AP=D\). Indeed, \(\det P=2\ne0\), so \(P\) is invertible, and each column of \(P\) is an eigenvector corresponding to the matching diagonal entry of \(D\).</p>
+
+    <p><strong>Check.</strong></p>
+    \[ Av_1=(1,0,0)^T=1\cdot v_1, \]
+    \[ Av_2=(2,2,0)^T=2\cdot v_2, \]
+    \[ Av_3=(9,18,6)^T=3\cdot v_3. \]
+
+    <p><strong>Remark.</strong> This particular \(A\) is not symmetric; it is upper triangular, and distinct eigenvalues already guarantee diagonalizability. If \(A\) were symmetric, we could additionally choose \(P\) orthogonal, so that \(P^{-1}=P^T\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q7. Count the number of \(n\times n\) symmetric \(0/1\) matrices whose trace is zero.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> A symmetric matrix \(A=(a_{ij})\) is completely determined by its entries on and above the main diagonal, since \(a_{ij}=a_{ji}\) for \(i\lt j\).</p>
+
+    <p><strong>Diagonal entries.</strong> Each \(a_{ii}\in\{0,1\}\), and \(\operatorname{tr}A=\sum_i a_{ii}=0\), so \(a_{ii}=0\) for every \(i\). Thus the diagonal contributes exactly \(1\) choice.</p>
+
+    <p><strong>Off-diagonal entries.</strong> The strict upper triangle consists of the entries \(a_{ij}\) with \(i\lt j\), and there are</p>
+    \[ \binom{n}{2}=\frac{n(n-1)}{2} \]
+    <p>such positions. Each of these entries can be chosen as \(0\) or \(1\) independently, and then the strictly lower triangle is forced by symmetry.</p>
+
+    <p><strong>Count.</strong> Hence the number of such matrices is</p>
+    \[ \boxed{\,2^{\,n(n-1)/2}\,}. \]
+
+    <p><strong>Small cases.</strong></p>
+    <ul>
+      <li>\(n=1\): \(2^{0}=1\), namely \([0]\).</li>
+      <li>\(n=2\): \(2^{1}=2\).</li>
+      <li>\(n=3\): \(2^{3}=8\).</li>
+      <li>\(n=4\): \(2^{6}=64\).</li>
+    </ul>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[scale=0.85, every node/.style={font=\small}]
+          \draw (0,0) grid (4,4);
+          \node at (0.5,3.5) {$0$};
+          \node at (1.5,2.5) {$0$};
+          \node at (2.5,1.5) {$0$};
+          \node at (3.5,0.5) {$0$};
+          \node at (1.5,3.5) {$*$};
+          \node at (2.5,3.5) {$*$};
+          \node at (3.5,3.5) {$*$};
+          \node at (2.5,2.5) {$*$};
+          \node at (3.5,2.5) {$*$};
+          \node at (3.5,1.5) {$*$};
+          \node at (0.5,2.5) {$\cdot$};
+          \node at (0.5,1.5) {$\cdot$};
+          \node at (0.5,0.5) {$\cdot$};
+          \node at (1.5,1.5) {$\cdot$};
+          \node at (1.5,0.5) {$\cdot$};
+          \node at (2.5,0.5) {$\cdot$};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SECTION 2: ADJACENCY MATRIX ============ -->
+<h2>2. Adjacency matrix</h2>
+
+<div class="question">
+  <h3>Q8. Define the adjacency matrix and give its basic properties.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> \(A=(a_{ij})\), where \(a_{ij}=1\) if \(ij\in E(G)\), else \(0\). For simple undirected \(G\), \(A\) is symmetric, has zero diagonal, entries \(0/1\), row sums are degrees, and \(\operatorname{tr}(A)=0\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q9. What does \((A^k)_{ij}\) count?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> It counts the number of walks of length \(k\) from \(i\) to \(j\). This follows by induction:</p>
+    \[
+      (A^k)_{ij}=\sum_{\ell}(A^{k-1})_{i\ell}A_{\ell j}.
+    \]
+    <p>For example, on the graph below, \((A^2)_{13}=1\) counts the walk \(1\to 2\to 3\), and \((A^2)_{14}=1\) counts \(1\to 2\to 4\).</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm}]
+          \node[v] (1) at (0,0) {1};
+          \node[v] (2) at (1.5,0) {2};
+          \node[v] (3) at (3,0) {3};
+          \node[v] (4) at (1.5,1.4) {4};
+          \draw (1)--(2)--(3);
+          \draw (2)--(4);
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q10. How can connectivity be read from \(A\)?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> \(G\) is connected iff \(A\) is irreducible iff for every \(i\ne j\), some \(k\) satisfies \((A^k)_{ij}\gt 0\). Equivalently,</p>
+    \[
+      I+A+A^2+\cdots+A^{n-1}
+    \]
+    <p>has positive off-diagonal entries for connected \(G\). If \(G\) is disconnected, \(A\) can be permuted into block-diagonal form.</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm}]
+          \node[v] (1) at (0,0) {};
+          \node[v] (2) at (1,0) {};
+          \node[v] (3) at (2,0) {};
+          \node[v] (4) at (3.4,0) {};
+          \node[v] (5) at (4.4,0) {};
+          \draw (1)--(2)--(3);
+          \draw (4)--(5);
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q11. What is the relation between row sums and the all-ones vector?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> \(A\mathbf 1\) is the degree vector. All row sums equal \(d\) iff \(G\) is \(d\)-regular; then \(\mathbf 1\) is an eigenvector with eigenvalue \(d\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q12. What spectral properties does \(A\) have?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> \(A\) is real symmetric, so all eigenvalues are real. Also</p>
+    \[
+      \operatorname{tr}(A)=\sum_i\lambda_i=0.
+    \]
+    <p>The spectral radius satisfies \(\rho(A)\le \Delta(G)\), with equality for connected \(G\) iff \(G\) is regular.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q13. How does bipartiteness appear in the adjacency spectrum?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> \(G\) is bipartite iff the adjacency spectrum is symmetric about \(0\): \(\lambda\) is an eigenvalue iff \(-\lambda\) is, with the same multiplicity. One proof uses \(DAD^{-1}=-A\), where \(D\) has entries \(\pm1\) according to the bipartition.</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=6mm}]
+          \node[v] (u1) at (0,1) {$u_1$};
+          \node[v] (u2) at (0,-1) {$u_2$};
+          \node[v] (v1) at (2,1) {$v_1$};
+          \node[v] (v2) at (2,-1) {$v_2$};
+          \draw (u1)--(v1); \draw (u1)--(v2);
+          \draw (u2)--(v1); \draw (u2)--(v2);
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q14. What do \(\operatorname{tr}(A^k)\) and \(\operatorname{tr}(A^3)\) count?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> \(\operatorname{tr}(A^k)\) counts closed walks of length \(k\). Hence the number of triangles is</p>
+    \[
+      \frac{\operatorname{tr}(A^3)}{6}.
+    \]
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm}]
+          \node[v] (1) at (0,0) {1};
+          \node[v] (2) at (1.5,0) {2};
+          \node[v] (3) at (0.75,1.3) {3};
+          \draw (1)--(2)--(3)--(1);
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q15. Give spectra of standard graphs.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong></p>
+    <ul>
+      <li>\(K_n\): eigenvalues \(n-1\) once and \(-1\) with multiplicity \(n-1\).</li>
+      <li>Empty graph: eigenvalue \(0\) with multiplicity \(n\).</li>
+      <li>Cycle \(C_n\): eigenvalues \(2\cos(2\pi k/n)\), \(k=0,\dots,n-1\).</li>
+    </ul>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q16. Does the adjacency spectrum determine the graph?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> No. Isomorphic graphs have permutation-similar adjacency matrices, so the spectrum is invariant, but it is not a complete invariant. Example: \(K_{1,4}\) and \(C_4\cup K_1\) are non-isomorphic but both have adjacency spectrum \(\{2,0,0,0,-2\}\).</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+          l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (c) at (0,0) {};
+          \node[v] (a) at (0,1.2) {};
+          \node[v] (b) at (1.2,0) {};
+          \node[v] (d) at (0,-1.2) {};
+          \node[v] (e) at (-1.2,0) {};
+          \draw (c)--(a); \draw (c)--(b); \draw (c)--(d); \draw (c)--(e);
+          \node[l] at (0,-1.9) {$K_{1,4}$};
+        \end{tikzpicture}
+      </script>
+    </div>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+          l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (0,0) {};
+          \node[v] (2) at (1.2,0) {};
+          \node[v] (3) at (1.2,1.2) {};
+          \node[v] (4) at (0,1.2) {};
+          \node[v] (5) at (2.6,0.6) {};
+          \draw (1)--(2)--(3)--(4)--(1);
+          \node[l] at (1.2,-0.7) {$C_4 \cup K_1$};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SECTION 3: LAPLACIAN ============ -->
+<h2>3. Laplacian matrix</h2>
+
+<div class="question">
+  <h3>Q17. Define \(L\) and prove it is positive semidefinite.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> \(L=D-A\). For any \(x\in\mathbb R^n\),</p>
+    \[
+      x^T Lx=\sum_{ij\in E(G)}(x_i-x_j)^2\ge0.
+    \]
+    <p>Thus \(L\) is symmetric positive semidefinite.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q18. What are the basic spectral properties of \(L\)?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> \(L\mathbf 1=0\), so \(0\) is always an eigenvalue. Write</p>
+    \[
+      0=\lambda_1\le \lambda_2\le\cdots\le\lambda_n.
+    \]
+    <p>The multiplicity of \(0\) equals the number of connected components of \(G\). Thus \(G\) is connected iff \(\lambda_2\gt 0\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q19. What is \(\lambda_2\) called?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> \(\lambda_2\) is the algebraic connectivity or Fiedler value. Small \(\lambda_2\) means the graph is close to disconnecting. The corresponding eigenvector is the Fiedler vector.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q20. What is the sum of Laplacian eigenvalues?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    \[
+      \sum_{i=1}^n\lambda_i=\operatorname{tr}(L)=\sum_v\deg(v)=2m.
+    \]
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q21. State the Matrix-Tree Theorem.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> For connected \(G\), any cofactor of \(L\) equals the number \(\tau(G)\) of spanning trees. Equivalently,</p>
+    \[
+      \tau(G)=\frac{\lambda_2\lambda_3\cdots\lambda_n}{n}.
+    \]
+    <p>For \(K_n\), this gives Cayley's formula \(\tau(K_n)=n^{n-2}\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q22. How is \(L\) related to \(A\) for regular graphs?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> If \(G\) is \(d\)-regular, then \(L=dI-A\). Hence the Laplacian eigenvalues are \(d-\lambda_i(A)\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q23. Give Laplacian spectra of standard graphs.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong></p>
+    <ul>
+      <li>\(K_n\): \(0\) once and \(n\) with multiplicity \(n-1\).</li>
+      <li>Path \(P_n\): \(2-2\cos(\pi k/n)\), \(k=0,\dots,n-1\).</li>
+      <li>Cycle \(C_n\): \(2-2\cos(2\pi k/n)\), \(k=0,\dots,n-1\).</li>
+      <li>\(K_{a,b}\): \(0\); \(a\) with multiplicity \(b-1\); \(b\) with multiplicity \(a-1\); and \(a+b\) once.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q24. Does \(L\) determine the graph? Does its spectrum determine the graph?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> The matrix \(L\) itself determines the simple graph: off-diagonal entries are \(-1\) exactly for edges, and diagonal entries give degrees. However, the Laplacian spectrum is not a complete invariant; non-isomorphic Laplacian-cospectral graphs exist.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q25. Common trap: is \(G\) connected iff \(\lambda_1\gt 0\)?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> No. Always \(\lambda_1=0\). Connectivity is equivalent to \(\lambda_2\gt 0\).</p>
+    <div class="trap">Trap: \(0\) is always an eigenvalue of the Laplacian, so \(\lambda_1\gt 0\) is never possible.</div>
+  </div>
+</div>
+
+<!-- ============ SECTION 4: DISTANCE MATRIX ============ -->
+<h2>4. Distance matrix</h2>
+
+<div class="question">
+  <h3>Q26. Give basic properties of the distance matrix.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> \(M\) is symmetric, has zero diagonal, positive off-diagonal entries for connected \(G\), and satisfies the triangle inequality. The row sum \(\sum_j d(i,j)\) is the total distance from \(i\). The sum of all entries is \(2W(G)\), where \(W(G)\) is the Wiener index.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q27. Does the distance matrix determine the graph?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Yes, for a connected simple graph. Since \(d(i,j)=1\) iff \(ij\in E(G)\), the adjacency matrix is recovered from \(M\) by replacing entries equal to \(1\) by \(1\) and all other off-diagonal entries by \(0\). For disconnected graphs one uses \(\infty\) entries.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q28. Is the distance matrix always positive semidefinite?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> No. For \(C_4\),</p>
+    \[
+      M=\begin{pmatrix}
+      0&1&2&1\\
+      1&0&1&2\\
+      2&1&0&1\\
+      1&2&1&0
+      \end{pmatrix}
+    \]
+    <p>has eigenvalues \(4,0,-2,-2\), so it is not PSD.</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm}]
+          \node[v] (1) at (0,0) {1};
+          \node[v] (2) at (1.5,0) {2};
+          \node[v] (3) at (1.5,1.5) {3};
+          \node[v] (4) at (0,1.5) {4};
+          \draw (1)--(2)--(3)--(4)--(1);
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q29. What is \(M\) for a complete graph?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> \(M=J-I=A(K_n)\). Its eigenvalues are \(n-1\) once and \(-1\) with multiplicity \(n-1\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q30. If \(\operatorname{diam}(G)=2\), how is \(M\) related to \(A\)?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong></p>
+    \[
+      M=A+2\overline A,
+    \]
+    <p>where \(\overline A\) is the adjacency matrix of the complement.</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm}]
+          \node[v] (1) at (90:1.2) {};
+          \node[v] (2) at (18:1.2) {};
+          \node[v] (3) at (-54:1.2) {};
+          \node[v] (4) at (-126:1.2) {};
+          \node[v] (5) at (162:1.2) {};
+          \draw (1)--(2)--(3)--(4)--(5)--(1);
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q31. Advanced: what is the determinant of the distance matrix of a tree?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> For a tree \(T\) on \(n\ge2\) vertices, Graham–Pollak gives</p>
+    \[
+      \det \operatorname{Dist}(T)=(-1)^{n-1}(n-1)2^{n-2}.
+    \]
+    <p>Thus the distance matrix of a tree is nonsingular for \(n\ge2\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q32. Common trap: is the distance matrix the same as the Laplacian?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> No. The Laplacian is PSD and has row sums \(0\); the distance matrix generally has positive row sums and need not be PSD.</p>
+    <div class="trap">Trap: do not assume \(L=\operatorname{Dist}\) or that both are PSD.</div>
+  </div>
+</div>
+
+<!-- ============ SECTION 5: AUTOMORPHISM GROUP ============ -->
+<h2>5. Automorphism group</h2>
+
+<div class="question">
+  <h3>Q33. Define a graph automorphism and the automorphism group.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> An automorphism is a bijection \(\sigma:V(G)\to V(G)\) such that</p>
+    \[
+      uv\in E(G)\iff \sigma(u)\sigma(v)\in E(G).
+    \]
+    <p>The set of all automorphisms forms a group under composition, denoted \(\operatorname{Aut}(G)\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q34. What is the matrix condition for an automorphism?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> If \(P\) is the permutation matrix of \(\sigma\), then</p>
+    \[
+      PAP^T=A,
+    \]
+    <p>equivalently \(PA=AP\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q35. What graph invariants are preserved by automorphisms?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Automorphisms preserve degrees, adjacency, distances, the Laplacian, the distance matrix, the adjacency spectrum, and the number of triangles. The converse is false: preserving a spectrum does not imply being an automorphism.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q36. Give examples of automorphism groups.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <ul>
+      <li>\(K_n\) and the empty graph: \(\operatorname{Aut}\cong S_n\).</li>
+      <li>Cycle \(C_n\), \(n\ge3\): \(\operatorname{Aut}\cong D_{2n}\), order \(2n\).</li>
+      <li>Path \(P_n\), \(n\ge2\): order \(2\).</li>
+      <li>Star \(K_{1,k}\), \(k\ge2\): \(\operatorname{Aut}\cong S_k\).</li>
+      <li>Complete bipartite \(K_{a,b}\): if \(a\ne b\), \(\operatorname{Aut}\cong S_a\times S_b\); if \(a=b\), also allow swapping the two parts.</li>
+    </ul>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+          l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (0,0) {};
+          \node[v] (2) at (1,0) {};
+          \node[v] (3) at (2,0) {};
+          \node[v] (4) at (3,0) {};
+          \draw (1)--(2)--(3)--(4);
+          \node[l] at (1.5,-0.7) {$P_4$: $\operatorname{Aut}\cong C_2$};
+        \end{tikzpicture}
+      </script>
+    </div>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+          l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (90:1.2) {};
+          \node[v] (2) at (18:1.2) {};
+          \node[v] (3) at (-54:1.2) {};
+          \node[v] (4) at (-126:1.2) {};
+          \node[v] (5) at (162:1.2) {};
+          \draw (1)--(2)--(3)--(4)--(5)--(1);
+          \node[l] at (0,-1.9) {$C_5$: $\operatorname{Aut}\cong D_{10}$};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q37. What does it mean for a graph to be vertex-transitive?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> \(\operatorname{Aut}(G)\) acts transitively on \(V(G)\): for every \(u,v\) there is an automorphism sending \(u\) to \(v\). Cycles, complete graphs, and Cayley graphs are vertex-transitive.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q38. State orbit-stabilizer in this context.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> For \(v\in V(G)\),</p>
+    \[
+      |\operatorname{Aut}(G)|=|\operatorname{Orb}(v)|\cdot|\operatorname{Stab}(v)|.
+    \]
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q39. Automorphism versus isomorphism?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> An isomorphism is a bijection \(V(G)\to V(H)\) preserving adjacency. An automorphism is an isomorphism from \(G\) to itself.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q40. Does the adjacency spectrum determine \(\operatorname{Aut}(G)\)?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> No. Cospectral graphs can have different automorphism groups. For example, \(K_{1,4}\) and \(C_4\cup K_1\) are adjacency-cospectral but have different automorphism groups.</p>
+  </div>
+</div>
+
+<!-- ============ SECTION 6: VERTEX AND EDGE COVER ============ -->
+<h2>6. Vertex and edge cover, matching, independence number</h2>
+
+<div class="question">
+  <h3>Q41. Define a vertex cover and the vertex cover number \(\tau(G)\).</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> A <em>vertex cover</em> of \(G\) is a set \(S\subseteq V(G)\) such that every edge of \(G\) has at least one endpoint in \(S\). The <em>vertex cover number</em> \(\tau(G)\) is the minimum size of a vertex cover of \(G\).</p>
+    <p>Equivalently, \(S\) is a vertex cover iff \(V(G)\setminus S\) contains no edge.</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=6mm},
+          cov/.style={circle, draw, fill=gray!40, inner sep=0.6pt, minimum size=6mm},
+          l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (0,0) {1};
+          \node[cov] (2) at (1.4,0) {2};
+          \node[cov] (3) at (2.8,0) {3};
+          \node[v] (4) at (4.2,0) {4};
+          \draw (1)--(2)--(3)--(4);
+          \node[l] at (2.1,-0.8) {$P_4$: shaded $\{2,3\}$ is a min vertex cover, $\tau=2$};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q42. Define an independent set and the independence number \(\alpha(G)\).</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> An <em>independent set</em> is a set \(I\subseteq V(G)\) such that no two vertices of \(I\) are adjacent. The <em>independence number</em> \(\alpha(G)\) is the maximum size of an independent set.</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=6mm},
+          ind/.style={circle, draw, fill=blue!25, inner sep=0.6pt, minimum size=6mm},
+          l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[ind] (1) at (0,0) {1};
+          \node[v] (2) at (1.4,0) {2};
+          \node[ind] (3) at (2.8,0) {3};
+          \node[v] (4) at (4.2,0) {4};
+          \draw (1)--(2)--(3)--(4);
+          \node[l] at (2.1,-0.8) {$P_4$: shaded $\{1,3\}$ is a max independent set, $\alpha=2$};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q43. Prove Gallai's identity: \(\alpha(G)+\tau(G)=n\).</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> We prove the stronger statement:</p>
+    \[ S\text{ is a vertex cover}\iff V(G)\setminus S\text{ is an independent set.} \]
+    <p><strong>(⇒)</strong> Suppose \(S\) is a vertex cover. Take any two distinct \(u,v\in V\setminus S\). If \(uv\in E(G)\), then the edge \(uv\) has no endpoint in \(S\), contradicting that \(S\) covers every edge. Hence \(V\setminus S\) has no edge, i.e., \(V\setminus S\) is independent.</p>
+    <p><strong>(⇐)</strong> Suppose \(I=V\setminus S\) is independent. Take any edge \(uv\in E(G)\). Since \(I\) has no edge, at least one of \(u,v\) lies outside \(I\), i.e., in \(S\). Hence \(S\) is a vertex cover.</p>
+    <p><strong>Conclusion.</strong> The map \(S\mapsto V\setminus S\) is a bijection between vertex covers and independent sets, and it reverses inclusion. So a <em>minimum</em> vertex cover corresponds to a <em>maximum</em> independent set:</p>
+    \[ \tau(G)=n-\alpha(G),\qquad\text{i.e.}\qquad \alpha(G)+\tau(G)=n. \]
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q44. Define a matching and the matching number \(\nu(G)\).</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> A <em>matching</em> \(M\) in \(G\) is a set of pairwise vertex-disjoint edges of \(G\), i.e., no two edges of \(M\) share an endpoint. A vertex is <em>matched</em> if it is an endpoint of some edge of \(M\). A matching is <em>perfect</em> if it matches every vertex.</p>
+    <p>The <em>matching number</em> \(\nu(G)\) is the maximum size of a matching in \(G\).</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=6mm},
+          l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (0,0) {1};
+          \node[v] (2) at (1.2,0) {2};
+          \node[v] (3) at (2.4,0) {3};
+          \node[v] (4) at (3.6,0) {4};
+          \draw (1)--(2)--(3)--(4);
+          \draw[ultra thick, blue] (1)--(2);
+          \draw[ultra thick, blue] (3)--(4);
+          \node[l] at (1.8,-0.8) {matching $\{(1,2),(3,4)\}$, $\nu(P_4)=2$};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q45. Define an edge cover and the edge cover number \(\rho(G)\). When does an edge cover exist?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> An <em>edge cover</em> is a set \(C\subseteq E(G)\) such that every vertex of \(G\) is incident to at least one edge of \(C\). The <em>edge cover number</em> \(\rho(G)\) is the minimum size of an edge cover.</p>
+    <p>An edge cover exists iff \(G\) has no isolated vertices. If some vertex \(v\) has degree \(0\), no edge is incident to \(v\), so \(v\) can never be covered.</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=6mm},
+          l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (0,0) {1};
+          \node[v] (2) at (1.2,0) {2};
+          \node[v] (3) at (2.4,0) {3};
+          \node[v] (4) at (3.6,0) {4};
+          \draw (1)--(2)--(3)--(4);
+          \draw[ultra thick, red] (1)--(2);
+          \draw[ultra thick, red] (3)--(4);
+          \node[l] at (1.8,-0.8) {edge cover $\{(1,2),(3,4)\}$, $\rho(P_4)=2$};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q46. Prove Gallai's theorem: for a graph with no isolated vertices, \(\nu(G)+\rho(G)=n\).</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> We prove two inequalities that together give equality.</p>
+
+    <p><strong>Part 1: \(\rho(G)\le n-\nu(G)\).</strong>
+    Let \(M\) be a maximum matching, so \(|M|=\nu\). Let \(U\) be the set of unmatched vertices; then \(|U|=n-2\nu\). The set \(U\) is independent, because otherwise we could add the edge between two unmatched vertices to \(M\) and get a larger matching.</p>
+    <p>For each \(u\in U\), pick an edge \(e_u\) incident to \(u\) (possible because \(G\) has no isolated vertices). Define</p>
+    \[ C=M\cup\{e_u:u\in U\}. \]
+    <p>Every vertex is covered: matched vertices by \(M\), unmatched vertices by their \(e_u\). So \(C\) is an edge cover and</p>
+    \[ \rho\le |C|=\nu+(n-2\nu)=n-\nu, \]
+    <p>hence \(\nu+\rho\le n\).</p>
+
+    <p><strong>Part 2: \(\rho(G)\ge n-\nu(G)\).</strong>
+    Let \(C\) be a minimum edge cover, so \(|C|=\rho\). <em>Claim:</em> every edge of \(C\) has at least one endpoint that has degree exactly \(1\) in the spanning subgraph \((V,C)\).</p>
+    <p><em>Proof of claim.</em> Suppose \(e=uv\in C\) and both \(u,v\) have degree at least \(2\) in \((V,C)\). Removing \(e\) from \(C\) leaves both \(u\) and \(v\) still incident to another edge of \(C\), and every other vertex was covered before and is untouched. So \(C\setminus\{e\}\) is still an edge cover, contradicting the minimality of \(C\).</p>
+    <p>It follows that \((V,C)\) is a disjoint union of stars \(K_{1,k_1},\dots,K_{1,k_m}\) (each \(K_{1,k_i}\) with \(k_i\ge1\); for \(k_i=1\) it is a single edge \(K_2\)). Then</p>
+    \[ \rho=|C|=\sum_i k_i,\qquad n=\sum_i(k_i+1)=\rho+m. \]
+    <p>Within each star \(K_{1,k_i}\), a matching contains at most one edge (all edges share the center). So a matching of size \(m\), one edge from each star, is available. Hence</p>
+    \[ \nu\ge m=n-\rho, \]
+    <p>i.e., \(\nu+\rho\ge n\).</p>
+
+    <p><strong>Conclusion.</strong> Combining the two inequalities gives</p>
+    \[ \boxed{\nu(G)+\rho(G)=n.} \]
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q47. State König's theorem. Give a small example.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> <em>König's theorem.</em> In a bipartite graph \(G=(X\cup Y,E)\), the maximum matching size equals the minimum vertex cover size:</p>
+    \[ \nu(G)=\tau(G). \]
+    <p><strong>Examples.</strong></p>
+    <ul>
+      <li>\(K_{3,3}\) has a perfect matching, so \(\nu=3\), and taking all of \(X\) gives a vertex cover of size \(3\), so \(\tau=3\). Consistent.</li>
+      <li>\(P_4\) is bipartite with bipartition \(\{1,3\}\) and \(\{2,4\}\). \(\nu(P_4)=2\) via \(\{(1,2),(3,4)\}\), and \(\tau(P_4)=2\) via \(\{2,3\}\). Consistent.</li>
+      <li>\(C_5\) is <em>not</em> bipartite: \(\nu(C_5)=2\) but \(\tau(C_5)=3\), so König's equality fails. This shows the bipartite hypothesis is essential.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q48. Compute \(\tau,\alpha,\nu,\rho\) for \(P_4\), \(C_5\), and \(K_4\).</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong></p>
+    <p><strong>\(P_4\)</strong> (vertices \(1-2-3-4\)):</p>
+    <ul>
+      <li>\(\nu(P_4)=2\) via the matching \(\{(1,2),(3,4)\}\).</li>
+      <li>\(\tau(P_4)=2\) via the cover \(\{2,3\}\).</li>
+      <li>\(\alpha(P_4)=2\) via the independent set \(\{1,3\}\).</li>
+      <li>\(\rho(P_4)=2\) via the edge cover \(\{(1,2),(3,4)\}\).</li>
+      <li>Checks: \(\alpha+\tau=2+2=4=n\), \(\nu+\rho=2+2=4=n\).</li>
+    </ul>
+    <p><strong>\(C_5\)</strong> (vertices \(1,\dots,5\) in a cycle):</p>
+    <ul>
+      <li>\(\nu(C_5)=2\): two disjoint edges cover \(4\) vertices, a third would need a fifth disjoint vertex, impossible.</li>
+      <li>\(\tau(C_5)=3\): any \(2\) vertices miss at least one edge of the cycle (the edge between the remaining two); \(\{1,3,5\}\) is a cover of size \(3\).</li>
+      <li>\(\alpha(C_5)=2\): \(\{1,3\}\) is independent, but no \(3\)-set in \(C_5\) is independent.</li>
+      <li>\(\rho(C_5)=3\): e.g. \(\{(1,2),(3,4),(5,1)\}\).</li>
+      <li>Checks: \(\alpha+\tau=2+3=5=n\), \(\nu+\rho=2+3=5=n\).</li>
+    </ul>
+    <p><strong>\(K_4\)</strong> (complete graph on \(4\) vertices):</p>
+    <ul>
+      <li>\(\nu(K_4)=2\): two disjoint edges cover all \(4\) vertices; a matching of size \(3\) would need \(6\) vertices.</li>
+      <li>\(\tau(K_4)=3\): any \(2\) vertices leave an edge; any \(3\) vertices cover all \(6\) edges.</li>
+      <li>\(\alpha(K_4)=1\): every pair is adjacent.</li>
+      <li>\(\rho(K_4)=2\): e.g. \(\{(1,2),(3,4)\}\).</li>
+      <li>Checks: \(\alpha+\tau=1+3=4=n\), \(\nu+\rho=2+2=4=n\).</li>
+    </ul>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q49. Show that every maximal matching \(M\) in \(G\) satisfies \(|M|\ge \nu(G)/2\).</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Let \(M\) be a maximal matching and \(M^*\) a maximum matching, so \(|M^*|=\nu(G)\).</p>
+    <p>Since \(M\) is maximal, no edge of \(M^*\) can have both endpoints unmatched by \(M\); otherwise that edge could be added to \(M\), contradicting maximality. So every edge of \(M^*\) shares an endpoint with some edge of \(M\).</p>
+    <p>Each edge of \(M\) has exactly two endpoints, so it can "block" at most \(2\) edges of \(M^*\). Hence</p>
+    \[ |M^*|\le 2|M|, \]
+    <p>i.e.,</p>
+    \[ |M|\ge \frac{|M^*|}{2}=\frac{\nu(G)}{2}. \]
+    <p><strong>Interpretation.</strong> A maximal matching is a \(2\)-approximation to a maximum matching: greedy matching algorithms that stop when no further edge can be added automatically achieve at least half of the optimum.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q50. Relate the independence number of \(G\) to the clique number of its complement.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> An <em>independent set</em> in \(G\) is a set of pairwise non-adjacent vertices. In the complement \(\overline G\), two vertices are adjacent iff they are non-adjacent in \(G\). So an independent set in \(G\) is exactly a <em>clique</em> in \(\overline G\). Therefore</p>
+    \[ \boxed{\alpha(G)=\omega(\overline G)}, \]
+    <p>where \(\omega(\overline G)\) is the clique number of \(\overline G\) (the maximum size of a complete subgraph).</p>
+    <p>Symmetrically, a clique in \(G\) is an independent set in \(\overline G\), so \(\omega(G)=\alpha(\overline G)\).</p>
+    <p>Combining with Gallai's identity for \(\overline G\), one also gets</p>
+    \[ \alpha(G)+\tau(G)=n,\qquad \alpha(\overline G)+\tau(\overline G)=n, \]
+    <p>and equivalently \(\omega(G)+\tau(\overline G)=n\).</p>
+  </div>
+</div>
+
+<!-- ============ SECTION 7: ADDITIONAL SPECTRAL ============ -->
+<h2>7. Additional spectral and structural questions</h2>
+
+<div class="question">
+  <h3>Q51. Characterize graphs with only one distinct adjacency eigenvalue.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> If \(A\) has only one eigenvalue \(\lambda\), then \(A=\lambda I\). Since a simple graph has zero diagonal, \(\lambda=0\). Hence \(A=0\), i.e. \(G\) is the edgeless graph. Conversely, the edgeless graph has \(A=0\), so its only eigenvalue is \(0\).</p>
+    <p>Caveat: \(K_1\) also has \(A=0\).</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+          l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (0,0) {};
+          \node[v] (2) at (1.5,0) {};
+          \node[v] (3) at (1.5,1.5) {};
+          \node[v] (4) at (0,1.5) {};
+          \node[l] at (0.75,-0.6) {edgeless graph};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q52. Characterize connected graphs with exactly two distinct adjacency eigenvalues.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> For \(n\ge2\), a connected graph has exactly two distinct adjacency eigenvalues iff it is complete.</p>
+    <p>Sketch: if the two eigenvalues are \(\alpha,\beta\), then</p>
+    \[
+      (A-\alpha I)(A-\beta I)=0,
+    \]
+    <p>so \(A^2=(\alpha+\beta)A-\alpha\beta I\). Thus adjacent vertices have a fixed number of common neighbours, while non-adjacent vertices have \(0\) common neighbours. If the graph is connected and not complete, there are non-adjacent vertices at distance \(2\), giving a common neighbour, a contradiction. Hence \(G\) is complete.</p>
+    <p>Caveat: \(K_1\) is connected but has only one eigenvalue.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q53. State and prove the diameter–eigenvalue inequality.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> If \(G\) is connected with diameter \(d\), and \(A\) has \(k\) distinct eigenvalues, then</p>
+    \[
+      k\ge d+1.
+    \]
+    <p>Proof sketch: the minimal polynomial of \(A\) has degree \(k\). If \(d\ge k\), then \(A^d\) is a linear combination of \(I,A,\dots,A^{d-1}\). Choose vertices \(u,v\) at distance \(d\). Then \((A^r)_{uv}=0\) for \(r\lt d\), but \((A^d)_{uv}\gt 0\), since it counts shortest walks of length \(d\) from \(u\) to \(v\). This contradicts the linear relation. Hence \(d\le k-1\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q54. Prove that a graph is regular iff \(AJ=JA\), where \(J\) is the all-ones matrix.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Compute</p>
+    \[
+      (AJ)_{ij}=\sum_k A_{ik}=\deg(i),
+    \]
+    <p>and</p>
+    \[
+      (JA)_{ij}=\sum_k A_{kj}=\deg(j).
+    \]
+    <p>Thus \(AJ=JA\) iff \(\deg(i)=\deg(j)\) for all \(i,j\), i.e. iff \(G\) is regular.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q55. If \(J\) is a polynomial in \(A\), prove that \(G\) is connected and regular.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> If \(J=p(A)\), then \(J\) commutes with \(A\), so \(AJ=JA\), hence \(G\) is regular by Q54.</p>
+    <p>For connectivity: since \(J=p(A)\), every entry of \(J\) is a polynomial in \(A\), so \(J_{ij}=1\) implies some \(m\) has \((A^m)_{ij}\ne0\). Thus for every \(i,j\) there is a walk of length \(m\) from \(i\) to \(j\), i.e. \(G\) is connected. If \(G\) were disconnected, \(A\) would be block-diagonal after a permutation, and every polynomial \(p(A)\) would also be block-diagonal with the same block structure; but \(J\) has nonzero entries between different components, so \(J\ne p(A)\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q56. Is the converse of Q55 true? Is \(J\) a polynomial in \(A\) for every connected regular graph?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Yes. Let \(G\) be connected and \(r\)-regular. By Perron–Frobenius, \(r\) is a simple eigenvalue of \(A\) with eigenspace \(\operatorname{span}\{\mathbf 1\}\). Choose a polynomial \(q\) such that</p>
+    \[
+      q(r)=1,\qquad q(\lambda)=0
+    \]
+    <p>for every other distinct eigenvalue \(\lambda\) of \(A\). Then \(q(A)\) is the projection onto the \(r\)-eigenspace, so</p>
+    \[
+      q(A)=\frac1n J.
+    \]
+    <p>Hence \(J=nq(A)\), so \(J\) is a polynomial in \(A\). Thus the converse is true: \(J\) is a polynomial in \(A\) iff \(G\) is connected and regular.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q57. What is the automorphism group of the path graph \(P_n\)?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> For \(n=1\), \(\operatorname{Aut}(P_1)\) is trivial. For \(n\ge2\),</p>
+    \[
+      \operatorname{Aut}(P_n)\cong C_2,
+    \]
+    <p>generated by the reflection of the path. In all cases \(n\ge2\), the automorphism group has order \(2\).</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm}]
+          \node[v] (1) at (0,0) {$1$};
+          \node[v] (2) at (1.2,0) {$2$};
+          \node[v] (3) at (2.4,0) {$3$};
+          \node[v] (4) at (3.6,0) {$\cdots$};
+          \node[v] (5) at (4.8,0) {$n$};
+          \draw (1)--(2)--(3);
+          \draw[dotted] (3)--(4);
+          \draw[dotted] (4)--(5);
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q58. What is the automorphism group of the star graph \(K_{1,k}\)?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> For \(k\ge2\), the centre is the unique vertex of degree \(k\), so it is fixed by every automorphism. The \(k\) leaves can be permuted arbitrarily. Hence</p>
+    \[
+      \operatorname{Aut}(K_{1,k})\cong S_k,
+    \]
+    <p>with order \(k!\). For \(k=1\), \(K_{1,1}=P_2\), so \(\operatorname{Aut}(K_{1,1})\cong S_2\).</p>
+  </div>
+</div>
+
+<!-- ============ SECTION 8: SELF-COMPLEMENTARY ============ -->
+<h2>8. Self-complementary graphs</h2>
+
+<div class="question">
+  <h3>Q59. Define a self-complementary graph and derive the necessary condition on \(n\).</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> A graph \(G\) is self-complementary if \(G\cong \overline G\).</p>
+    <p>If \(G\) has \(n\) vertices and \(m\) edges, then \(\overline G\) has \(\binom n2-m\) edges. Since \(G\cong\overline G\),</p>
+    \[
+      m=\binom n2-m
+      \quad\Longrightarrow\quad
+      m=\frac{n(n-1)}4.
+    \]
+    <p>Thus \(n(n-1)\) must be divisible by \(4\), i.e. \(n\equiv0\) or \(1\pmod 4\).</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+          l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (0,0) {};
+          \node[v] (2) at (1,0) {};
+          \node[v] (3) at (2,0) {};
+          \node[v] (4) at (3,0) {};
+          \draw (1)--(2)--(3)--(4);
+          \node[l] at (1.5,-0.7) {$P_4$ (self-complementary)};
+        \end{tikzpicture}
+      </script>
+    </div>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+          l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (90:1.2) {};
+          \node[v] (2) at (18:1.2) {};
+          \node[v] (3) at (-54:1.2) {};
+          \node[v] (4) at (-126:1.2) {};
+          \node[v] (5) at (162:1.2) {};
+          \draw (1)--(2)--(3)--(4)--(5)--(1);
+          \node[l] at (0,-1.9) {$C_5$ (self-complementary)};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q60. Is every self-complementary graph connected?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> For \(n\gt 1\), yes. If \(G\) were disconnected, then \(\overline G\) would be connected. But \(G\cong\overline G\), so \(G\) would also be connected, a contradiction.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q61. Give the matrix condition for a graph to be self-complementary.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Let \(\overline A=J-I-A\). Then \(G\) is self-complementary iff there exists a permutation matrix \(P\) such that</p>
+    \[
+      A=P\overline A P^T
+      =P(J-I-A)P^T.
+    \]
+    <p>Since \(PJP^T=J\), this is equivalent to \(A=J-I-PAP^T\), or \(A+PAP^T=J-I\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q62. If \(G\) is self-complementary, what can be said about a complementing permutation?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> If \(\sigma\) is an isomorphism from \(G\) to \(\overline G\), then applying \(\sigma\) twice gives an isomorphism from \(G\) to \(G\). Hence</p>
+    \[
+      \sigma^2\in \operatorname{Aut}(G).
+    \]
+    <p>Such a \(\sigma\) is called a complementing permutation or anti-automorphism of \(G\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q63. Give examples of self-complementary graphs and their automorphism groups.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <ul>
+      <li>\(K_1\): self-complementary, \(\operatorname{Aut}(K_1)\) trivial.</li>
+      <li>\(P_4\): self-complementary, \(\operatorname{Aut}(P_4)\cong C_2\).</li>
+      <li>\(C_5\): self-complementary, \(\operatorname{Aut}(C_5)\cong D_{10}\), of order \(10\).</li>
+    </ul>
+    <p>Not every self-complementary graph is vertex-transitive: \(C_5\) is, but \(P_4\) is not.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q64. If \(G\) is self-complementary and regular, what is its degree?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> If \(G\) is \(d\)-regular on \(n\) vertices, then \(\overline G\) is \((n-1-d)\)-regular. Since \(G\cong\overline G\), regular degrees must match:</p>
+    \[
+      d=n-1-d.
+    \]
+    <p>Hence \(d=(n-1)/2\). In particular, \(n\) must be odd.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q65. For a regular self-complementary graph, how are the adjacency eigenvalues related?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Let \(G\) be \(d\)-regular and self-complementary, \(d=(n-1)/2\). For \(x\perp\mathbf 1\) with \(Ax=\lambda x\),</p>
+    \[
+      \overline A x=(J-I-A)x=-(\lambda+1)x.
+    \]
+    <p>Since \(G\cong\overline G\), the spectrum is invariant under \(\lambda\mapsto -(\lambda+1)\). So nontrivial eigenvalues occur in pairs summing to \(-1\).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q66. Is every self-complementary graph regular?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> No. \(P_4\) is self-complementary, but its degrees are \(1,2,2,1\), so it is not regular.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q67. Does \(G\cong\overline G\) imply that \(A\) and \(J-I-A\) have the same characteristic polynomial?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Yes, because isomorphic graphs have the same adjacency spectrum, so \(A\) and \(J-I-A\) are permutation-similar. However, this spectral condition alone does not generally characterize self-complementarity; one needs the actual isomorphism \(G\cong\overline G\).</p>
+    <div class="trap">Trap: having the same characteristic polynomial is necessary but not sufficient for self-complementarity.</div>
+  </div>
+</div>
+
+<!-- ============ SECTION 9: FURTHER SPECTRAL ============ -->
+<h2>9. Further spectral questions</h2>
+
+<div class="question">
+  <h3>Q68. State a known characterization: connected graph with exactly two distinct Laplacian eigenvalues.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> A connected simple graph has exactly two distinct Laplacian eigenvalues iff it is a complete graph. Indeed, \(K_n\) has Laplacian spectrum \(0,n,\dots,n\) (two distinct values). Conversely, if \(L\) has only \(0\) and \(\mu\gt 0\) as eigenvalues, then \(L^2=\mu L\), and analysing this identity forces all pairs of distinct vertices to be adjacent, so the graph is complete.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q69. If \(G\) is connected and regular, is \(\mathbf 1\) always an eigenvector of \(A\)?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Yes. If \(G\) is \(d\)-regular, then \(A\mathbf 1=d\mathbf 1\). Conversely, if \(\mathbf 1\) is an eigenvector of \(A\), then all row sums are equal, so \(G\) is regular. Thus</p>
+    \[
+      G\text{ is regular}\iff \mathbf 1\text{ is an eigenvector of }A.
+    \]
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q70. Find all adjacency eigenvalues of \(P_n\) and show they are distinct; explain how the diameter inequality also guarantees distinctness.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Label the vertices \(1,\dots,n\) and write \(x_0=x_{n+1}=0\). The eigenvalue equation \(Ax=\lambda x\) is</p>
+    \[ x_{i-1}+x_{i+1}=\lambda x_i\qquad(1\le i\le n). \]
+    <p>Try \(x_i=\sin(i\theta)\). Using the identity \(\sin((i-1)\theta)+\sin((i+1)\theta)=2\cos\theta\,\sin(i\theta)\), the recurrence is satisfied with \(\lambda=2\cos\theta\). The boundary condition \(x_{n+1}=\sin((n+1)\theta)=0\) requires \((n+1)\theta=k\pi\), so</p>
+    \[ \theta=\frac{k\pi}{n+1},\qquad k=1,\dots,n, \]
+    <p>giving</p>
+    \[ \boxed{\lambda_k=2\cos\frac{k\pi}{n+1},\qquad v^{(k)}_i=\sin\frac{ik\pi}{n+1},\quad k=1,\dots,n.} \]
+    <p>The angles are distinct in \((0,\pi)\), and \(\cos\) is strictly decreasing there, so the \(\lambda_k\) are distinct.</p>
+    <p><strong>Diameter argument.</strong> \(\operatorname{diam}(P_n)=n-1\), and any connected graph with diameter \(d\) has at least \(d+1\) distinct eigenvalues. Here \(k\ge n\), and an \(n\times n\) matrix has at most \(n\) distinct eigenvalues, so \(k=n\). This proves distinctness without computing the eigenvalues.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q71. Give an example of a non-path graph on \(n\) vertices with \(n\) distinct eigenvalues.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> The paw graph on \(4\) vertices: a triangle plus one pendant vertex attached to one triangle vertex. Its adjacency characteristic polynomial is</p>
+    \[
+      \chi_A(\lambda)=(\lambda+1)(\lambda^3-\lambda^2-3\lambda+1).
+    \]
+    <p>The cubic has discriminant \(148\gt 0\), so it has three distinct real roots; and \(\lambda=-1\) is not a root of the cubic (\(\chi_{\text{cubic}}(-1)=2\)). So the paw graph has \(4\) distinct eigenvalues, giving a non-path example with \(n=4\).</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[
+          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+          l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (0,0) {$1$};
+          \node[v] (2) at (1.5,0) {$2$};
+          \node[v] (3) at (0.75,1.3) {$3$};
+          \node[v] (4) at (-1,0.5) {$4$};
+          \draw (1)--(2)--(3)--(1);
+          \draw (1)--(4);
+          \node[l] at (0.3,-0.8) {paw graph};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q72. Give an example of a 3-regular graph all of whose adjacency eigenvalues are distinct.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> The <strong>Frucht graph</strong> is a connected 3-regular graph on \(12\) vertices with \(\operatorname{Aut}(G)=\{\mathrm{id}\}\). Its adjacency characteristic polynomial is</p>
+    \[
+    \begin{aligned}
+    \chi_A(x)=x^{12}
+      &-18x^{10}-12x^9+111x^8+132x^7-280x^6\\
+      &-408x^5+240x^4+432x^3+32x^2-96x-32.
+    \end{aligned}
+    \]
+    <p>A direct check shows \(\gcd(\chi_A(x),\chi_A'(x))=1\), so \(\chi_A\) is square-free and has \(12\) distinct roots. Hence the Frucht graph has \(12\) distinct adjacency eigenvalues.</p>
+    <p><strong>Verification in SageMath.</strong></p>
+<pre><code>G = graphs.FruchtGraph()
+print(G.is_regular(3))          # True
+A = G.adjacency_matrix()
+R = PolynomialRing(QQ, 'x')
+p = R(A.charpoly())
+print(gcd(p, p.derivative()))   # 1
+print(A.eigenvalues())          # 12 distinct numerical eigenvalues
+</code></pre>
+  </div>
+</div>
+<div class="question">
+  <h3>Q73. Give an example of a graph which contains exactly four distinct eigenvalues.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Take the cycle \(C_6\). Its adjacency eigenvalues are</p>
+    \[
+      \lambda_k = 2\cos\frac{2\pi k}{6} = 2\cos\frac{k\pi}{3},\qquad k=0,1,\dots,5.
+    \]
+    <p>Explicitly:</p>
+    \[
+      \lambda_0=2,\quad \lambda_1=1,\quad \lambda_2=-1,\quad \lambda_3=-2,\quad \lambda_4=-1,\quad \lambda_5=1.
+    \]
+    <p>So the spectrum is \(\{2,1,1,-1,-1,-2\}\), which contains <strong>exactly four distinct eigenvalues</strong>: \(2,\,1,\,-1,\,-2\).</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          \foreach \k in {0,...,5} {
+            \node[v] (a\k) at ({60*\k+30}:1.3) {};
+          }
+          \foreach \k in {0,...,5} {
+            \pgfmathtruncatemacro{\n}{(\k+1)}
+            \ifnum\n<6 \draw (a\k)--(a\n); \fi
+          }
+          \draw (a5)--(a0);
+          \node[l] at (0,-1.9) {$C_6$: spectrum $\{2,1,1,-1,-1,-2\}$};
+        \end{tikzpicture}
+      </script>
+    </div>
+    <p><strong>Another example.</strong> The path \(P_4\) has eigenvalues \(2\cos(k\pi/5)\), \(k=1,2,3,4\), all distinct, giving exactly four distinct eigenvalues.</p>
+    <p><strong>Contrast.</strong> \(K_4\) has only 2 distinct (\(3,-1\)); \(K_{2,2}=C_4\) has only 3 distinct (\(2,0,-2\)); \(C_5\) has only 3 distinct (\(2,\;\tfrac{-1\pm\sqrt5}{2}\)).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q74. Find the eigenvalues of the complete bipartite graph \(K_{m,n}\).</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Order vertices so that the \(m\) vertices of one part come first, then the \(n\) of the other. Then</p>
+    \[
+      A(K_{m,n})=\begin{pmatrix} 0 & J \\ J^T & 0 \end{pmatrix},
+    \]
+    <p>where \(J=J_{m\times n}\) is the \(m\times n\) all-ones matrix.</p>
+
+    <p><strong>Case 1 (eigenvectors supported on one side).</strong> Let \(x\in\mathbb R^m\) with \(\sum_i x_i=0\), and take \((x,0)\in\mathbb R^{m+n}\). Then</p>
+    \[
+      A\binom{x}{0}=\binom{0}{J^Tx}=\binom{0}{0},
+    \]
+    <p>since \(J^Tx=(\sum_i x_i)\mathbf 1_n=0\). Hence \((x,0)\) is an eigenvector with eigenvalue \(0\). This gives \(m-1\) independent eigenvectors of eigenvalue \(0\).</p>
+    <p>Similarly, any \((0,y)\) with \(y\in\mathbb R^n\), \(\sum_j y_j=0\), gives \(n-1\) more independent eigenvectors of eigenvalue \(0\).</p>
+    <p>So \(0\) is an eigenvalue with multiplicity at least \((m-1)+(n-1)=m+n-2\).</p>
+
+    <p><strong>Case 2 (eigenvectors constant on each side).</strong> Take \((a\mathbf 1_m, b\mathbf 1_n)\). Since \(J\mathbf 1_n=n\mathbf 1_m\) and \(J^T\mathbf 1_m=m\mathbf 1_n\),</p>
+    \[
+      A\binom{a\mathbf 1_m}{b\mathbf 1_n}
+      =\binom{b\,n\,\mathbf 1_m}{a\,m\,\mathbf 1_n}.
+    \]
+    <p>For this to equal \(\lambda(a\mathbf 1_m,b\mathbf 1_n)\) we need</p>
+    \[
+      bn=\lambda a,\qquad am=\lambda b.
+    \]
+    <p>Eliminating: \(\lambda^2=mn\), so \(\lambda=\pm\sqrt{mn}\). Each gives one eigenvector. This gives two more eigenvalues.</p>
+
+    <p><strong>Conclusion.</strong> The spectrum of \(K_{m,n}\) is</p>
+    \[
+      \boxed{\;\sigma(K_{m,n})=\{\sqrt{mn},\;0^{m+n-2},\;-\sqrt{mn}\}.\;}
+    \]
+    <p>In particular:</p>
+    <ul>
+      <li>\(K_{1,n}\) (star): eigenvalues \(\pm\sqrt n\) and \(0\) with multiplicity \(n-1\).</li>
+      <li>\(K_{n,n}\): eigenvalues \(\pm n\) and \(0\) with multiplicity \(2n-2\).</li>
+      <li>Trace check: \(0=\sqrt{mn}+0+(-\sqrt{mn})\). \(\operatorname{tr}(A^2)=2mn\).</li>
+    </ul>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q75. Find the sum of entries of the adjacency matrix of a tree. If \(A\) is the adjacency matrix of a tree, what is \(\operatorname{tr}(A^k)\) for odd \(k\)?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Sum of entries.</strong> For any graph,</p>
+    \[
+      \sum_{i,j} a_{ij}=\mathbf 1^T A\mathbf 1=\sum_{i}\deg(i)=2|E|.
+    \]
+    <p>For a tree on \(n\) vertices, \(m=n-1\), so</p>
+    \[
+      \boxed{\mathbf 1^T A\mathbf 1 = 2(n-1).}
+    \]
+
+    <p><strong>Trace of odd powers.</strong> Two equivalent arguments:</p>
+    <ul>
+      <li><em>Combinatorial.</em> \(\operatorname{tr}(A^k)\) equals the number of closed walks of length \(k\) in the graph. A tree is bipartite; every closed walk in a bipartite graph has even length. Hence, for odd \(k\),</li>
+    </ul>
+    \[
+      \boxed{\operatorname{tr}(A^k)=0\ \text{for every odd }k.}
+    \]
+    <ul>
+      <li><em>Spectral.</em> A tree is bipartite, so its eigenvalues are symmetric about \(0\): if \(\lambda\) is an eigenvalue, then \(-\lambda\) is too, with the same multiplicity. Hence the sum of \(k\)-th powers of eigenvalues vanishes for odd \(k\):</li>
+    </ul>
+    \[
+      \operatorname{tr}(A^k)=\sum_i\lambda_i^k=0\qquad(k\text{ odd}).
+    \]
+    <p>For even \(k=2r\), \(\operatorname{tr}(A^{2r})=\sum_i\lambda_i^{2r}\ge 0\), with equality iff \(A=0\) (empty graph); in particular, a tree with \(n\ge 2\) has \(\operatorname{tr}(A^2)=2(n-1)>0\).</p>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm}]
+          \node[v] (a) at (0,0) {};
+          \node[v] (b) at (1.1,0.7) {};
+          \node[v] (c) at (2.2,0) {};
+          \node[v] (d) at (3.1,0.7) {};
+          \node[v] (e) at (1.1,-0.7) {};
+          \draw (a)--(b)--(c)--(d);
+          \draw (b)--(e);
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q76. Let \(X\) be a connected bipartite graph. Then \(X\) has three distinct eigenvalues if and only if \(X\) is a complete bipartite graph.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Let \(|V(X)|=n\).</p>
+
+    <p><strong>(⇐)</strong> If \(X=K_{m,n}\) with \(m,n\ge1\) and \(m+n\ge3\), then by Q74 its spectrum is</p>
+    \[
+      \sigma(X)=\{\sqrt{mn},\;0^{m+n-2},\;-\sqrt{mn}\},
+    \]
+    <p>which has exactly three distinct eigenvalues. (The exceptional case \(K_{1,1}=K_2\) has spectrum \(\{1,-1\}\), only two distinct values, and it satisfies \(m+n=2\).)</p>
+
+    <p><strong>(⇒)</strong> Suppose \(X\) is connected bipartite with exactly three distinct eigenvalues. Since \(X\) is bipartite, its spectrum is symmetric about \(0\); with only three distinct eigenvalues, they must be</p>
+    \[
+      -\lambda,\quad 0,\quad\lambda\qquad(\lambda>0).
+    \]
+    <p>We now use the standard classification: <em>a connected graph with exactly three distinct eigenvalues is either complete bipartite \(K_{m,n}\), or a regular complete multipartite graph \(K_{r,\dots,r}\) with at least three parts of equal size \(r\), or a strongly regular graph.</em></p>
+    <p>Examine the three cases:</p>
+    <ul>
+      <li>Complete multipartite \(K_{r,\dots,r}\) with \(s\ge3\) parts: the parts are independent sets of size \(r\). If \(s\ge3\), three vertices in three different parts pairwise form triangles, so the graph is not bipartite. Hence this case cannot occur.</li>
+      <li>Strongly regular: every connected strongly regular graph that is bipartite is one of \(K_{n,n}\) (equivalently, satisfies \(\lambda=0\) and equal part sizes). More directly, bipartite strongly regular graphs with equal bipartition size \(n\) and \(\alpha=0\) are exactly \(K_{n,n}\).</li>
+      <li>Therefore \(X=K_{m,n}\) with \(m,n\ge1\).</li>
+    </ul>
+    <p><strong>Conclusion.</strong> Connected bipartite \(X\) has exactly three distinct eigenvalues iff \(X=K_{m,n}\) with \(mn\ge2\).</p>
+
+    <p><strong>Verification using the minimal polynomial.</strong> For \(X\) with eigenvalues \(\{-\lambda,0,\lambda\}\), the minimal polynomial is \(m_A(x)=x(x-\lambda)(x+\lambda)=x^3-\lambda^2x\), so \(A^3=\lambda^2A\). In particular, if \(i\in U\), \(j\in V\) are adjacent, the number of 3-walks from \(i\) to \(j\) equals \(\lambda^2\), which is exactly the behaviour of \(K_{m,n}\) (with \(\lambda^2=mn\)).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q77. Let \(T\) be a tree and \(A\) its adjacency matrix. Then \(A\) is non-singular if and only if \(T\) has a perfect matching.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Use the Leibniz expansion of the determinant:</p>
+    \[
+      \det A=\sum_{\sigma\in S_n}\operatorname{sign}(\sigma)\prod_{i=1}^{n}a_{i,\sigma(i)}.
+    \]
+
+    <p><strong>Which permutations contribute?</strong> A term is nonzero iff \(a_{i,\sigma(i)}=1\) for all \(i\), i.e. \(i\sigma(i)\in E(T)\) for every \(i\). Such a \(\sigma\) decomposes into disjoint cycles, each of which must be a cycle in \(T\). Since \(T\) is acyclic, every cycle in \(T\) has length \(2\) (a single edge traversed in both directions). Hence \(\sigma\) is a product of \(\tfrac n2\) disjoint transpositions \((i,j)\) with \(ij\in E(T)\), i.e. \(\sigma\) corresponds exactly to a perfect matching of \(T\).</p>
+
+    <p><strong>Conversely,</strong> any perfect matching \(M=\{(i_1,j_1),\dots,(i_{n/2},j_{n/2})\}\) of \(T\) gives such a permutation \(\sigma_M=(i_1\,j_1)\cdots(i_{n/2}\,j_{n/2})\) with nonzero contribution.</p>
+
+    <p><strong>Signs.</strong> Each transposition has sign \(-1\), so \(\operatorname{sign}(\sigma_M)=(-1)^{n/2}\) is the same for every perfect matching. Therefore</p>
+    \[
+      \det A=\sum_{M}(-1)^{n/2}=(-1)^{n/2}\cdot\#\{\text{perfect matchings of }T\}.
+    \]
+    <p>Hence \(\det A\neq 0\) iff \(T\) has at least one perfect matching. In particular, if \(n\) is odd, \(\det A=0\) automatically, as expected.</p>
+
+    <p><strong>Examples.</strong></p>
+    <ul>
+      <li>Star \(K_{1,3}\): no perfect matching, \(\det A=0\) (indeed \(0\) is an eigenvalue).</li>
+      <li>Path \(P_4\): has the unique perfect matching \(\{12,34\}\), and \(\det A=(-1)^2\cdot 1=1\). (Indeed the eigenvalues \(2\cos(k\pi/5)\) contain no zero.)</li>
+      <li>Path \(P_5\) on \(5\) vertices: \(n\) odd, so no perfect matching and \(\det A=0\).</li>
+    </ul>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (0,0) {};
+          \node[v] (2) at (1,0) {};
+          \node[v] (3) at (2,0) {};
+          \node[v] (4) at (3,0) {};
+          \draw (1)--(2)--(3)--(4);
+          \draw[ultra thick, blue] (1)--(2);
+          \draw[ultra thick, blue] (3)--(4);
+          \node[l] at (1.5,-0.8) {$P_4$: perfect matching, $\det A\ne 0$};
+
+          \node[v] (a) at (5,0) {};
+          \node[v] (b) at (6,0) {};
+          \node[v] (c) at (7,0) {};
+          \node[v] (d) at (8,0) {};
+          \node[v] (e) at (9,0) {};
+          \draw (a)--(b)--(c)--(d)--(e);
+          \node[l] at (7,-0.8) {$P_5$: $n$ odd, no perfect matching, $\det A=0$};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q78. If \(G\) is a tree then its adjacency matrix can be written in the form \(N+N^T\) where \(N\) is nilpotent.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Let \(T\) be a tree with vertex set \(V=\{1,\dots,n\}\). Pick any vertex \(r\) as <strong>root</strong>. Direct every edge toward \(r\): for each vertex \(v\neq r\), the edge joining \(v\) to its parent is directed \(v\to\mathrm{par}(v)\).</p>
+
+    <p>Define \(N\in\{0,1\}^{n\times n}\) by</p>
+    \[
+      N_{ij}=\begin{cases}1 & \text{if }j=\mathrm{par}(i),\; i\neq r,\\ 0 & \text{otherwise.}\end{cases}
+    \]
+    <p>So \(N_{ij}=1\) iff there is a directed edge \(i\to j\).</p>
+
+    <p><strong>Key identity: \(A=N+N^T\).</strong> For distinct \(i,j\):</p>
+    \[
+      (N+N^T)_{ij}=N_{ij}+N_{ji}.
+    \]
+    <p>If \(\{i,j\}\in E(T)\), exactly one of \(i=\mathrm{par}(j)\) or \(j=\mathrm{par}(i)\) holds, so \(N_{ij}+N_{ji}=1=A_{ij}\). If \(\{i,j\}\notin E(T)\), neither is a parent of the other, so \(N_{ij}=N_{ji}=0=A_{ij}\).</p>
+    <p>The diagonal entries are \(N_{ii}=0\) (no vertex is its own parent) and \(N^T_{ii}=0\), so \((N+N^T)_{ii}=0=A_{ii}\). Hence \(A=N+N^T\).</p>
+
+    <p><strong>Nilpotency of \(N\).</strong> The \((i,j)\)-entry of \(N^k\) counts directed walks of length \(k\) from \(i\) to \(j\). Every directed edge points one level closer to the root, so a directed walk of length \(k\) from \(i\) must land on the \(k\)-th ancestor of \(i\). If \(h\) is the maximum depth in \(T\) (with root at depth \(0\)), no directed walk has length greater than \(h\). Hence</p>
+    \[
+      N^k=0\quad\text{for all }k>h,
+    \]
+    <p>so \(N\) is nilpotent (nilpotency index \(\le h+1\le n\)).</p>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (r) at (0,1.2) {$r$};
+          \node[v] (a) at (-1.2,0) {};
+          \node[v] (b) at (1.2,0) {};
+          \node[v] (c) at (-1.8,-1.2) {};
+          \node[v] (d) at (-0.6,-1.2) {};
+          \node[v] (e) at (1.2,-1.2) {};
+          \draw[-&gt;] (a)--(r);
+          \draw[-&gt;] (b)--(r);
+          \draw[-&gt;] (c)--(a);
+          \draw[-&gt;] (d)--(a);
+          \draw[-&gt;] (e)--(b);
+          \node[l] at (0,-2.0) {all edges directed toward the root $r$};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q79. Show that out of all trees, the star graph has the largest algebraic connectivity.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Recall that the <em>algebraic connectivity</em> of a graph \(G\) is the second-smallest eigenvalue \(\lambda_2(L(G))\) of its Laplacian. We use the following classical result of Fiedler.</p>
+
+    <p><strong>Fiedler's theorem.</strong> For any tree \(T\) on \(n\ge 3\) vertices,</p>
+    \[
+      \lambda_2(L(T))\le 1,
+    \]
+    <p>with equality if and only if \(T\) is the star \(K_{1,n-1}\).</p>
+    <p>(Sketch of the mechanism: Fiedler's inequality \(\lambda_2(G)\le\kappa(G)\) gives \(\lambda_2(T)\le1\) for every tree on \(n\ge3\) vertices, since trees on \(n\ge3\) are not complete and have vertex-connectivity \(1\). A finer analysis of the Fiedler vector on trees shows equality forces a single vertex to be adjacent to all others, i.e. \(T=K_{1,n-1}\).)</p>
+
+    <p><strong>Verification for the star.</strong> For \(K_{1,n-1}\) with centre \(c\) and leaves \(\ell_1,\dots,\ell_{n-1}\), the Laplacian has</p>
+    \[
+      L = \begin{pmatrix} n-1 & -\mathbf 1^T \\ -\mathbf 1 & I_{n-1}\end{pmatrix}.
+    \]
+    <p>Its eigenvalues are</p>
+    \[
+      0,\quad \underbrace{1,\dots,1}_{n-2\ \text{times}},\quad n.
+    \]
+    <p>Hence \(\lambda_2(K_{1,n-1})=1\).</p>
+
+    <p><strong>Verification for the path.</strong> For \(P_n\),</p>
+    \[
+      \lambda_2(P_n)=2-2\cos\frac{\pi}{n}.
+    \]
+    <p>For \(n=3\) we get \(\lambda_2=2-2\cos(\pi/3)=2-1=1\), consistent with \(P_3=K_{1,2}\). For \(n\ge4\), \(\cos(\pi/n)>\cos(\pi/3)=\tfrac12\), so \(\lambda_2(P_n)<1\).</p>
+
+    <p><strong>Conclusion.</strong> Among all trees on \(n\ge3\) vertices, the star achieves the maximum possible value \(\lambda_2=1\); every other tree has \(\lambda_2<1\). Thus the star maximises algebraic connectivity among trees.</p>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (c) at (0,0) {};
+          \foreach \k in {0,...,5} { \node[v] (a\k) at ({60*\k}:1.2) {}; \draw (c)--(a\k); }
+          \node[l] at (0,-2.0) {star $K_{1,6}$: $\lambda_2=1$};
+
+          \node[v] (p1) at (4,0) {};
+          \node[v] (p2) at (4.9,0) {};
+          \node[v] (p3) at (5.8,0) {};
+          \node[v] (p4) at (6.7,0) {};
+          \node[v] (p5) at (7.6,0) {};
+          \draw (p1)--(p2)--(p3)--(p4)--(p5);
+          \node[l] at (5.8,-2.0) {path $P_5$: $\lambda_2<1$};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q80. Show that the algebraic connectivity of the complete bipartite graph \(K_{m,n}\) is \(\min\{m,n\}\).</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Let \(U=\{u_1,\dots,u_m\}\), \(V=\{v_1,\dots,v_n\}\). Order vertices as \(U\) then \(V\). The Laplacian is</p>
+    \[
+      L(K_{m,n})=\begin{pmatrix} nI_m & -J \\ -J^T & mI_n \end{pmatrix},
+    \]
+    <p>where \(J=J_{m\times n}\). We compute all eigenvalues.</p>
+
+    <p><strong>Eigenvalue 0 (multiplicity 1).</strong> \(L(\mathbf 1_m,\mathbf 1_n)=0\), since the row sums of \(L\) are all zero. So \(\mathbf 1_{m+n}\) is the (unique, since \(K_{m,n}\) is connected) eigenvector for eigenvalue \(0\).</p>
+
+    <p><strong>Eigenvalue \(n\) (multiplicity \(m-1\)).</strong> Take \(x\in\mathbb R^m\) with \(\sum_i x_i=0\) and consider \((x,0)\). Then</p>
+    \[
+      L\binom{x}{0}=\binom{nx}{-J^Tx}=\binom{nx}{0},
+    \]
+    <p>since \(J^Tx=(\sum_ix_i)\mathbf 1_n=0\). So \((x,0)\) is an eigenvector with eigenvalue \(n\). This gives \(m-1\) independent eigenvectors.</p>
+
+    <p><strong>Eigenvalue \(m\) (multiplicity \(n-1\)).</strong> Similarly, for \(y\in\mathbb R^n\) with \(\sum_j y_j=0\), the vector \((0,y)\) satisfies \(L(0,y)=(0,my)\). This gives \(n-1\) independent eigenvectors with eigenvalue \(m\).</p>
+
+    <p><strong>Eigenvalue \(m+n\) (multiplicity 1).</strong> Consider \((a\mathbf 1_m, b\mathbf 1_n)\). Using \(J\mathbf 1_n=n\mathbf 1_m\) and \(J^T\mathbf 1_m=m\mathbf 1_n\),</p>
+    \[
+      L\binom{a\mathbf 1_m}{b\mathbf 1_n}=\binom{an\mathbf 1_m-bn\mathbf 1_m}{-am\mathbf 1_n+bm\mathbf 1_n}
+      =\binom{n(a-b)\mathbf 1_m}{m(b-a)\mathbf 1_n}.
+    \]
+    <p>For this to equal \(\lambda(a\mathbf 1_m,b\mathbf 1_n)\):</p>
+    \[
+      n(a-b)=\lambda a,\qquad m(b-a)=\lambda b.
+    \]
+    <p>For \((a,b)\neq(0,0)\) with \(a\ne b\) (the \(a=b\) case gives eigenvalue \(0\)), divide the two equations: \(\dfrac{n(a-b)}{m(b-a)}=\dfrac{a}{b}\), i.e. \(-\dfrac nm=\dfrac ab\). Setting \(a=-n\), \(b=m\) gives</p>
+    \[
+      \lambda=n(a-b)/a = n(-n-m)/(-n)=m+n.
+    \]
+    <p>So \((a,b)=(-n,m)\) gives eigenvalue \(m+n\).</p>
+
+    <p><strong>Total count.</strong> \(1+(m-1)+(n-1)+1=m+n\) eigenvectors, so we have all eigenvalues:</p>
+    \[
+      \boxed{\sigma(L(K_{m,n}))=\{0,\; n^{(m-1)},\; m^{(n-1)},\; m+n\}.}
+    \]
+
+    <p><strong>Conclusion.</strong> The second-smallest eigenvalue is</p>
+    \[
+      \lambda_2(K_{m,n})=\min\{n,\,m\}=\min\{m,n\}.
+    \]
+    <p>(When \(m=1\) or \(n=1\): the eigenvalue \(n\) or \(m\) with multiplicity \(0\) is absent, but the remaining set still gives \(\lambda_2=\min\{m,n\}=1\).)</p>
+
+    <p><strong>Sanity checks.</strong></p>
+    <ul>
+      <li>Trace: \(0+n(m-1)+m(n-1)+(m+n)=2mn=2|E(K_{m,n})|\). ✓</li>
+      <li>\(K_{n,n}\): eigenvalues \(0,n^{(n-1)},n^{(n-1)},2n\), so \(\lambda_2=n\). ✓</li>
+      <li>\(K_{1,n}\) (star): \(m=1\), eigenvalues \(0,1^{(n-1)},n+1\), so \(\lambda_2=1\). ✓ (Consistent with Q79.)</li>
+    </ul>
+  </div>
+</div>
+
+</div>
+<!-- /container -->
+
+<script>
+  function toggleSolution(btn) {
+    const sol = btn.nextElementSibling;
+    sol.classList.toggle('visible');
+    btn.textContent = sol.classList.contains('visible') ? 'Hide Solution' : 'Show Solution';
+    if (sol.classList.contains('visible') && window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise([sol]).catch(err => console.error(err));
+    }
+  }
+  function showAll() {
+    document.querySelectorAll('.solution').forEach(s => s.classList.add('visible'));
+    document.querySelectorAll('.toggle').forEach(b => b.textContent = 'Hide Solution');
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise().catch(err => console.error(err));
+    }
+  }
+  function hideAll() {
+    document.querySelectorAll('.solution').forEach(s => s.classList.remove('visible'));
+    document.querySelectorAll('.toggle').forEach(b => b.textContent = 'Show Solution');
+  }
+</script>
+</body>
+</html>
