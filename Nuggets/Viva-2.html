@@ -1106,7 +1106,6 @@
       <script type="text/tikz">
         \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
                             l/.style={draw=none, fill=none, inner sep=1pt}]
-          % K_4
           \node[v] (1) at (0,0) {};
           \node[v] (2) at (1.2,0) {};
           \node[v] (3) at (1.2,1.2) {};
@@ -1114,7 +1113,6 @@
           \draw (1)--(2)--(3)--(4)--(1); \draw (1)--(3); \draw (2)--(4);
           \node[l] at (0.6,-0.6) {$K_4$: $\{3,-1\}$ (2 eigenvalues)};
 
-          % C_4
           \node[v] (5) at (3.5,0) {};
           \node[v] (6) at (4.7,0) {};
           \node[v] (7) at (4.7,1.2) {};
@@ -1122,7 +1120,6 @@
           \draw (5)--(6)--(7)--(8)--(5);
           \node[l] at (4.1,-0.6) {$C_4$: $\{2,0,-2\}$ (3 eigenvalues)};
 
-          % P_4
           \node[v] (9) at (7,0.6) {};
           \node[v] (10) at (8,0.6) {};
           \node[v] (11) at (9,0.6) {};
@@ -1213,7 +1210,6 @@
       <script type="text/tikz">
         \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
                             l/.style={draw=none, fill=none, inner sep=1pt}]
-          % C_5 regular
           \node[v] (1) at (90:1.2) {};
           \node[v] (2) at (18:1.2) {};
           \node[v] (3) at (-54:1.2) {};
@@ -1222,7 +1218,6 @@
           \draw (1)--(2)--(3)--(4)--(5)--(1);
           \node[l] at (0,-1.9) {$C_5$ (2-regular): $AJ=JA=2J$};
 
-          % P_4 non-regular
           \node[v] (a) at (3.5,0.6) {};
           \node[v] (b) at (4.5,0.6) {};
           \node[v] (c) at (5.5,0.6) {};
@@ -1381,6 +1376,7 @@
     </div>
   </div>
 </div>
+
 <!-- ============ SECTION 8: SELF-COMPLEMENTARY ============ -->
 <h2>8. Self-complementary graphs</h2>
 
@@ -1559,14 +1555,12 @@
       <script type="text/tikz">
         \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
                             l/.style={draw=none, fill=none, inner sep=1pt}]
-          % K_3
           \node[v] (a) at (0,0) {};
           \node[v] (b) at (1.2,0) {};
           \node[v] (c) at (0.6,1.0) {};
           \draw (a)--(b)--(c)--(a);
           \node[l] at (0.6,-0.6) {$K_3$: $L$-spec $\{0,3,3\}$, 2 distinct};
 
-          % P_3
           \node[v] (p) at (3.5,0.5) {};
           \node[v] (q) at (4.5,0.5) {};
           \node[v] (r) at (5.5,0.5) {};
@@ -1600,7 +1594,6 @@
       <script type="text/tikz">
         \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
                             l/.style={draw=none, fill=none, inner sep=1pt}]
-          % C_4 regular
           \node[v] (1) at (0,0) {};
           \node[v] (2) at (1.2,0) {};
           \node[v] (3) at (1.2,1.2) {};
@@ -1608,7 +1601,6 @@
           \draw (1)--(2)--(3)--(4)--(1);
           \node[l] at (0.6,-0.6) {$C_4$ (2-regular): $A\mathbf 1=2\mathbf 1$};
 
-          % P_3 non-regular
           \node[v] (a) at (3.5,0.6) {};
           \node[v] (b) at (4.5,0.6) {};
           \node[v] (c) at (5.5,0.6) {};
@@ -1660,7 +1652,6 @@
       <script type="text/tikz">
         \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
                             l/.style={draw=none, fill=none, inner sep=1pt}]
-          % Path with first eigenvector (all positive sine)
           \node[l] at (-1.5, 1.5) {$k=1$:};
           \node[v] (a1) at (0,0) {};
           \node[v] (a2) at (1,0) {};
@@ -1672,7 +1663,6 @@
             plot (\x, {0.5*sin(3.14159*\x/5)});
           \node[l] at (2,-1.0) {$k=1$: $v_i=\sin(i\pi/6)$, all positive};
 
-          % Path with second eigenvector
           \node[l] at (-1.5, -2.0) {$k=3$:};
           \node[v] (b1) at (0,-3.5) {};
           \node[v] (b2) at (1,-3.5) {};
@@ -1782,7 +1772,364 @@ print(A.eigenvalues())          # 12 distinct numerical eigenvalues
     <p><strong>On the drawing.</strong> The Frucht graph is typically drawn as a "twisted hexagonal prism" with threefold symmetry broken; standard textbook drawings are the clearest reference. What matters here is not the exact drawing but the verification of the characteristic polynomial above.</p>
   </div>
 </div>
+
+<!-- ============ SECTION 10: MORE ON TREES AND BIPARTITE GRAPHS ============ -->
+<h2>10. More results on trees and bipartite graphs</h2>
+
+<div class="question">
+  <h3>Q73. Give an example of a graph which contains exactly four distinct eigenvalues.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Take the cycle \(C_6\). Its adjacency eigenvalues are</p>
+    \[
+      \lambda_k = 2\cos\frac{2\pi k}{6} = 2\cos\frac{k\pi}{3},\qquad k=0,1,\dots,5.
+    \]
+    <p>Explicitly:</p>
+    \[
+      \lambda_0=2,\quad \lambda_1=1,\quad \lambda_2=-1,\quad \lambda_3=-2,\quad \lambda_4=-1,\quad \lambda_5=1.
+    \]
+    <p>So the spectrum is \(\{2,1,1,-1,-1,-2\}\), which contains <strong>exactly four distinct eigenvalues</strong>: \(2,\,1,\,-1,\,-2\).</p>
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          \foreach \k in {0,...,5} {
+            \node[v] (a\k) at ({60*\k+30}:1.3) {};
+          }
+          \foreach \k in {0,...,5} {
+            \pgfmathtruncatemacro{\n}{(\k+1)}
+            \ifnum\n<6 \draw (a\k)--(a\n); \fi
+          }
+          \draw (a5)--(a0);
+          \node[l] at (0,-1.9) {$C_6$: spectrum $\{2,1,1,-1,-1,-2\}$};
+        \end{tikzpicture}
+      </script>
+    </div>
+    <p><strong>Another example.</strong> The path \(P_4\) has eigenvalues \(2\cos(k\pi/5)\), \(k=1,2,3,4\), all distinct, giving exactly four distinct eigenvalues.</p>
+    <p><strong>Contrast.</strong> \(K_4\) has only 2 distinct (\(3,-1\)); \(K_{2,2}=C_4\) has only 3 distinct (\(2,0,-2\)); \(C_5\) has only 3 distinct (\(2,\;\tfrac{-1\pm\sqrt5}{2}\)).</p>
+  </div>
 </div>
+
+<div class="question">
+  <h3>Q74. Find the eigenvalues of the complete bipartite graph \(K_{m,n}\).</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Order vertices so that the \(m\) vertices of one part come first, then the \(n\) of the other. Then</p>
+    \[
+      A(K_{m,n})=\begin{pmatrix} 0 & J \\ J^T & 0 \end{pmatrix},
+    \]
+    <p>where \(J=J_{m\times n}\) is the \(m\times n\) all-ones matrix.</p>
+
+    <p><strong>Case 1 (eigenvectors supported on one side).</strong> Let \(x\in\mathbb R^m\) with \(\sum_i x_i=0\), and take \((x,0)\in\mathbb R^{m+n}\). Then</p>
+    \[
+      A\binom{x}{0}=\binom{0}{J^Tx}=\binom{0}{0},
+    \]
+    <p>since \(J^Tx=(\sum_i x_i)\mathbf 1_n=0\). Hence \((x,0)\) is an eigenvector with eigenvalue \(0\). This gives \(m-1\) independent eigenvectors of eigenvalue \(0\).</p>
+    <p>Similarly, any \((0,y)\) with \(y\in\mathbb R^n\), \(\sum_j y_j=0\), gives \(n-1\) more independent eigenvectors of eigenvalue \(0\).</p>
+    <p>So \(0\) is an eigenvalue with multiplicity at least \((m-1)+(n-1)=m+n-2\).</p>
+
+    <p><strong>Case 2 (eigenvectors constant on each side).</strong> Take \((a\mathbf 1_m, b\mathbf 1_n)\). Since \(J\mathbf 1_n=n\mathbf 1_m\) and \(J^T\mathbf 1_m=m\mathbf 1_n\),</p>
+    \[
+      A\binom{a\mathbf 1_m}{b\mathbf 1_n}
+      =\binom{b\,n\,\mathbf 1_m}{a\,m\,\mathbf 1_n}.
+    \]
+    <p>For this to equal \(\lambda(a\mathbf 1_m,b\mathbf 1_n)\) we need</p>
+    \[
+      bn=\lambda a,\qquad am=\lambda b.
+    \]
+    <p>Eliminating: \(\lambda^2=mn\), so \(\lambda=\pm\sqrt{mn}\). Each gives one eigenvector. This gives two more eigenvalues.</p>
+
+    <p><strong>Conclusion.</strong> The spectrum of \(K_{m,n}\) is</p>
+    \[
+      \boxed{\;\sigma(K_{m,n})=\{\sqrt{mn},\;0^{m+n-2},\;-\sqrt{mn}\}.\;}
+    \]
+    <p>In particular:</p>
+    <ul>
+      <li>\(K_{1,n}\) (star): eigenvalues \(\pm\sqrt n\) and \(0\) with multiplicity \(n-1\).</li>
+      <li>\(K_{n,n}\): eigenvalues \(\pm n\) and \(0\) with multiplicity \(2n-2\).</li>
+      <li>Trace check: \(0=\sqrt{mn}+0+(-\sqrt{mn})\). \(\operatorname{tr}(A^2)=2mn\).</li>
+    </ul>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q75. Find the sum of entries of the adjacency matrix of a tree. If \(A\) is the adjacency matrix of a tree, what is \(\operatorname{tr}(A^k)\) for odd \(k\)?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Sum of entries.</strong> For any graph,</p>
+    \[
+      \sum_{i,j} a_{ij}=\mathbf 1^T A\mathbf 1=\sum_{i}\deg(i)=2|E|.
+    \]
+    <p>For a tree on \(n\) vertices, \(m=n-1\), so</p>
+    \[
+      \boxed{\mathbf 1^T A\mathbf 1 = 2(n-1).}
+    \]
+
+    <p><strong>Trace of odd powers.</strong> Two equivalent arguments:</p>
+    <ul>
+      <li><em>Combinatorial.</em> \(\operatorname{tr}(A^k)\) equals the number of closed walks of length \(k\) in the graph. A tree is bipartite; every closed walk in a bipartite graph has even length. Hence, for odd \(k\),</li>
+    </ul>
+    \[
+      \boxed{\operatorname{tr}(A^k)=0\ \text{for every odd }k.}
+    \]
+    <ul>
+      <li><em>Spectral.</em> A tree is bipartite, so its eigenvalues are symmetric about \(0\): if \(\lambda\) is an eigenvalue, then \(-\lambda\) is too, with the same multiplicity. Hence the sum of \(k\)-th powers of eigenvalues vanishes for odd \(k\):</li>
+    </ul>
+    \[
+      \operatorname{tr}(A^k)=\sum_i\lambda_i^k=0\qquad(k\text{ odd}).
+    \]
+    <p>For even \(k=2r\), \(\operatorname{tr}(A^{2r})=\sum_i\lambda_i^{2r}\ge 0\), with equality iff \(A=0\) (empty graph); in particular, a tree with \(n\ge 2\) has \(\operatorname{tr}(A^2)=2(n-1)>0\).</p>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm}]
+          \node[v] (a) at (0,0) {};
+          \node[v] (b) at (1.1,0.7) {};
+          \node[v] (c) at (2.2,0) {};
+          \node[v] (d) at (3.1,0.7) {};
+          \node[v] (e) at (1.1,-0.7) {};
+          \draw (a)--(b)--(c)--(d);
+          \draw (b)--(e);
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q76. Let \(X\) be a connected bipartite graph. Then \(X\) has three distinct eigenvalues if and only if \(X\) is a complete bipartite graph.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Let \(|V(X)|=n\).</p>
+
+    <p><strong>(⇐)</strong> If \(X=K_{m,n}\) with \(m,n\ge1\) and \(m+n\ge3\), then by Q74 its spectrum is</p>
+    \[
+      \sigma(X)=\{\sqrt{mn},\;0^{m+n-2},\;-\sqrt{mn}\},
+    \]
+    <p>which has exactly three distinct eigenvalues. (The exceptional case \(K_{1,1}=K_2\) has spectrum \(\{1,-1\}\), only two distinct values, and it satisfies \(m+n=2\).)</p>
+
+    <p><strong>(⇒)</strong> Suppose \(X\) is connected bipartite with exactly three distinct eigenvalues. Since \(X\) is bipartite, its spectrum is symmetric about \(0\); with only three distinct eigenvalues, they must be</p>
+    \[
+      -\lambda,\quad 0,\quad\lambda\qquad(\lambda>0).
+    \]
+    <p>We now use the standard classification: <em>a connected graph with exactly three distinct eigenvalues is either complete bipartite \(K_{m,n}\), or a regular complete multipartite graph \(K_{r,\dots,r}\) with at least three parts of equal size \(r\), or a strongly regular graph.</em></p>
+    <p>Examine the three cases:</p>
+    <ul>
+      <li>Complete multipartite \(K_{r,\dots,r}\) with \(s\ge3\) parts: the parts are independent sets of size \(r\). If \(s\ge3\), three vertices in three different parts pairwise form triangles, so the graph is not bipartite. Hence this case cannot occur.</li>
+      <li>Strongly regular: every connected strongly regular graph that is bipartite is one of \(K_{n,n}\) (equivalently, satisfies \(\lambda=0\) and equal part sizes). More directly, bipartite strongly regular graphs with equal bipartition size \(n\) and \(\alpha=0\) are exactly \(K_{n,n}\).</li>
+      <li>Therefore \(X=K_{m,n}\) with \(m,n\ge1\).</li>
+    </ul>
+    <p><strong>Conclusion.</strong> Connected bipartite \(X\) has exactly three distinct eigenvalues iff \(X=K_{m,n}\) with \(mn\ge2\).</p>
+
+    <p><strong>Verification using the minimal polynomial.</strong> For \(X\) with eigenvalues \(\{-\lambda,0,\lambda\}\), the minimal polynomial is \(m_A(x)=x(x-\lambda)(x+\lambda)=x^3-\lambda^2x\), so \(A^3=\lambda^2A\). In particular, if \(i\in U\), \(j\in V\) are adjacent, the number of 3-walks from \(i\) to \(j\) equals \(\lambda^2\), which is exactly the behaviour of \(K_{m,n}\) (with \(\lambda^2=mn\)).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q77. Let \(T\) be a tree and \(A\) its adjacency matrix. Then \(A\) is non-singular if and only if \(T\) has a perfect matching.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Use the Leibniz expansion of the determinant:</p>
+    \[
+      \det A=\sum_{\sigma\in S_n}\operatorname{sign}(\sigma)\prod_{i=1}^{n}a_{i,\sigma(i)}.
+    \]
+
+    <p><strong>Which permutations contribute?</strong> A term is nonzero iff \(a_{i,\sigma(i)}=1\) for all \(i\), i.e. \(i\sigma(i)\in E(T)\) for every \(i\). Such a \(\sigma\) decomposes into disjoint cycles, each of which must be a cycle in \(T\). Since \(T\) is acyclic, every cycle in \(T\) has length \(2\) (a single edge traversed in both directions). Hence \(\sigma\) is a product of \(\tfrac n2\) disjoint transpositions \((i,j)\) with \(ij\in E(T)\), i.e. \(\sigma\) corresponds exactly to a perfect matching of \(T\).</p>
+
+    <p><strong>Conversely,</strong> any perfect matching \(M=\{(i_1,j_1),\dots,(i_{n/2},j_{n/2})\}\) of \(T\) gives such a permutation \(\sigma_M=(i_1\,j_1)\cdots(i_{n/2}\,j_{n/2})\) with nonzero contribution.</p>
+
+    <p><strong>Signs.</strong> Each transposition has sign \(-1\), so \(\operatorname{sign}(\sigma_M)=(-1)^{n/2}\) is the same for every perfect matching. Therefore</p>
+    \[
+      \det A=\sum_{M}(-1)^{n/2}=(-1)^{n/2}\cdot\#\{\text{perfect matchings of }T\}.
+    \]
+    <p>Hence \(\det A\neq 0\) iff \(T\) has at least one perfect matching. In particular, if \(n\) is odd, \(\det A=0\) automatically, as expected.</p>
+
+    <p><strong>Examples.</strong></p>
+    <ul>
+      <li>Star \(K_{1,3}\): no perfect matching, \(\det A=0\) (indeed \(0\) is an eigenvalue).</li>
+      <li>Path \(P_4\): has the unique perfect matching \(\{12,34\}\), and \(\det A=(-1)^2\cdot 1=1\). (Indeed the eigenvalues \(2\cos(k\pi/5)\) contain no zero.)</li>
+      <li>Path \(P_5\) on \(5\) vertices: \(n\) odd, so no perfect matching and \(\det A=0\).</li>
+    </ul>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (0,0) {};
+          \node[v] (2) at (1,0) {};
+          \node[v] (3) at (2,0) {};
+          \node[v] (4) at (3,0) {};
+          \draw (1)--(2)--(3)--(4);
+          \draw[ultra thick, blue] (1)--(2);
+          \draw[ultra thick, blue] (3)--(4);
+          \node[l] at (1.5,-0.8) {$P_4$: perfect matching, $\det A\ne 0$};
+
+          \node[v] (a) at (5,0) {};
+          \node[v] (b) at (6,0) {};
+          \node[v] (c) at (7,0) {};
+          \node[v] (d) at (8,0) {};
+          \node[v] (e) at (9,0) {};
+          \draw (a)--(b)--(c)--(d)--(e);
+          \node[l] at (7,-0.8) {$P_5$: $n$ odd, no perfect matching, $\det A=0$};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q78. If \(G\) is a tree then its adjacency matrix can be written in the form \(N+N^T\) where \(N\) is nilpotent.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Let \(T\) be a tree with vertex set \(V=\{1,\dots,n\}\). Pick any vertex \(r\) as <strong>root</strong>. Direct every edge toward \(r\): for each vertex \(v\neq r\), the edge joining \(v\) to its parent is directed \(v\to\mathrm{par}(v)\).</p>
+
+    <p>Define \(N\in\{0,1\}^{n\times n}\) by</p>
+    \[
+      N_{ij}=\begin{cases}1 & \text{if }j=\mathrm{par}(i),\; i\neq r,\\ 0 & \text{otherwise.}\end{cases}
+    \]
+    <p>So \(N_{ij}=1\) iff there is a directed edge \(i\to j\).</p>
+
+    <p><strong>Key identity: \(A=N+N^T\).</strong> For distinct \(i,j\):</p>
+    \[
+      (N+N^T)_{ij}=N_{ij}+N_{ji}.
+    \]
+    <p>If \(\{i,j\}\in E(T)\), exactly one of \(i=\mathrm{par}(j)\) or \(j=\mathrm{par}(i)\) holds, so \(N_{ij}+N_{ji}=1=A_{ij}\). If \(\{i,j\}\notin E(T)\), neither is a parent of the other, so \(N_{ij}=N_{ji}=0=A_{ij}\).</p>
+    <p>The diagonal entries are \(N_{ii}=0\) (no vertex is its own parent) and \(N^T_{ii}=0\), so \((N+N^T)_{ii}=0=A_{ii}\). Hence \(A=N+N^T\).</p>
+
+    <p><strong>Nilpotency of \(N\).</strong> The \((i,j)\)-entry of \(N^k\) counts directed walks of length \(k\) from \(i\) to \(j\). Every directed edge points one level closer to the root, so a directed walk of length \(k\) from \(i\) must land on the \(k\)-th ancestor of \(i\). If \(h\) is the maximum depth in \(T\) (with root at depth \(0\)), no directed walk has length greater than \(h\). Hence</p>
+    \[
+      N^k=0\quad\text{for all }k>h,
+    \]
+    <p>so \(N\) is nilpotent (nilpotency index \(\le h+1\le n\)).</p>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (r) at (0,1.2) {$r$};
+          \node[v] (a) at (-1.2,0) {};
+          \node[v] (b) at (1.2,0) {};
+          \node[v] (c) at (-1.8,-1.2) {};
+          \node[v] (d) at (-0.6,-1.2) {};
+          \node[v] (e) at (1.2,-1.2) {};
+          \draw[-&gt;] (a)--(r);
+          \draw[-&gt;] (b)--(r);
+          \draw[-&gt;] (c)--(a);
+          \draw[-&gt;] (d)--(a);
+          \draw[-&gt;] (e)--(b);
+          \node[l] at (0,-2.0) {all edges directed toward the root $r$};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q79. Show that out of all trees, the star graph has the largest algebraic connectivity.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Recall that the <em>algebraic connectivity</em> of a graph \(G\) is the second-smallest eigenvalue \(\lambda_2(L(G))\) of its Laplacian. We use the following classical result of Fiedler.</p>
+
+    <p><strong>Fiedler's theorem.</strong> For any tree \(T\) on \(n\ge 3\) vertices,</p>
+    \[
+      \lambda_2(L(T))\le 1,
+    \]
+    <p>with equality if and only if \(T\) is the star \(K_{1,n-1}\).</p>
+    <p>(Sketch of the mechanism: Fiedler's inequality \(\lambda_2(G)\le\kappa(G)\) gives \(\lambda_2(T)\le1\) for every tree on \(n\ge3\) vertices, since trees on \(n\ge3\) are not complete and have vertex-connectivity \(1\). A finer analysis of the Fiedler vector on trees shows equality forces a single vertex to be adjacent to all others, i.e. \(T=K_{1,n-1}\).)</p>
+
+    <p><strong>Verification for the star.</strong> For \(K_{1,n-1}\) with centre \(c\) and leaves \(\ell_1,\dots,\ell_{n-1}\), the Laplacian has</p>
+    \[
+      L = \begin{pmatrix} n-1 & -\mathbf 1^T \\ -\mathbf 1 & I_{n-1}\end{pmatrix}.
+    \]
+    <p>Its eigenvalues are</p>
+    \[
+      0,\quad \underbrace{1,\dots,1}_{n-2\ \text{times}},\quad n.
+    \]
+    <p>Hence \(\lambda_2(K_{1,n-1})=1\).</p>
+
+    <p><strong>Verification for the path.</strong> For \(P_n\),</p>
+    \[
+      \lambda_2(P_n)=2-2\cos\frac{\pi}{n}.
+    \]
+    <p>For \(n=3\) we get \(\lambda_2=2-2\cos(\pi/3)=2-1=1\), consistent with \(P_3=K_{1,2}\). For \(n\ge4\), \(\cos(\pi/n)>\cos(\pi/3)=\tfrac12\), so \(\lambda_2(P_n)<1\).</p>
+
+    <p><strong>Conclusion.</strong> Among all trees on \(n\ge3\) vertices, the star achieves the maximum possible value \(\lambda_2=1\); every other tree has \(\lambda_2<1\). Thus the star maximises algebraic connectivity among trees.</p>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (c) at (0,0) {};
+          \foreach \k in {0,...,5} { \node[v] (a\k) at ({60*\k}:1.2) {}; \draw (c)--(a\k); }
+          \node[l] at (0,-2.0) {star $K_{1,6}$: $\lambda_2=1$};
+
+          \node[v] (p1) at (4,0) {};
+          \node[v] (p2) at (4.9,0) {};
+          \node[v] (p3) at (5.8,0) {};
+          \node[v] (p4) at (6.7,0) {};
+          \node[v] (p5) at (7.6,0) {};
+          \draw (p1)--(p2)--(p3)--(p4)--(p5);
+          \node[l] at (5.8,-2.0) {path $P_5$: $\lambda_2<1$};
+        \end{tikzpicture}
+      </script>
+    </div>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q80. Show that the algebraic connectivity of the complete bipartite graph \(K_{m,n}\) is \(\min\{m,n\}\).</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Let \(U=\{u_1,\dots,u_m\}\), \(V=\{v_1,\dots,v_n\}\). Order vertices as \(U\) then \(V\). The Laplacian is</p>
+    \[
+      L(K_{m,n})=\begin{pmatrix} nI_m & -J \\ -J^T & mI_n \end{pmatrix},
+    \]
+    <p>where \(J=J_{m\times n}\). We compute all eigenvalues.</p>
+
+    <p><strong>Eigenvalue 0 (multiplicity 1).</strong> \(L(\mathbf 1_m,\mathbf 1_n)=0\), since the row sums of \(L\) are all zero. So \(\mathbf 1_{m+n}\) is the (unique, since \(K_{m,n}\) is connected) eigenvector for eigenvalue \(0\).</p>
+
+    <p><strong>Eigenvalue \(n\) (multiplicity \(m-1\)).</strong> Take \(x\in\mathbb R^m\) with \(\sum_i x_i=0\) and consider \((x,0)\). Then</p>
+    \[
+      L\binom{x}{0}=\binom{nx}{-J^Tx}=\binom{nx}{0},
+    \]
+    <p>since \(J^Tx=(\sum_ix_i)\mathbf 1_n=0\). So \((x,0)\) is an eigenvector with eigenvalue \(n\). This gives \(m-1\) independent eigenvectors.</p>
+
+    <p><strong>Eigenvalue \(m\) (multiplicity \(n-1\)).</strong> Similarly, for \(y\in\mathbb R^n\) with \(\sum_j y_j=0\), the vector \((0,y)\) satisfies \(L(0,y)=(0,my)\). This gives \(n-1\) independent eigenvectors with eigenvalue \(m\).</p>
+
+    <p><strong>Eigenvalue \(m+n\) (multiplicity 1).</strong> Consider \((a\mathbf 1_m, b\mathbf 1_n)\). Using \(J\mathbf 1_n=n\mathbf 1_m\) and \(J^T\mathbf 1_m=m\mathbf 1_n\),</p>
+    \[
+      L\binom{a\mathbf 1_m}{b\mathbf 1_n}=\binom{an\mathbf 1_m-bn\mathbf 1_m}{-am\mathbf 1_n+bm\mathbf 1_n}
+      =\binom{n(a-b)\mathbf 1_m}{m(b-a)\mathbf 1_n}.
+    \]
+    <p>For this to equal \(\lambda(a\mathbf 1_m,b\mathbf 1_n)\):</p>
+    \[
+      n(a-b)=\lambda a,\qquad m(b-a)=\lambda b.
+    \]
+    <p>For \((a,b)\neq(0,0)\) with \(a\ne b\) (the \(a=b\) case gives eigenvalue \(0\)), divide the two equations: \(\dfrac{n(a-b)}{m(b-a)}=\dfrac{a}{b}\), i.e. \(-\dfrac nm=\dfrac ab\). Setting \(a=-n\), \(b=m\) gives</p>
+    \[
+      \lambda=n(a-b)/a = n(-n-m)/(-n)=m+n.
+    \]
+    <p>So \((a,b)=(-n,m)\) gives eigenvalue \(m+n\).</p>
+
+    <p><strong>Total count.</strong> \(1+(m-1)+(n-1)+1=m+n\) eigenvectors, so we have all eigenvalues:</p>
+    \[
+      \boxed{\sigma(L(K_{m,n}))=\{0,\; n^{(m-1)},\; m^{(n-1)},\; m+n\}.}
+    \]
+
+    <p><strong>Conclusion.</strong> The second-smallest eigenvalue is</p>
+    \[
+      \lambda_2(K_{m,n})=\min\{n,\,m\}=\min\{m,n\}.
+    \]
+    <p>(When \(m=1\) or \(n=1\): the eigenvalue \(n\) or \(m\) with multiplicity \(0\) is absent, but the remaining set still gives \(\lambda_2=\min\{m,n\}=1\).)</p>
+
+    <p><strong>Sanity checks.</strong></p>
+    <ul>
+      <li>Trace: \(0+n(m-1)+m(n-1)+(m+n)=2mn=2|E(K_{m,n})|\). ✓</li>
+      <li>\(K_{n,n}\): eigenvalues \(0,n^{(n-1)},n^{(n-1)},2n\), so \(\lambda_2=n\). ✓</li>
+      <li>\(K_{1,n}\) (star): \(m=1\), eigenvalues \(0,1^{(n-1)},n+1\), so \(\lambda_2=1\). ✓ (Consistent with Q79.)</li>
+    </ul>
+  </div>
+</div></div>
 <!-- /container -->
 
 <script>
