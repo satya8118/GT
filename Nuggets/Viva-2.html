@@ -1042,20 +1042,29 @@
   <h3>Q51. Characterize graphs with only one distinct adjacency eigenvalue.</h3>
   <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
   <div class="solution">
-    <p><strong>Solution.</strong> If \(A\) has only one eigenvalue \(\lambda\), then \(A=\lambda I\). Since a simple graph has zero diagonal, \(\lambda=0\). Hence \(A=0\), i.e. \(G\) is the edgeless graph. Conversely, the edgeless graph has \(A=0\), so its only eigenvalue is \(0\).</p>
-    <p>Caveat: \(K_1\) also has \(A=0\).</p>
+    <p><strong>Statement.</strong> A graph \(G\) has only one distinct adjacency eigenvalue iff \(G\) is edgeless (including the case \(G=K_1\)).</p>
+
+    <p><strong>Proof (⇒).</strong> Suppose \(A\) has one distinct eigenvalue \(\lambda\). Since \(A\) is real symmetric, it is diagonalizable, so \(A=Q(\lambda I)Q^T=\lambda I\). Comparing diagonal entries, \(A_{ii}=\lambda\) for all \(i\). But for a simple graph \(A_{ii}=0\), so \(\lambda=0\) and \(A=0\). Hence \(G\) has no edges.</p>
+
+    <p><em>Alternative argument.</em> \(\operatorname{tr}(A)=\sum_i\lambda_i=0\). With one eigenvalue, \(\lambda n=0\), so \(\lambda=0\). Then \(A=0\).</p>
+
+    <p><strong>Proof (⇐).</strong> If \(G\) is edgeless, \(A=0\), and the only eigenvalue of \(0\) is \(0\) (with multiplicity \(n\)). So \(G\) has exactly one distinct eigenvalue.</p>
+
     <div class="tikz-wrap">
       <script type="text/tikz">
-        \begin{tikzpicture}[
-          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
-          l/.style={draw=none, fill=none, inner sep=1pt}]
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
           \node[v] (1) at (0,0) {};
-          \node[v] (2) at (1.5,0) {};
-          \node[v] (3) at (1.5,1.5) {};
-          \node[v] (4) at (0,1.5) {};
-          \node[l] at (0.75,-0.6) {edgeless graph};
+          \node[v] (2) at (1.4,0) {};
+          \node[v] (3) at (1.4,1.4) {};
+          \node[v] (4) at (0,1.4) {};
+          \node[l] at (0.7,-0.6) {edgeless graph: only eigenvalue $0$};
         \end{tikzpicture}
       </script>
+    </div>
+
+    <div class="trap">
+      Two extremes: \(K_1\) also has only eigenvalue \(0\), but it is technically the same as the edgeless graph on one vertex. Every other graph (in particular \(K_2\)) has at least two distinct eigenvalues.
     </div>
   </div>
 </div>
@@ -1064,25 +1073,122 @@
   <h3>Q52. Characterize connected graphs with exactly two distinct adjacency eigenvalues.</h3>
   <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
   <div class="solution">
-    <p><strong>Solution.</strong> For \(n\ge2\), a connected graph has exactly two distinct adjacency eigenvalues iff it is complete.</p>
-    <p>Sketch: if the two eigenvalues are \(\alpha,\beta\), then</p>
+    <p><strong>Statement.</strong> For \(n\ge 2\), a connected graph \(G\) has exactly two distinct adjacency eigenvalues iff \(G\) is complete.</p>
+
+    <p><strong>Proof (⇒).</strong> Let the two distinct eigenvalues be \(\alpha,\beta\). Since \(A\) is symmetric, the minimal polynomial of \(A\) has degree \(2\) and equals</p>
     \[
-      (A-\alpha I)(A-\beta I)=0,
+      m_A(x)=(x-\alpha)(x-\beta)=x^2-(\alpha+\beta)x+\alpha\beta.
     \]
-    <p>so \(A^2=(\alpha+\beta)A-\alpha\beta I\). Thus adjacent vertices have a fixed number of common neighbours, while non-adjacent vertices have \(0\) common neighbours. If the graph is connected and not complete, there are non-adjacent vertices at distance \(2\), giving a common neighbour, a contradiction. Hence \(G\) is complete.</p>
-    <p>Caveat: \(K_1\) is connected but has only one eigenvalue.</p>
+    <p>Substituting \(A\) gives</p>
+    \[
+      A^2=(\alpha+\beta)A-\alpha\beta I. \tag{1}
+    \]
+
+    <p>Recall that \((A^2)_{ij}\) equals the number of common neighbours of \(i\) and \(j\). Compare the \((i,j)\)-entries of (1) for \(i\ne j\) (the \(I\) term has zeros off the diagonal):</p>
+    \[
+      (A^2)_{ij}=(\alpha+\beta)\,A_{ij}. \tag{2}
+    \]
+
+    <p><strong>Case A: \(i,j\) adjacent.</strong> Then \(A_{ij}=1\), so any two adjacent vertices have exactly \(\alpha+\beta\) common neighbours.</p>
+
+    <p><strong>Case B: \(i,j\) non-adjacent.</strong> Then \(A_{ij}=0\), so any two non-adjacent vertices have \(0\) common neighbours.</p>
+
+    <p>Now suppose \(G\not\cong K_n\). Then \(G\) has non-adjacent vertices \(u,v\). Because \(G\) is connected, \(d=\operatorname{dist}(u,v)\ge 2\).</p>
+    <ul>
+      <li>If \(d=2\): \(u\) and \(v\) have a common neighbour on the shortest path, contradicting Case B.</li>
+      <li>If \(d\ge 3\): on the shortest path \(u-w_1-w_2-\cdots-v\), the vertices \(u\) and \(w_2\) are at distance \(2\), so they have common neighbour \(w_1\) — again contradicting Case B.</li>
+    </ul>
+    <p>So no non-adjacent pair exists, i.e., \(G\) is complete.</p>
+
+    <p><strong>Proof (⇐).</strong> For \(K_n\), the spectrum is \(\{(n-1),\,(-1)^{n-1}\}\). For \(n\ge2\), these are distinct. So \(K_n\) has exactly two distinct eigenvalues.</p>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          % K_4
+          \node[v] (1) at (0,0) {};
+          \node[v] (2) at (1.2,0) {};
+          \node[v] (3) at (1.2,1.2) {};
+          \node[v] (4) at (0,1.2) {};
+          \draw (1)--(2)--(3)--(4)--(1); \draw (1)--(3); \draw (2)--(4);
+          \node[l] at (0.6,-0.6) {$K_4$: $\{3,-1\}$ (2 eigenvalues)};
+
+          % C_4
+          \node[v] (5) at (3.5,0) {};
+          \node[v] (6) at (4.7,0) {};
+          \node[v] (7) at (4.7,1.2) {};
+          \node[v] (8) at (3.5,1.2) {};
+          \draw (5)--(6)--(7)--(8)--(5);
+          \node[l] at (4.1,-0.6) {$C_4$: $\{2,0,-2\}$ (3 eigenvalues)};
+
+          % P_4
+          \node[v] (9) at (7,0.6) {};
+          \node[v] (10) at (8,0.6) {};
+          \node[v] (11) at (9,0.6) {};
+          \node[v] (12) at (10,0.6) {};
+          \draw (9)--(10)--(11)--(12);
+          \node[l] at (8.5,-0.3) {$P_4$: 4 distinct eigenvalues};
+        \end{tikzpicture}
+      </script>
+    </div>
+
+    <div class="trap">
+      \(K_1\) is connected but has only <em>one</em> eigenvalue (0). So \(n\ge 2\) is needed.
+    </div>
   </div>
 </div>
 
 <div class="question">
-  <h3>Q53. State and prove the diameter–eigenvalue inequality.</h3>
+  <h3>Q53. State and prove the diameter–eigenvalue inequality: if \(G\) is connected with diameter \(d\) and \(A\) has \(k\) distinct eigenvalues, then \(k\ge d+1\).</h3>
   <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
   <div class="solution">
-    <p><strong>Solution.</strong> If \(G\) is connected with diameter \(d\), and \(A\) has \(k\) distinct eigenvalues, then</p>
+    <p><strong>Statement.</strong> If \(G\) is connected with diameter \(d\) and \(A\) has \(k\) distinct eigenvalues, then \(k\ge d+1\), equivalently \(d\le k-1\).</p>
+
+    <p><strong>Step 1: \(A^d\) is a linear combination of \(I,A,\dots,A^{k-1}\).</strong>
+    Let \(\lambda_1,\dots,\lambda_k\) be the distinct eigenvalues of \(A\). The minimal polynomial</p>
     \[
-      k\ge d+1.
+      m_A(x)=\prod_{i=1}^k (x-\lambda_i)
     \]
-    <p>Proof sketch: the minimal polynomial of \(A\) has degree \(k\). If \(d\ge k\), then \(A^d\) is a linear combination of \(I,A,\dots,A^{d-1}\). Choose vertices \(u,v\) at distance \(d\). Then \((A^r)_{uv}=0\) for \(r\lt d\), but \((A^d)_{uv}\gt 0\), since it counts shortest walks of length \(d\) from \(u\) to \(v\). This contradicts the linear relation. Hence \(d\le k-1\).</p>
+    <p>has degree \(k\) and satisfies \(m_A(A)=0\). Expanding,</p>
+    \[
+      A^k=c_{k-1}A^{k-1}+\cdots+c_1A+c_0I
+    \]
+    <p>for some coefficients \(c_i\). Multiplying repeatedly by \(A\) shows that \(A^m\) is a linear combination of \(I,A,\dots,A^{k-1}\) for every \(m\ge k\). In particular, since \(d\ge k\) in our assumption (proof by contradiction),</p>
+    \[
+      A^d=\sum_{r=0}^{k-1}a_r A^r. \tag{1}
+    \]
+
+    <p><strong>Step 2: pick \(u,v\) at distance \(d\).</strong> For \(0\le r< d\) there is no walk of length \(r\) from \(u\) to \(v\), so</p>
+    \[
+      (A^r)_{uv}=0\quad(0\le r<d).
+    \]
+    <p>Since \(k-1< d\), this gives \((A^r)_{uv}=0\) for every \(r\in\{0,1,\dots,k-1\}\).</p>
+
+    <p><strong>Step 3: contradiction.</strong> Taking the \((u,v)\)-entry of (1):</p>
+    \[
+      (A^d)_{uv}=\sum_{r=0}^{k-1}a_r (A^r)_{uv}=\sum_{r=0}^{k-1}a_r\cdot 0=0.
+    \]
+    <p>But \((A^d)_{uv}\ge 1\): the shortest path of length \(d\) from \(u\) to \(v\) is a walk of length \(d\), so it contributes to \((A^d)_{uv}\). Contradiction.</p>
+
+    <p>Hence \(d< k\), i.e., \(k\ge d+1\). \(\square\)</p>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (0,0) {1};
+          \node[v] (2) at (1.2,0) {2};
+          \node[v] (3) at (2.4,0) {3};
+          \node[v] (4) at (3.6,0) {4};
+          \draw (1)--(2)--(3)--(4);
+          \draw[<->, dashed, blue] (1.south) to[bend right=25] node[below] {$d=3$} (4.south);
+          \node[l] at (1.8,-1.2) {$P_4$: $k=4\ge 3+1$, equality holds};
+        \end{tikzpicture}
+      </script>
+    </div>
+
+    <p><strong>When is equality possible?</strong> For the path \(P_4\), \(d=3\) and \(k=4\), so \(k=d+1\) exactly. Paths are the typical "worst case" (smallest number of distinct eigenvalues relative to diameter).</p>
   </div>
 </div>
 
@@ -1090,15 +1196,42 @@
   <h3>Q54. Prove that a graph is regular iff \(AJ=JA\), where \(J\) is the all-ones matrix.</h3>
   <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
   <div class="solution">
-    <p><strong>Solution.</strong> Compute</p>
+    <p><strong>Solution.</strong> The \(i\)-th row sum of \(A\) is \(\deg(i)\), and the \(j\)-th column sum is also \(\deg(j)\). Compute:</p>
     \[
-      (AJ)_{ij}=\sum_k A_{ik}=\deg(i),
+      (AJ)_{ij}=\sum_k A_{ik}\cdot 1=\deg(i),\qquad (JA)_{ij}=\sum_k 1\cdot A_{kj}=\deg(j).
     \]
-    <p>and</p>
+
+    <p><strong>(⇒)</strong> If \(G\) is \(d\)-regular then \(\deg(i)=\deg(j)=d\) for all \(i,j\), so both sides equal \(d\) for every \((i,j)\). Hence \(AJ=JA=dJ\).</p>
+
+    <p><strong>(⇐)</strong> If \(AJ=JA\), then for every \(i,j\),</p>
     \[
-      (JA)_{ij}=\sum_k A_{kj}=\deg(j).
+      \deg(i)=(AJ)_{ij}=(JA)_{ij}=\deg(j).
     \]
-    <p>Thus \(AJ=JA\) iff \(\deg(i)=\deg(j)\) for all \(i,j\), i.e. iff \(G\) is regular.</p>
+    <p>So all degrees are equal, hence \(G\) is regular. \(\square\)</p>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          % C_5 regular
+          \node[v] (1) at (90:1.2) {};
+          \node[v] (2) at (18:1.2) {};
+          \node[v] (3) at (-54:1.2) {};
+          \node[v] (4) at (-126:1.2) {};
+          \node[v] (5) at (162:1.2) {};
+          \draw (1)--(2)--(3)--(4)--(5)--(1);
+          \node[l] at (0,-1.9) {$C_5$ (2-regular): $AJ=JA=2J$};
+
+          % P_4 non-regular
+          \node[v] (a) at (3.5,0.6) {};
+          \node[v] (b) at (4.5,0.6) {};
+          \node[v] (c) at (5.5,0.6) {};
+          \node[v] (d) at (6.5,0.6) {};
+          \draw (a)--(b)--(c)--(d);
+          \node[l] at (5,-1.9) {$P_4$ (degrees $1,2,2,1$): $AJ\ne JA$};
+        \end{tikzpicture}
+      </script>
+    </div>
   </div>
 </div>
 
@@ -1106,8 +1239,40 @@
   <h3>Q55. If \(J\) is a polynomial in \(A\), prove that \(G\) is connected and regular.</h3>
   <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
   <div class="solution">
-    <p><strong>Solution.</strong> If \(J=p(A)\), then \(J\) commutes with \(A\), so \(AJ=JA\), hence \(G\) is regular by Q54.</p>
-    <p>For connectivity: since \(J=p(A)\), every entry of \(J\) is a polynomial in \(A\), so \(J_{ij}=1\) implies some \(m\) has \((A^m)_{ij}\ne0\). Thus for every \(i,j\) there is a walk of length \(m\) from \(i\) to \(j\), i.e. \(G\) is connected. If \(G\) were disconnected, \(A\) would be block-diagonal after a permutation, and every polynomial \(p(A)\) would also be block-diagonal with the same block structure; but \(J\) has nonzero entries between different components, so \(J\ne p(A)\).</p>
+    <p><strong>Solution.</strong> Assume \(J=p(A)\) for some polynomial \(p\).</p>
+
+    <p><strong>Step 1: \(G\) is regular.</strong> Since \(J=p(A)\) and polynomials in \(A\) commute with \(A\),</p>
+    \[
+      AJ=A\cdot p(A)=p(A)\cdot A=JA.
+    \]
+    <p>By Q54, this means \(G\) is regular.</p>
+
+    <p><strong>Step 2: \(G\) is connected.</strong> Suppose \(G\) is disconnected with components \(C_1,\dots,C_r\), \(r\ge 2\). Reorder vertices so that each component occupies a contiguous block. Then</p>
+    \[
+      A=\begin{pmatrix}A_1& & &\\ & A_2& &\\& &\ddots&\\& & &A_r\end{pmatrix}
+    \]
+    <p>is block-diagonal, where \(A_s\) is the adjacency matrix of \(C_s\).</p>
+
+    <p>Because the algebra of block-diagonal matrices is closed under multiplication and addition, every power \(A^m\) — and hence every polynomial \(p(A)\) — is block-diagonal with the same block partition. So \(p(A)_{ij}=0\) whenever \(i,j\) lie in different components.</p>
+
+    <p>But \(J_{ij}=1\) for all \(i,j\), including cross-component entries. So \(J\ne p(A)\). Contradiction. Hence \(G\) is connected. \(\square\)</p>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (0,0) {};
+          \node[v] (2) at (1,0) {};
+          \node[v] (3) at (2,0) {};
+          \node[v] (4) at (3.4,0) {};
+          \node[v] (5) at (4.4,0) {};
+          \draw (1)--(2)--(3);
+          \draw (4)--(5);
+          \node[l] at (2.2,-1.2) {disconnected: $A$ is block-diagonal};
+          \node[l] at (2.2,-2.2) {every $p(A)$ is block-diagonal, but $J$ has $1$s everywhere};
+        \end{tikzpicture}
+      </script>
+    </div>
   </div>
 </div>
 
@@ -1115,15 +1280,33 @@
   <h3>Q56. Is the converse of Q55 true? Is \(J\) a polynomial in \(A\) for every connected regular graph?</h3>
   <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
   <div class="solution">
-    <p><strong>Solution.</strong> Yes. Let \(G\) be connected and \(r\)-regular. By Perron–Frobenius, \(r\) is a simple eigenvalue of \(A\) with eigenspace \(\operatorname{span}\{\mathbf 1\}\). Choose a polynomial \(q\) such that</p>
+    <p><strong>Solution.</strong> Yes. Let \(G\) be connected and \(r\)-regular.</p>
+
+    <p><strong>Step 1: \(r\) is a simple eigenvalue.</strong> \(A\mathbf 1=r\mathbf 1\), so \(\mathbf 1\) is an eigenvector with eigenvalue \(r\). By Perron–Frobenius applied to the connected non-negative matrix \(A\), the spectral radius \(r\) is a <em>simple</em> eigenvalue, with a positive eigenvector (unique up to scaling). So the \(r\)-eigenspace is \(\operatorname{span}\{\mathbf 1\}\), dimension \(1\).</p>
+
+    <p><strong>Step 2: build a polynomial that "isolates" \(r\).</strong> Let the other distinct eigenvalues be \(\mu_1,\dots,\mu_{k-1}\), all different from \(r\). Define</p>
     \[
-      q(r)=1,\qquad q(\lambda)=0
+      q(x)=\prod_{i=1}^{k-1}\frac{x-\mu_i}{r-\mu_i}.
     \]
-    <p>for every other distinct eigenvalue \(\lambda\) of \(A\). Then \(q(A)\) is the projection onto the \(r\)-eigenspace, so</p>
+    <p>Then \(q(r)=1\) and \(q(\mu_i)=0\) for every \(i\).</p>
+
+    <p><strong>Step 3: \(q(A)\) is the projection onto the \(r\)-eigenspace.</strong> Since \(A\) is symmetric, \(A=Q\Lambda Q^T\) with \(Q\) orthogonal and \(\Lambda\) diagonal. Then \(q(A)=Q\,q(\Lambda)\,Q^T\), and \(q(\Lambda)\) has diagonal entries \(q(\lambda_j)\), which is \(1\) for the \(r\)-eigenvectors and \(0\) for all other eigenvectors. Hence \(q(A)\) is the orthogonal projection onto \(\operatorname{span}\{\mathbf 1\}\).</p>
+
+    <p><strong>Step 4: that projection is \(\frac1n J\).</strong> The matrix \(\frac1n J\) has all entries \(1/n\). Its range is \(\operatorname{span}\{\mathbf 1\}\), and \((\frac1nJ)^2=\frac1nJ\), so it is the orthogonal projection onto \(\operatorname{span}\{\mathbf 1\}\). Therefore</p>
     \[
-      q(A)=\frac1n J.
+      q(A)=\frac1n J\quad\Longrightarrow\quad J=n\,q(A).
     \]
-    <p>Hence \(J=nq(A)\), so \(J\) is a polynomial in \(A\). Thus the converse is true: \(J\) is a polynomial in \(A\) iff \(G\) is connected and regular.</p>
+    <p>So \(J\) is a polynomial in \(A\). \(\square\)</p>
+
+    <p><strong>Explicit example: \(K_n\).</strong> Here \(r=n-1\) and the only other eigenvalue is \(-1\). Take</p>
+    \[
+      q(x)=\frac{x+1}{n}:\quad q(n-1)=\frac{n}{n}=1,\quad q(-1)=0.
+    \]
+    <p>Then \(q(A)=\frac{A+I}{n}\) and \(J=nq(A)=A+I\). Indeed for \(K_n\), \(A=J-I\), so \(A+I=J\). ✓</p>
+
+    <div class="trap">
+      Together, Q55 and Q56 give the clean characterization: <strong>\(J\) is a polynomial in \(A\) iff \(G\) is connected and regular.</strong>
+    </div>
   </div>
 </div>
 
@@ -1131,15 +1314,24 @@
   <h3>Q57. What is the automorphism group of the path graph \(P_n\)?</h3>
   <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
   <div class="solution">
-    <p><strong>Solution.</strong> For \(n=1\), \(\operatorname{Aut}(P_1)\) is trivial. For \(n\ge2\),</p>
-    \[
-      \operatorname{Aut}(P_n)\cong C_2,
-    \]
-    <p>generated by the reflection of the path. In all cases \(n\ge2\), the automorphism group has order \(2\).</p>
+    <p><strong>Solution.</strong> Label \(P_n\) as \(1-2-\cdots-n\).</p>
+
+    <p><strong>Case \(n=1\):</strong> trivial, \(\operatorname{Aut}(P_1)=\{\mathrm{id}\}\).</p>
+
+    <p><strong>Case \(n\ge 2\):</strong> Every automorphism preserves degrees. The two endpoints (\(1\) and \(n\)) have degree \(1\); every interior vertex has degree \(2\). So any \(\sigma\) maps \(\{1,n\}\) to itself — either fixing both or swapping them.</p>
+
+    <ul>
+      <li><em>Identity</em> \(\sigma(k)=k\): clearly an automorphism.</li>
+      <li><em>Reflection</em> \(\sigma(k)=n+1-k\): sends edge \(\{k,k+1\}\) to \(\{n+1-k,\,n-k\}\), which is again an edge. So it is an automorphism.</li>
+      <li><em>No others</em>: once \(\sigma(1)\) is fixed (either \(1\) or \(n\)), the neighbour \(\sigma(2)\) is forced (the unique neighbour of \(\sigma(1)\)), then \(\sigma(3)\) is forced, and so on.</li>
+    </ul>
+
+    <p>So \(|\operatorname{Aut}(P_n)|=2\) for \(n\ge 2\), and \(\operatorname{Aut}(P_n)\cong C_2\).</p>
+
     <div class="tikz-wrap">
       <script type="text/tikz">
-        \begin{tikzpicture}[
-          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm}]
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
           \node[v] (1) at (0,0) {$1$};
           \node[v] (2) at (1.2,0) {$2$};
           \node[v] (3) at (2.4,0) {$3$};
@@ -1148,6 +1340,7 @@
           \draw (1)--(2)--(3);
           \draw[dotted] (3)--(4);
           \draw[dotted] (4)--(5);
+          \node[l] at (2.4,-1.0) {reflection $k\mapsto n+1-k$ is the unique nontrivial automorphism};
         \end{tikzpicture}
       </script>
     </div>
@@ -1158,14 +1351,36 @@
   <h3>Q58. What is the automorphism group of the star graph \(K_{1,k}\)?</h3>
   <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
   <div class="solution">
-    <p><strong>Solution.</strong> For \(k\ge2\), the centre is the unique vertex of degree \(k\), so it is fixed by every automorphism. The \(k\) leaves can be permuted arbitrarily. Hence</p>
-    \[
-      \operatorname{Aut}(K_{1,k})\cong S_k,
-    \]
-    <p>with order \(k!\). For \(k=1\), \(K_{1,1}=P_2\), so \(\operatorname{Aut}(K_{1,1})\cong S_2\).</p>
+    <p><strong>Solution.</strong> The star \(K_{1,k}\) has one <em>centre</em> \(c\) (adjacent to all \(k\) leaves) and \(k\) <em>leaves</em> \(\ell_1,\dots,\ell_k\) (each adjacent only to \(c\)).</p>
+
+    <p><strong>Case \(k=1\):</strong> \(K_{1,1}=K_2=P_2\), and \(\operatorname{Aut}(K_{1,1})\cong S_2\).</p>
+
+    <p><strong>Case \(k\ge 2\):</strong> The centre has degree \(k\ge 2\); each leaf has degree \(1\). Since \(k\neq 1\), every automorphism must fix \(c\) and permute the leaves among themselves.</p>
+    <p>Conversely, any permutation \(\sigma\) of \(\{\ell_1,\dots,\ell_k\}\), extended by \(\sigma(c)=c\), is an automorphism: the edges \(c\ell_i\) map to the edges \(c\sigma(\ell_i)\), and there are no other edges.</p>
+
+    <p>Hence \(\operatorname{Aut}(K_{1,k})\cong S_k\) (order \(k!\)) for \(k\ge 2\).</p>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (c) at (0,0) {};
+          \node[v] (a) at (90:1.3) {};
+          \node[v] (b) at (18:1.3) {};
+          \node[v] (d) at (-54:1.3) {};
+          \node[v] (e) at (-126:1.3) {};
+          \node[v] (f) at (162:1.3) {};
+          \draw (c)--(a); \draw (c)--(b); \draw (c)--(d); \draw (c)--(e); \draw (c)--(f);
+          \node[l] at (0,-1.9) {$K_{1,5}$: centre fixed, leaves permute freely, $\operatorname{Aut}\cong S_5$};
+        \end{tikzpicture}
+      </script>
+    </div>
+
+    <div class="trap">
+      The special case \(k=1\) is the edge \(K_2\): here both vertices have degree \(1\), so there is no "centre", and the automorphism group is \(S_2\), not \(S_1\).
+    </div>
   </div>
 </div>
-
 <!-- ============ SECTION 8: SELF-COMPLEMENTARY ============ -->
 <h2>8. Self-complementary graphs</h2>
 
@@ -1307,57 +1522,56 @@
   <h3>Q68. State a known characterization: connected graph with exactly two distinct Laplacian eigenvalues.</h3>
   <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
   <div class="solution">
-    <p><strong>Solution.</strong> A connected simple graph has exactly two distinct Laplacian eigenvalues iff it is a complete graph. Indeed, \(K_n\) has Laplacian spectrum \(0,n,\dots,n\) (two distinct values). Conversely, if \(L\) has only \(0\) and \(\mu\gt 0\) as eigenvalues, then \(L^2=\mu L\), and analysing this identity forces all pairs of distinct vertices to be adjacent, so the graph is complete.</p>
-  </div>
-</div>
+    <p><strong>Statement.</strong> A connected simple graph \(G\) has exactly two distinct Laplacian eigenvalues iff \(G\) is complete.</p>
 
-<div class="question">
-  <h3>Q69. If \(G\) is connected and regular, is \(\mathbf 1\) always an eigenvector of \(A\)?</h3>
-  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
-  <div class="solution">
-    <p><strong>Solution.</strong> Yes. If \(G\) is \(d\)-regular, then \(A\mathbf 1=d\mathbf 1\). Conversely, if \(\mathbf 1\) is an eigenvector of \(A\), then all row sums are equal, so \(G\) is regular. Thus</p>
+    <p><strong>Proof (⇐).</strong> For \(K_n\), the Laplacian is \(L=nI-J\). The spectrum of \(J\) is \(\{n,0^{(n-1)}\}\), so the spectrum of \(L\) is</p>
     \[
-      G\text{ is regular}\iff \mathbf 1\text{ is an eigenvector of }A.
+      \sigma(L(K_n))=\{0,\, n^{(n-1)}\},
     \]
-  </div>
-</div>
+    <p>which has exactly two distinct eigenvalues, \(0\) and \(n\).</p>
 
-<div class="question">
-  <h3>Q70. Find all adjacency eigenvalues of \(P_n\) and show they are distinct; explain how the diameter inequality also guarantees distinctness.</h3>
-  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
-  <div class="solution">
-    <p><strong>Solution.</strong> Label the vertices \(1,\dots,n\) and write \(x_0=x_{n+1}=0\). The eigenvalue equation \(Ax=\lambda x\) is</p>
-    \[ x_{i-1}+x_{i+1}=\lambda x_i\qquad(1\le i\le n). \]
-    <p>Try \(x_i=\sin(i\theta)\). Using the identity \(\sin((i-1)\theta)+\sin((i+1)\theta)=2\cos\theta\,\sin(i\theta)\), the recurrence is satisfied with \(\lambda=2\cos\theta\). The boundary condition \(x_{n+1}=\sin((n+1)\theta)=0\) requires \((n+1)\theta=k\pi\), so</p>
-    \[ \theta=\frac{k\pi}{n+1},\qquad k=1,\dots,n, \]
-    <p>giving</p>
-    \[ \boxed{\lambda_k=2\cos\frac{k\pi}{n+1},\qquad v^{(k)}_i=\sin\frac{ik\pi}{n+1},\quad k=1,\dots,n.} \]
-    <p>The angles are distinct in \((0,\pi)\), and \(\cos\) is strictly decreasing there, so the \(\lambda_k\) are distinct.</p>
-    <p><strong>Diameter argument.</strong> \(\operatorname{diam}(P_n)=n-1\), and any connected graph with diameter \(d\) has at least \(d+1\) distinct eigenvalues. Here \(k\ge n\), and an \(n\times n\) matrix has at most \(n\) distinct eigenvalues, so \(k=n\). This proves distinctness without computing the eigenvalues.</p>
-  </div>
-</div>
-
-<div class="question">
-  <h3>Q71. Give an example of a non-path graph on \(n\) vertices with \(n\) distinct eigenvalues.</h3>
-  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
-  <div class="solution">
-    <p><strong>Solution.</strong> The paw graph on \(4\) vertices: a triangle plus one pendant vertex attached to one triangle vertex. Its adjacency characteristic polynomial is</p>
+    <p><strong>Proof (⇒).</strong> Suppose \(G\) is connected with two distinct Laplacian eigenvalues, \(0\) and \(\mu>0\). The minimal polynomial of \(L\) is \(x(x-\mu)\), so</p>
     \[
-      \chi_A(\lambda)=(\lambda+1)(\lambda^3-\lambda^2-3\lambda+1).
+      L(L-\mu I)=0. \tag{1}
     \]
-    <p>The cubic has discriminant \(148\gt 0\), so it has three distinct real roots; and \(\lambda=-1\) is not a root of the cubic (\(\chi_{\text{cubic}}(-1)=2\)). So the paw graph has \(4\) distinct eigenvalues, giving a non-path example with \(n=4\).</p>
+
+    <p>Look at column \(j\) of \(L-\mu I\). Its entries are</p>
+    \[
+      (L-\mu I)_{ij}=\begin{cases}L_{ij}=-A_{ij}& (i\ne j),\\ \deg(j)-\mu &(i=j).\end{cases}
+    \]
+
+    <p>Equation (1) says: for every \(j\), the \(j\)-th column of \(L-\mu I\) lies in \(\ker(L)\). Since \(G\) is connected, \(\ker(L)=\operatorname{span}\{\mathbf 1\}\). So there is a constant \(c_j\) such that</p>
+    \[
+      -A_{ij}=c_j\quad\text{for every }i\ne j,\qquad \deg(j)-\mu=c_j. \tag{2}
+    \]
+
+    <p>Since \(A_{ij}\in\{0,1\}\) and is the same for all \(i\ne j\):</p>
+    <ul>
+      <li>If \(c_j=0\): \(A_{ij}=0\) for all \(i\ne j\), so \(j\) is isolated — impossible for connected \(G\) with \(n\ge 2\).</li>
+      <li>If \(c_j=-1\): \(A_{ij}=1\) for all \(i\ne j\), so \(j\) is adjacent to every other vertex.</li>
+      <li>If \(c_j=-m\) with \(m\ge 2\): would force \(A_{ij}=m\ge 2\), impossible since \(A_{ij}\in\{0,1\}\).</li>
+      <li>If \(c_j>0\): would force \(A_{ij}<0\), impossible.</li>
+    </ul>
+
+    <p>So for every \(j\) we must have \(c_j=-1\), i.e., every vertex is adjacent to all others: \(G=K_n\). (Consistency check from (2): \(\deg(j)-\mu=-1\), i.e., \(\mu=\deg(j)+1=(n-1)+1=n\), matching the spectrum of \(K_n\).)</p>
+
     <div class="tikz-wrap">
       <script type="text/tikz">
-        \begin{tikzpicture}[
-          v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
-          l/.style={draw=none, fill=none, inner sep=1pt}]
-          \node[v] (1) at (0,0) {$1$};
-          \node[v] (2) at (1.5,0) {$2$};
-          \node[v] (3) at (0.75,1.3) {$3$};
-          \node[v] (4) at (-1,0.5) {$4$};
-          \draw (1)--(2)--(3)--(1);
-          \draw (1)--(4);
-          \node[l] at (0.3,-0.8) {paw graph};
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          % K_3
+          \node[v] (a) at (0,0) {};
+          \node[v] (b) at (1.2,0) {};
+          \node[v] (c) at (0.6,1.0) {};
+          \draw (a)--(b)--(c)--(a);
+          \node[l] at (0.6,-0.6) {$K_3$: $L$-spec $\{0,3,3\}$, 2 distinct};
+
+          % P_3
+          \node[v] (p) at (3.5,0.5) {};
+          \node[v] (q) at (4.5,0.5) {};
+          \node[v] (r) at (5.5,0.5) {};
+          \draw (p)--(q)--(r);
+          \node[l] at (4.5,-0.6) {$P_3$: $L$-spec $\{0,1,3\}$, 3 distinct};
         \end{tikzpicture}
       </script>
     </div>
@@ -1365,10 +1579,173 @@
 </div>
 
 <div class="question">
+  <h3>Q69. If \(G\) is connected and regular, is \(\mathbf 1\) always an eigenvector of \(A\)?</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Yes, and in fact a stronger statement holds: <em>\(\mathbf 1\) is an eigenvector of \(A\) iff \(G\) is regular</em> (no connectedness needed).</p>
+
+    <p><strong>(⇒)</strong> If \(G\) is \(d\)-regular, then every row of \(A\) has exactly \(d\) ones, so</p>
+    \[
+      A\mathbf 1=\deg\text{-vector}=d\mathbf 1,
+    \]
+    <p>i.e., \(\mathbf 1\) is an eigenvector with eigenvalue \(d\).</p>
+
+    <p><strong>(⇐)</strong> If \(A\mathbf 1=\lambda\mathbf 1\), then taking the \(i\)-th component:</p>
+    \[
+      \lambda=(A\mathbf 1)_i=\sum_j A_{ij}=\deg(i).
+    \]
+    <p>So \(\deg(i)=\lambda\) for every \(i\), meaning \(G\) is regular with degree \(\lambda\).</p>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          % C_4 regular
+          \node[v] (1) at (0,0) {};
+          \node[v] (2) at (1.2,0) {};
+          \node[v] (3) at (1.2,1.2) {};
+          \node[v] (4) at (0,1.2) {};
+          \draw (1)--(2)--(3)--(4)--(1);
+          \node[l] at (0.6,-0.6) {$C_4$ (2-regular): $A\mathbf 1=2\mathbf 1$};
+
+          % P_3 non-regular
+          \node[v] (a) at (3.5,0.6) {};
+          \node[v] (b) at (4.5,0.6) {};
+          \node[v] (c) at (5.5,0.6) {};
+          \draw (a)--(b)--(c);
+          \node[l] at (4.5,-0.6) {$P_3$: $A\mathbf 1=(1,2,1)^T\ne\lambda\mathbf 1$};
+        \end{tikzpicture}
+      </script>
+    </div>
+
+    <p><strong>Why \(\mathbf 1\) is so useful.</strong> Because \(A\) is symmetric, eigenvectors corresponding to different eigenvalues are orthogonal. If \(G\) is \(r\)-regular and connected, Perron–Frobenius says the \(r\)-eigenvector is unique; since \(\mathbf 1\) is one such vector, <em>every other eigenvector is orthogonal to \(\mathbf 1\)</em>, i.e., its components sum to \(0\). This orthogonality is the key fact used in Q56 and Q65.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q70. Find all adjacency eigenvalues of \(P_n\), show they are distinct, and explain how the diameter inequality also guarantees distinctness.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Step 1: the eigenvalue equation.</strong> Label \(P_n\) as \(1-2-\cdots-n\). Set \(x_0=x_{n+1}=0\) (outside the path). Then \(Ax=\lambda x\) means:</p>
+    \[
+      x_{i-1}+x_{i+1}=\lambda x_i\qquad (i=1,2,\dots,n). \tag{1}
+    \]
+
+    <p><strong>Step 2: try \(x_i=\sin(i\theta)\).</strong> Using the identity</p>
+    \[
+      \sin((i-1)\theta)+\sin((i+1)\theta)=2\cos\theta\,\sin(i\theta),
+    \]
+    <p>equation (1) is satisfied if we set</p>
+    \[
+      \lambda=2\cos\theta.
+    \]
+
+    <p><strong>Step 3: boundary conditions.</strong> The condition \(x_0=\sin 0=0\) is automatic. The condition \(x_{n+1}=\sin((n+1)\theta)=0\) requires</p>
+    \[
+      (n+1)\theta=k\pi,\qquad k\in\mathbb Z.
+    \]
+    <p>For a nonzero eigenvector we need \(\theta\in(0,\pi)\), so \(k=1,2,\dots,n\) (giving \(\theta=k\pi/(n+1)\)).</p>
+
+    <p><strong>Step 4: the eigenvalues and eigenvectors.</strong></p>
+    \[
+      \boxed{\;\lambda_k=2\cos\frac{k\pi}{n+1},\qquad v^{(k)}_i=\sin\frac{ik\pi}{n+1},\quad k=1,\dots,n.\;}
+    \]
+    <p>These \(n\) vectors are nonzero (since \(ik\pi/(n+1)\in(0,\pi)\)) and mutually orthogonal, and \(A\) has \(n\) eigenvalues total — so they form a complete eigenbasis.</p>
+
+    <p><strong>Step 5: distinctness.</strong> The angles \(k\pi/(n+1)\), \(k=1,\dots,n\), are \(n\) distinct angles in \((0,\pi)\). Since \(\cos x\) is strictly decreasing on \((0,\pi)\), the values \(2\cos(k\pi/(n+1))\) are all distinct.</p>
+
+    <p><strong>Diameter argument (independent verification).</strong> \(\operatorname{diam}(P_n)=n-1\). By Q53, any connected graph with diameter \(d\) has at least \(d+1\) distinct eigenvalues, so \(P_n\) has at least \(n\) distinct eigenvalues. But an \(n\times n\) matrix has at most \(n\) distinct eigenvalues. Hence \(P_n\) has exactly \(n\) distinct eigenvalues. This confirms distinctness <em>without</em> computing the eigenvalues.</p>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          % Path with first eigenvector (all positive sine)
+          \node[l] at (-1.5, 1.5) {$k=1$:};
+          \node[v] (a1) at (0,0) {};
+          \node[v] (a2) at (1,0) {};
+          \node[v] (a3) at (2,0) {};
+          \node[v] (a4) at (3,0) {};
+          \node[v] (a5) at (4,0) {};
+          \draw (a1)--(a2)--(a3)--(a4)--(a5);
+          \draw[thick, blue, smooth, samples=50, domain=0:4]
+            plot (\x, {0.5*sin(3.14159*\x/5)});
+          \node[l] at (2,-1.0) {$k=1$: $v_i=\sin(i\pi/6)$, all positive};
+
+          % Path with second eigenvector
+          \node[l] at (-1.5, -2.0) {$k=3$:};
+          \node[v] (b1) at (0,-3.5) {};
+          \node[v] (b2) at (1,-3.5) {};
+          \node[v] (b3) at (2,-3.5) {};
+          \node[v] (b4) at (3,-3.5) {};
+          \node[v] (b5) at (4,-3.5) {};
+          \draw (b1)--(b2)--(b3)--(b4)--(b5);
+          \draw[thick, red, smooth, samples=50, domain=0:4]
+            plot (\x, {-3.5 + 0.5*sin(3.14159*3*\x/5)});
+          \node[l] at (2,-4.5) {$k=3$: $v_i=\sin(3i\pi/6)$, changes sign};
+        \end{tikzpicture}
+      </script>
+    </div>
+
+    <p><strong>Interpretation.</strong> The \(k\)-th eigenvector is a discrete "sine wave" with \(k\) half-periods along the path. Vectors with higher \(k\) oscillate more, and their eigenvalues \(2\cos(k\pi/(n+1))\) correspondingly range from near \(+2\) (for \(k=1\)) down to near \(-2\) (for \(k=n\)).</p>
+  </div>
+</div>
+
+<div class="question">
+  <h3>Q71. Give an example of a non-path graph on \(n\) vertices with \(n\) distinct eigenvalues.</h3>
+  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
+  <div class="solution">
+    <p><strong>Solution.</strong> Take the <strong>paw graph</strong> on \(4\) vertices: a triangle \(1\!-\!2\!-\!3\!-\!1\) plus one pendant vertex \(4\) attached to vertex \(1\).</p>
+
+    <p>The adjacency matrix is</p>
+    \[
+      A=\begin{pmatrix}0&1&1&1\\1&0&1&0\\1&1&0&0\\1&0&0&0\end{pmatrix}.
+    \]
+
+    <p><strong>Characteristic polynomial.</strong> Expanding \(\det(\lambda I-A)\) along the last column (which has entries \(-1,0,0,\lambda\)):</p>
+    \[
+      \chi_A(\lambda)=(\lambda+1)(\lambda^3-\lambda^2-3\lambda+1).
+    \]
+    <p>(The first factor \(\lambda+1\) comes from the pendant vertex; the cubic is the reduced characteristic polynomial of the triangle with one "foot" attached.)</p>
+
+    <p><strong>Distinctness of the four roots.</strong></p>
+    <ul>
+      <li>The cubic \(g(\lambda)=\lambda^3-\lambda^2-3\lambda+1\) has discriminant \(148>0\), so all three roots of \(g\) are real and distinct.</li>
+      <li>Check whether \(\lambda=-1\) is a root of \(g\): \(g(-1)=-1-1+3+1=2\ne 0\). So the root \(\lambda=-1\) of the first factor is genuinely separate from the three roots of \(g\).</li>
+    </ul>
+    <p>Hence \(\chi_A\) has four distinct real roots. The paw graph is not a path (it contains a cycle \(C_3\)), so it is a non-path example with \(n=4\) distinct eigenvalues.</p>
+
+    <div class="tikz-wrap">
+      <script type="text/tikz">
+        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
+                            l/.style={draw=none, fill=none, inner sep=1pt}]
+          \node[v] (1) at (0,0) {$1$};
+          \node[v] (2) at (1.5,0) {$2$};
+          \node[v] (3) at (0.75,1.3) {$3$};
+          \node[v] (4) at (-1,0.5) {$4$};
+          \draw (1)--(2)--(3)--(1);
+          \draw (1)--(4);
+          \node[l] at (0.3,-0.8) {paw graph ($n=4$, exactly $4$ distinct eigenvalues)};
+        \end{tikzpicture}
+      </script>
+    </div>
+
+    <p><strong>Contrast.</strong> Other \(4\)-vertex graphs:</p>
+    <ul>
+      <li>\(K_4\): \(2\) distinct eigenvalues (\(\{3,-1\}\)).</li>
+      <li>\(C_4=K_{2,2}\): \(3\) distinct eigenvalues (\(\{2,0,-2\}\)).</li>
+      <li>\(P_4\): \(4\) distinct eigenvalues (a path — the classical example).</li>
+      <li>Paw: \(4\) distinct eigenvalues (this example — non-path).</li>
+    </ul>
+    <p>So the paw graph is the smallest <em>non-path</em> graph on \(4\) vertices whose adjacency eigenvalues are all distinct.</p>
+  </div>
+</div>
+
+<div class="question">
   <h3>Q72. Give an example of a 3-regular graph all of whose adjacency eigenvalues are distinct.</h3>
   <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
   <div class="solution">
-    <p><strong>Solution.</strong> The <strong>Frucht graph</strong> is a connected 3-regular graph on \(12\) vertices with \(\operatorname{Aut}(G)=\{\mathrm{id}\}\). Its adjacency characteristic polynomial is</p>
+    <p><strong>Solution.</strong> A standard example is the <strong>Frucht graph</strong>: the unique connected \(3\)-regular graph on \(12\) vertices with trivial automorphism group \(\operatorname{Aut}(G)=\{\mathrm{id}\}\). Its characteristic polynomial is</p>
     \[
     \begin{aligned}
     \chi_A(x)=x^{12}
@@ -1376,7 +1753,22 @@
       &-408x^5+240x^4+432x^3+32x^2-96x-32.
     \end{aligned}
     \]
-    <p>A direct check shows \(\gcd(\chi_A(x),\chi_A'(x))=1\), so \(\chi_A\) is square-free and has \(12\) distinct roots. Hence the Frucht graph has \(12\) distinct adjacency eigenvalues.</p>
+
+    <p><strong>How to verify distinctness.</strong> A polynomial has all distinct roots iff it is square-free, i.e., iff \(\gcd(\chi_A(x),\,\chi_A'(x))=1\). Compute</p>
+    \[
+      \gcd\bigl(\chi_A(x),\,\chi_A'(x)\bigr)=1,
+    \]
+    <p>so \(\chi_A\) has no repeated root. Since \(\chi_A\) has degree \(12\), it therefore has \(12\) distinct real roots.</p>
+
+    <p><strong>Consistency checks.</strong></p>
+    <ul>
+      <li>Trace: \(\operatorname{tr}(A)=0\), matching the coefficient of \(x^{11}\) being \(0\). ✓</li>
+      <li>Sum of squares: \(\operatorname{tr}(A^2)=2\cdot 18=36\), matching \(-2\cdot(\text{coeff of }x^{10})=-2\cdot(-18)=36\). ✓</li>
+      <li>Sum of cubes: \(\operatorname{tr}(A^3)=-3\cdot(\text{coeff of }x^9)=-3\cdot(-12)=36\), so the Frucht graph has \(36/6=6\) triangles. ✓ (A known property of the Frucht graph.)</li>
+    </ul>
+
+    <p><strong>Why we need \(n\) large.</strong> A 3-regular graph on fewer than 12 vertices cannot have all distinct eigenvalues: \(K_4\) has 2, \(K_{3,3}\) has 3, the cube \(Q_3\) has 4, the Petersen graph has 3. The Frucht graph (12 vertices, 18 edges) is the smallest known 3-regular graph with all distinct eigenvalues, and is often presented as <em>the</em> standard example.</p>
+
     <p><strong>Verification in SageMath.</strong></p>
 <pre><code>G = graphs.FruchtGraph()
 print(G.is_regular(3))          # True
@@ -1386,363 +1778,10 @@ p = R(A.charpoly())
 print(gcd(p, p.derivative()))   # 1
 print(A.eigenvalues())          # 12 distinct numerical eigenvalues
 </code></pre>
+
+    <p><strong>On the drawing.</strong> The Frucht graph is typically drawn as a "twisted hexagonal prism" with threefold symmetry broken; standard textbook drawings are the clearest reference. What matters here is not the exact drawing but the verification of the characteristic polynomial above.</p>
   </div>
 </div>
-<div class="question">
-  <h3>Q73. Give an example of a graph which contains exactly four distinct eigenvalues.</h3>
-  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
-  <div class="solution">
-    <p><strong>Solution.</strong> Take the cycle \(C_6\). Its adjacency eigenvalues are</p>
-    \[
-      \lambda_k = 2\cos\frac{2\pi k}{6} = 2\cos\frac{k\pi}{3},\qquad k=0,1,\dots,5.
-    \]
-    <p>Explicitly:</p>
-    \[
-      \lambda_0=2,\quad \lambda_1=1,\quad \lambda_2=-1,\quad \lambda_3=-2,\quad \lambda_4=-1,\quad \lambda_5=1.
-    \]
-    <p>So the spectrum is \(\{2,1,1,-1,-1,-2\}\), which contains <strong>exactly four distinct eigenvalues</strong>: \(2,\,1,\,-1,\,-2\).</p>
-    <div class="tikz-wrap">
-      <script type="text/tikz">
-        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
-                            l/.style={draw=none, fill=none, inner sep=1pt}]
-          \foreach \k in {0,...,5} {
-            \node[v] (a\k) at ({60*\k+30}:1.3) {};
-          }
-          \foreach \k in {0,...,5} {
-            \pgfmathtruncatemacro{\n}{(\k+1)}
-            \ifnum\n<6 \draw (a\k)--(a\n); \fi
-          }
-          \draw (a5)--(a0);
-          \node[l] at (0,-1.9) {$C_6$: spectrum $\{2,1,1,-1,-1,-2\}$};
-        \end{tikzpicture}
-      </script>
-    </div>
-    <p><strong>Another example.</strong> The path \(P_4\) has eigenvalues \(2\cos(k\pi/5)\), \(k=1,2,3,4\), all distinct, giving exactly four distinct eigenvalues.</p>
-    <p><strong>Contrast.</strong> \(K_4\) has only 2 distinct (\(3,-1\)); \(K_{2,2}=C_4\) has only 3 distinct (\(2,0,-2\)); \(C_5\) has only 3 distinct (\(2,\;\tfrac{-1\pm\sqrt5}{2}\)).</p>
-  </div>
-</div>
-
-<div class="question">
-  <h3>Q74. Find the eigenvalues of the complete bipartite graph \(K_{m,n}\).</h3>
-  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
-  <div class="solution">
-    <p><strong>Solution.</strong> Order vertices so that the \(m\) vertices of one part come first, then the \(n\) of the other. Then</p>
-    \[
-      A(K_{m,n})=\begin{pmatrix} 0 & J \\ J^T & 0 \end{pmatrix},
-    \]
-    <p>where \(J=J_{m\times n}\) is the \(m\times n\) all-ones matrix.</p>
-
-    <p><strong>Case 1 (eigenvectors supported on one side).</strong> Let \(x\in\mathbb R^m\) with \(\sum_i x_i=0\), and take \((x,0)\in\mathbb R^{m+n}\). Then</p>
-    \[
-      A\binom{x}{0}=\binom{0}{J^Tx}=\binom{0}{0},
-    \]
-    <p>since \(J^Tx=(\sum_i x_i)\mathbf 1_n=0\). Hence \((x,0)\) is an eigenvector with eigenvalue \(0\). This gives \(m-1\) independent eigenvectors of eigenvalue \(0\).</p>
-    <p>Similarly, any \((0,y)\) with \(y\in\mathbb R^n\), \(\sum_j y_j=0\), gives \(n-1\) more independent eigenvectors of eigenvalue \(0\).</p>
-    <p>So \(0\) is an eigenvalue with multiplicity at least \((m-1)+(n-1)=m+n-2\).</p>
-
-    <p><strong>Case 2 (eigenvectors constant on each side).</strong> Take \((a\mathbf 1_m, b\mathbf 1_n)\). Since \(J\mathbf 1_n=n\mathbf 1_m\) and \(J^T\mathbf 1_m=m\mathbf 1_n\),</p>
-    \[
-      A\binom{a\mathbf 1_m}{b\mathbf 1_n}
-      =\binom{b\,n\,\mathbf 1_m}{a\,m\,\mathbf 1_n}.
-    \]
-    <p>For this to equal \(\lambda(a\mathbf 1_m,b\mathbf 1_n)\) we need</p>
-    \[
-      bn=\lambda a,\qquad am=\lambda b.
-    \]
-    <p>Eliminating: \(\lambda^2=mn\), so \(\lambda=\pm\sqrt{mn}\). Each gives one eigenvector. This gives two more eigenvalues.</p>
-
-    <p><strong>Conclusion.</strong> The spectrum of \(K_{m,n}\) is</p>
-    \[
-      \boxed{\;\sigma(K_{m,n})=\{\sqrt{mn},\;0^{m+n-2},\;-\sqrt{mn}\}.\;}
-    \]
-    <p>In particular:</p>
-    <ul>
-      <li>\(K_{1,n}\) (star): eigenvalues \(\pm\sqrt n\) and \(0\) with multiplicity \(n-1\).</li>
-      <li>\(K_{n,n}\): eigenvalues \(\pm n\) and \(0\) with multiplicity \(2n-2\).</li>
-      <li>Trace check: \(0=\sqrt{mn}+0+(-\sqrt{mn})\). \(\operatorname{tr}(A^2)=2mn\).</li>
-    </ul>
-  </div>
-</div>
-
-<div class="question">
-  <h3>Q75. Find the sum of entries of the adjacency matrix of a tree. If \(A\) is the adjacency matrix of a tree, what is \(\operatorname{tr}(A^k)\) for odd \(k\)?</h3>
-  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
-  <div class="solution">
-    <p><strong>Sum of entries.</strong> For any graph,</p>
-    \[
-      \sum_{i,j} a_{ij}=\mathbf 1^T A\mathbf 1=\sum_{i}\deg(i)=2|E|.
-    \]
-    <p>For a tree on \(n\) vertices, \(m=n-1\), so</p>
-    \[
-      \boxed{\mathbf 1^T A\mathbf 1 = 2(n-1).}
-    \]
-
-    <p><strong>Trace of odd powers.</strong> Two equivalent arguments:</p>
-    <ul>
-      <li><em>Combinatorial.</em> \(\operatorname{tr}(A^k)\) equals the number of closed walks of length \(k\) in the graph. A tree is bipartite; every closed walk in a bipartite graph has even length. Hence, for odd \(k\),</li>
-    </ul>
-    \[
-      \boxed{\operatorname{tr}(A^k)=0\ \text{for every odd }k.}
-    \]
-    <ul>
-      <li><em>Spectral.</em> A tree is bipartite, so its eigenvalues are symmetric about \(0\): if \(\lambda\) is an eigenvalue, then \(-\lambda\) is too, with the same multiplicity. Hence the sum of \(k\)-th powers of eigenvalues vanishes for odd \(k\):</li>
-    </ul>
-    \[
-      \operatorname{tr}(A^k)=\sum_i\lambda_i^k=0\qquad(k\text{ odd}).
-    \]
-    <p>For even \(k=2r\), \(\operatorname{tr}(A^{2r})=\sum_i\lambda_i^{2r}\ge 0\), with equality iff \(A=0\) (empty graph); in particular, a tree with \(n\ge 2\) has \(\operatorname{tr}(A^2)=2(n-1)>0\).</p>
-
-    <div class="tikz-wrap">
-      <script type="text/tikz">
-        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm}]
-          \node[v] (a) at (0,0) {};
-          \node[v] (b) at (1.1,0.7) {};
-          \node[v] (c) at (2.2,0) {};
-          \node[v] (d) at (3.1,0.7) {};
-          \node[v] (e) at (1.1,-0.7) {};
-          \draw (a)--(b)--(c)--(d);
-          \draw (b)--(e);
-        \end{tikzpicture}
-      </script>
-    </div>
-  </div>
-</div>
-
-<div class="question">
-  <h3>Q76. Let \(X\) be a connected bipartite graph. Then \(X\) has three distinct eigenvalues if and only if \(X\) is a complete bipartite graph.</h3>
-  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
-  <div class="solution">
-    <p><strong>Solution.</strong> Let \(|V(X)|=n\).</p>
-
-    <p><strong>(⇐)</strong> If \(X=K_{m,n}\) with \(m,n\ge1\) and \(m+n\ge3\), then by Q74 its spectrum is</p>
-    \[
-      \sigma(X)=\{\sqrt{mn},\;0^{m+n-2},\;-\sqrt{mn}\},
-    \]
-    <p>which has exactly three distinct eigenvalues. (The exceptional case \(K_{1,1}=K_2\) has spectrum \(\{1,-1\}\), only two distinct values, and it satisfies \(m+n=2\).)</p>
-
-    <p><strong>(⇒)</strong> Suppose \(X\) is connected bipartite with exactly three distinct eigenvalues. Since \(X\) is bipartite, its spectrum is symmetric about \(0\); with only three distinct eigenvalues, they must be</p>
-    \[
-      -\lambda,\quad 0,\quad\lambda\qquad(\lambda>0).
-    \]
-    <p>We now use the standard classification: <em>a connected graph with exactly three distinct eigenvalues is either complete bipartite \(K_{m,n}\), or a regular complete multipartite graph \(K_{r,\dots,r}\) with at least three parts of equal size \(r\), or a strongly regular graph.</em></p>
-    <p>Examine the three cases:</p>
-    <ul>
-      <li>Complete multipartite \(K_{r,\dots,r}\) with \(s\ge3\) parts: the parts are independent sets of size \(r\). If \(s\ge3\), three vertices in three different parts pairwise form triangles, so the graph is not bipartite. Hence this case cannot occur.</li>
-      <li>Strongly regular: every connected strongly regular graph that is bipartite is one of \(K_{n,n}\) (equivalently, satisfies \(\lambda=0\) and equal part sizes). More directly, bipartite strongly regular graphs with equal bipartition size \(n\) and \(\alpha=0\) are exactly \(K_{n,n}\).</li>
-      <li>Therefore \(X=K_{m,n}\) with \(m,n\ge1\).</li>
-    </ul>
-    <p><strong>Conclusion.</strong> Connected bipartite \(X\) has exactly three distinct eigenvalues iff \(X=K_{m,n}\) with \(mn\ge2\).</p>
-
-    <p><strong>Verification using the minimal polynomial.</strong> For \(X\) with eigenvalues \(\{-\lambda,0,\lambda\}\), the minimal polynomial is \(m_A(x)=x(x-\lambda)(x+\lambda)=x^3-\lambda^2x\), so \(A^3=\lambda^2A\). In particular, if \(i\in U\), \(j\in V\) are adjacent, the number of 3-walks from \(i\) to \(j\) equals \(\lambda^2\), which is exactly the behaviour of \(K_{m,n}\) (with \(\lambda^2=mn\)).</p>
-  </div>
-</div>
-
-<div class="question">
-  <h3>Q77. Let \(T\) be a tree and \(A\) its adjacency matrix. Then \(A\) is non-singular if and only if \(T\) has a perfect matching.</h3>
-  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
-  <div class="solution">
-    <p><strong>Solution.</strong> Use the Leibniz expansion of the determinant:</p>
-    \[
-      \det A=\sum_{\sigma\in S_n}\operatorname{sign}(\sigma)\prod_{i=1}^{n}a_{i,\sigma(i)}.
-    \]
-
-    <p><strong>Which permutations contribute?</strong> A term is nonzero iff \(a_{i,\sigma(i)}=1\) for all \(i\), i.e. \(i\sigma(i)\in E(T)\) for every \(i\). Such a \(\sigma\) decomposes into disjoint cycles, each of which must be a cycle in \(T\). Since \(T\) is acyclic, every cycle in \(T\) has length \(2\) (a single edge traversed in both directions). Hence \(\sigma\) is a product of \(\tfrac n2\) disjoint transpositions \((i,j)\) with \(ij\in E(T)\), i.e. \(\sigma\) corresponds exactly to a perfect matching of \(T\).</p>
-
-    <p><strong>Conversely,</strong> any perfect matching \(M=\{(i_1,j_1),\dots,(i_{n/2},j_{n/2})\}\) of \(T\) gives such a permutation \(\sigma_M=(i_1\,j_1)\cdots(i_{n/2}\,j_{n/2})\) with nonzero contribution.</p>
-
-    <p><strong>Signs.</strong> Each transposition has sign \(-1\), so \(\operatorname{sign}(\sigma_M)=(-1)^{n/2}\) is the same for every perfect matching. Therefore</p>
-    \[
-      \det A=\sum_{M}(-1)^{n/2}=(-1)^{n/2}\cdot\#\{\text{perfect matchings of }T\}.
-    \]
-    <p>Hence \(\det A\neq 0\) iff \(T\) has at least one perfect matching. In particular, if \(n\) is odd, \(\det A=0\) automatically, as expected.</p>
-
-    <p><strong>Examples.</strong></p>
-    <ul>
-      <li>Star \(K_{1,3}\): no perfect matching, \(\det A=0\) (indeed \(0\) is an eigenvalue).</li>
-      <li>Path \(P_4\): has the unique perfect matching \(\{12,34\}\), and \(\det A=(-1)^2\cdot 1=1\). (Indeed the eigenvalues \(2\cos(k\pi/5)\) contain no zero.)</li>
-      <li>Path \(P_5\) on \(5\) vertices: \(n\) odd, so no perfect matching and \(\det A=0\).</li>
-    </ul>
-
-    <div class="tikz-wrap">
-      <script type="text/tikz">
-        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
-                            l/.style={draw=none, fill=none, inner sep=1pt}]
-          \node[v] (1) at (0,0) {};
-          \node[v] (2) at (1,0) {};
-          \node[v] (3) at (2,0) {};
-          \node[v] (4) at (3,0) {};
-          \draw (1)--(2)--(3)--(4);
-          \draw[ultra thick, blue] (1)--(2);
-          \draw[ultra thick, blue] (3)--(4);
-          \node[l] at (1.5,-0.8) {$P_4$: perfect matching, $\det A\ne 0$};
-
-          \node[v] (a) at (5,0) {};
-          \node[v] (b) at (6,0) {};
-          \node[v] (c) at (7,0) {};
-          \node[v] (d) at (8,0) {};
-          \node[v] (e) at (9,0) {};
-          \draw (a)--(b)--(c)--(d)--(e);
-          \node[l] at (7,-0.8) {$P_5$: $n$ odd, no perfect matching, $\det A=0$};
-        \end{tikzpicture}
-      </script>
-    </div>
-  </div>
-</div>
-
-<div class="question">
-  <h3>Q78. If \(G\) is a tree then its adjacency matrix can be written in the form \(N+N^T\) where \(N\) is nilpotent.</h3>
-  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
-  <div class="solution">
-    <p><strong>Solution.</strong> Let \(T\) be a tree with vertex set \(V=\{1,\dots,n\}\). Pick any vertex \(r\) as <strong>root</strong>. Direct every edge toward \(r\): for each vertex \(v\neq r\), the edge joining \(v\) to its parent is directed \(v\to\mathrm{par}(v)\).</p>
-
-    <p>Define \(N\in\{0,1\}^{n\times n}\) by</p>
-    \[
-      N_{ij}=\begin{cases}1 & \text{if }j=\mathrm{par}(i),\; i\neq r,\\ 0 & \text{otherwise.}\end{cases}
-    \]
-    <p>So \(N_{ij}=1\) iff there is a directed edge \(i\to j\).</p>
-
-    <p><strong>Key identity: \(A=N+N^T\).</strong> For distinct \(i,j\):</p>
-    \[
-      (N+N^T)_{ij}=N_{ij}+N_{ji}.
-    \]
-    <p>If \(\{i,j\}\in E(T)\), exactly one of \(i=\mathrm{par}(j)\) or \(j=\mathrm{par}(i)\) holds, so \(N_{ij}+N_{ji}=1=A_{ij}\). If \(\{i,j\}\notin E(T)\), neither is a parent of the other, so \(N_{ij}=N_{ji}=0=A_{ij}\).</p>
-    <p>The diagonal entries are \(N_{ii}=0\) (no vertex is its own parent) and \(N^T_{ii}=0\), so \((N+N^T)_{ii}=0=A_{ii}\). Hence \(A=N+N^T\).</p>
-
-    <p><strong>Nilpotency of \(N\).</strong> The \((i,j)\)-entry of \(N^k\) counts directed walks of length \(k\) from \(i\) to \(j\). Every directed edge points one level closer to the root, so a directed walk of length \(k\) from \(i\) must land on the \(k\)-th ancestor of \(i\). If \(h\) is the maximum depth in \(T\) (with root at depth \(0\)), no directed walk has length greater than \(h\). Hence</p>
-    \[
-      N^k=0\quad\text{for all }k>h,
-    \]
-    <p>so \(N\) is nilpotent (nilpotency index \(\le h+1\le n\)).</p>
-
-    <div class="tikz-wrap">
-      <script type="text/tikz">
-        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
-                            l/.style={draw=none, fill=none, inner sep=1pt}]
-          \node[v] (r) at (0,1.2) {$r$};
-          \node[v] (a) at (-1.2,0) {};
-          \node[v] (b) at (1.2,0) {};
-          \node[v] (c) at (-1.8,-1.2) {};
-          \node[v] (d) at (-0.6,-1.2) {};
-          \node[v] (e) at (1.2,-1.2) {};
-          \draw[-&gt;] (a)--(r);
-          \draw[-&gt;] (b)--(r);
-          \draw[-&gt;] (c)--(a);
-          \draw[-&gt;] (d)--(a);
-          \draw[-&gt;] (e)--(b);
-          \node[l] at (0,-2.0) {all edges directed toward the root $r$};
-        \end{tikzpicture}
-      </script>
-    </div>
-  </div>
-</div>
-
-<div class="question">
-  <h3>Q79. Show that out of all trees, the star graph has the largest algebraic connectivity.</h3>
-  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
-  <div class="solution">
-    <p><strong>Solution.</strong> Recall that the <em>algebraic connectivity</em> of a graph \(G\) is the second-smallest eigenvalue \(\lambda_2(L(G))\) of its Laplacian. We use the following classical result of Fiedler.</p>
-
-    <p><strong>Fiedler's theorem.</strong> For any tree \(T\) on \(n\ge 3\) vertices,</p>
-    \[
-      \lambda_2(L(T))\le 1,
-    \]
-    <p>with equality if and only if \(T\) is the star \(K_{1,n-1}\).</p>
-    <p>(Sketch of the mechanism: Fiedler's inequality \(\lambda_2(G)\le\kappa(G)\) gives \(\lambda_2(T)\le1\) for every tree on \(n\ge3\) vertices, since trees on \(n\ge3\) are not complete and have vertex-connectivity \(1\). A finer analysis of the Fiedler vector on trees shows equality forces a single vertex to be adjacent to all others, i.e. \(T=K_{1,n-1}\).)</p>
-
-    <p><strong>Verification for the star.</strong> For \(K_{1,n-1}\) with centre \(c\) and leaves \(\ell_1,\dots,\ell_{n-1}\), the Laplacian has</p>
-    \[
-      L = \begin{pmatrix} n-1 & -\mathbf 1^T \\ -\mathbf 1 & I_{n-1}\end{pmatrix}.
-    \]
-    <p>Its eigenvalues are</p>
-    \[
-      0,\quad \underbrace{1,\dots,1}_{n-2\ \text{times}},\quad n.
-    \]
-    <p>Hence \(\lambda_2(K_{1,n-1})=1\).</p>
-
-    <p><strong>Verification for the path.</strong> For \(P_n\),</p>
-    \[
-      \lambda_2(P_n)=2-2\cos\frac{\pi}{n}.
-    \]
-    <p>For \(n=3\) we get \(\lambda_2=2-2\cos(\pi/3)=2-1=1\), consistent with \(P_3=K_{1,2}\). For \(n\ge4\), \(\cos(\pi/n)>\cos(\pi/3)=\tfrac12\), so \(\lambda_2(P_n)<1\).</p>
-
-    <p><strong>Conclusion.</strong> Among all trees on \(n\ge3\) vertices, the star achieves the maximum possible value \(\lambda_2=1\); every other tree has \(\lambda_2<1\). Thus the star maximises algebraic connectivity among trees.</p>
-
-    <div class="tikz-wrap">
-      <script type="text/tikz">
-        \begin{tikzpicture}[v/.style={circle, draw, fill=white, inner sep=0.6pt, minimum size=5mm},
-                            l/.style={draw=none, fill=none, inner sep=1pt}]
-          \node[v] (c) at (0,0) {};
-          \foreach \k in {0,...,5} { \node[v] (a\k) at ({60*\k}:1.2) {}; \draw (c)--(a\k); }
-          \node[l] at (0,-2.0) {star $K_{1,6}$: $\lambda_2=1$};
-
-          \node[v] (p1) at (4,0) {};
-          \node[v] (p2) at (4.9,0) {};
-          \node[v] (p3) at (5.8,0) {};
-          \node[v] (p4) at (6.7,0) {};
-          \node[v] (p5) at (7.6,0) {};
-          \draw (p1)--(p2)--(p3)--(p4)--(p5);
-          \node[l] at (5.8,-2.0) {path $P_5$: $\lambda_2<1$};
-        \end{tikzpicture}
-      </script>
-    </div>
-  </div>
-</div>
-
-<div class="question">
-  <h3>Q80. Show that the algebraic connectivity of the complete bipartite graph \(K_{m,n}\) is \(\min\{m,n\}\).</h3>
-  <button class="toggle" onclick="toggleSolution(this)">Show Solution</button>
-  <div class="solution">
-    <p><strong>Solution.</strong> Let \(U=\{u_1,\dots,u_m\}\), \(V=\{v_1,\dots,v_n\}\). Order vertices as \(U\) then \(V\). The Laplacian is</p>
-    \[
-      L(K_{m,n})=\begin{pmatrix} nI_m & -J \\ -J^T & mI_n \end{pmatrix},
-    \]
-    <p>where \(J=J_{m\times n}\). We compute all eigenvalues.</p>
-
-    <p><strong>Eigenvalue 0 (multiplicity 1).</strong> \(L(\mathbf 1_m,\mathbf 1_n)=0\), since the row sums of \(L\) are all zero. So \(\mathbf 1_{m+n}\) is the (unique, since \(K_{m,n}\) is connected) eigenvector for eigenvalue \(0\).</p>
-
-    <p><strong>Eigenvalue \(n\) (multiplicity \(m-1\)).</strong> Take \(x\in\mathbb R^m\) with \(\sum_i x_i=0\) and consider \((x,0)\). Then</p>
-    \[
-      L\binom{x}{0}=\binom{nx}{-J^Tx}=\binom{nx}{0},
-    \]
-    <p>since \(J^Tx=(\sum_ix_i)\mathbf 1_n=0\). So \((x,0)\) is an eigenvector with eigenvalue \(n\). This gives \(m-1\) independent eigenvectors.</p>
-
-    <p><strong>Eigenvalue \(m\) (multiplicity \(n-1\)).</strong> Similarly, for \(y\in\mathbb R^n\) with \(\sum_j y_j=0\), the vector \((0,y)\) satisfies \(L(0,y)=(0,my)\). This gives \(n-1\) independent eigenvectors with eigenvalue \(m\).</p>
-
-    <p><strong>Eigenvalue \(m+n\) (multiplicity 1).</strong> Consider \((a\mathbf 1_m, b\mathbf 1_n)\). Using \(J\mathbf 1_n=n\mathbf 1_m\) and \(J^T\mathbf 1_m=m\mathbf 1_n\),</p>
-    \[
-      L\binom{a\mathbf 1_m}{b\mathbf 1_n}=\binom{an\mathbf 1_m-bn\mathbf 1_m}{-am\mathbf 1_n+bm\mathbf 1_n}
-      =\binom{n(a-b)\mathbf 1_m}{m(b-a)\mathbf 1_n}.
-    \]
-    <p>For this to equal \(\lambda(a\mathbf 1_m,b\mathbf 1_n)\):</p>
-    \[
-      n(a-b)=\lambda a,\qquad m(b-a)=\lambda b.
-    \]
-    <p>For \((a,b)\neq(0,0)\) with \(a\ne b\) (the \(a=b\) case gives eigenvalue \(0\)), divide the two equations: \(\dfrac{n(a-b)}{m(b-a)}=\dfrac{a}{b}\), i.e. \(-\dfrac nm=\dfrac ab\). Setting \(a=-n\), \(b=m\) gives</p>
-    \[
-      \lambda=n(a-b)/a = n(-n-m)/(-n)=m+n.
-    \]
-    <p>So \((a,b)=(-n,m)\) gives eigenvalue \(m+n\).</p>
-
-    <p><strong>Total count.</strong> \(1+(m-1)+(n-1)+1=m+n\) eigenvectors, so we have all eigenvalues:</p>
-    \[
-      \boxed{\sigma(L(K_{m,n}))=\{0,\; n^{(m-1)},\; m^{(n-1)},\; m+n\}.}
-    \]
-
-    <p><strong>Conclusion.</strong> The second-smallest eigenvalue is</p>
-    \[
-      \lambda_2(K_{m,n})=\min\{n,\,m\}=\min\{m,n\}.
-    \]
-    <p>(When \(m=1\) or \(n=1\): the eigenvalue \(n\) or \(m\) with multiplicity \(0\) is absent, but the remaining set still gives \(\lambda_2=\min\{m,n\}=1\).)</p>
-
-    <p><strong>Sanity checks.</strong></p>
-    <ul>
-      <li>Trace: \(0+n(m-1)+m(n-1)+(m+n)=2mn=2|E(K_{m,n})|\). ✓</li>
-      <li>\(K_{n,n}\): eigenvalues \(0,n^{(n-1)},n^{(n-1)},2n\), so \(\lambda_2=n\). ✓</li>
-      <li>\(K_{1,n}\) (star): \(m=1\), eigenvalues \(0,1^{(n-1)},n+1\), so \(\lambda_2=1\). ✓ (Consistent with Q79.)</li>
-    </ul>
-  </div>
-</div>
-
 </div>
 <!-- /container -->
 
